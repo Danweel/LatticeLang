@@ -1,0 +1,81 @@
+The Lingua Franca font family is ultimately based on the Adobe Utopia fonts,
+which were licensed in 2006 by Adobe to the TeX Users Group (TUG) under the
+following license:
+
+  Adobe Systems Incorporated ("Adobe") hereby grants to the TeX Users Group and
+  its members a nonexclusive, royalty-free, perpetual license to the typeface
+  software for the Utopia Regular, Utopia Italic, Utopia Bold and Utopia bold
+  Italic typefaces, including Adobe Type 1 font programs for each style
+  (collectively, the "Software") as set forth below.
+
+  Adobe grants the TeX Users Group a license under its copyrights, to use,
+  reproduce, display and distribute the Software for any purpose and without fee
+  provided that the following copyright notice appears in all whole and partial
+  copies of the Software and provided that the following trademark symbol and
+  attribution appear in all unmodified copies of the Software:
+
+    Copyright 1989, 1991 Adobe Systems Incorporated. All rights reserved.
+    (alternatively, @1989, 1991 Adobe Systems Incorporated. All rights reserved.)
+    Utopia(R)
+    Utopia is either a registered trademark or trademark of Adobe Systems
+    Incorporated in the United States and/or other countries. Used under license.
+
+  Adobe also grants to the TeX Users Group a license to modify the Software for
+  any purpose and redistribute such modifications, for any purpose and
+  royalty-free, provided that the modified Software shall not use the font
+  name(s) or trademark(s), in whole or in part, unless explicit written
+  permission is granted by Adobe. This restriction applies to all references
+  stored in the Software for identification purposes, such as the font menu name
+  and other font description fields. The TeX Users Group is also permitted to
+  sublicense, and grant such sublicensees the right to further sublicense, any
+  or all the foregoing rights through multiple tiers of distribution. The
+  licenses granted herein are granted in perpetuity and may not be terminated by
+  either party unless such termination is based on a breach of the terms and
+  conditions herein stated.
+
+  Adobe retains ownership of the copyright in the Software. The TeX Users Group
+  agrees that Adobe and its suppliers are the sole and exclusive owners of all
+  rights, title and interest, including all copyrights, patents, trademarks,
+  trade names, trade secrets and other intellectual property rights in the
+  Software. No title or ownership of the Software, any copies of the Software,
+  or the patent, copyright, trade secret, trademark, trade name or other
+  proprietary rights contained in the Software is transferred to the TeX Users
+  Group.
+
+  The Adobe trademarks shall not be used in advertising pertaining to the
+  distribution of the Software without express prior permission from Adobe. Any
+  such use shall be in accordance with the Adobe trademark guidelines, available
+  on the Adobe website at http://www.adobe.com/misc/pdfs/TM
+  GuideforThirdPartiesFinal.pdf. If any portion of the Software is changed, it
+  cannot be marketed under Adobe's trademarks unless Adobe, in its sole
+  discretion, approves by a prior writing the quality of the resulting
+  implementation.
+
+  The TeX Users Group shall have the right to evaluate the Software provided by
+  Adobe.
+
+Then the TeX Users Group (TUG) gave all such rights, irrevocably and in
+perpetuity, to any and all interested parties (cf. the Adobe/TUG license
+agreement cited above, which is available at
+http://tug.org/fonts/utopia/LICENSE-utopia.txt and included here for convenience
+as licenses/utopia/utopia_LICENSE).
+
+The Lingua Franca fonts are a modified version of the Heuristica font family
+(http://code.google.com/p/evristika), which was last released in 2014 by Andrey
+V. Panov under the OFL (cf. licenses/heuristica/heuristica_LICENSE).
+
+The Heuristica fonts in turn contains glyphs from the Vntopia font family
+(http://vntex.sf.net), which was released by Han The Thanh in 2006 in accordance
+with the Adobe/TUG license agreement (cf. licenses/vntopia/vntopia_README).
+
+The Greek glyphs of the Lingua Franca fonts derive from the Fourier fonts
+(http://ctan.org/tex-archive/fonts/fourier-GUT), which were last released in
+2005 by Michel Bovani on behalf of the GUTenberg project under the LPPL (cf.
+licenses/fourier/fourier_README).
+
+The open-box glyphs of the Lingua Franca fonts are taken from the Erewhon font
+family (http://ctan.org/tex-archive/fonts/erewhon), which were released in 2014
+by Michael J. Sharpe under the OFL (cf. licenses/erewhon/erewhon_LICENSE).
+
+The modifications in the current form distributed here under the name "Lingua
+Franca" are likewise released under the OFL (cf. licenses/LICENSE).

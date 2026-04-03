@@ -1,0 +1,241 @@
+Fourier-GUTenberg distribution, Michel Bovani michel.bovani@wanadoo.fr
+
+1 VERSIONS
+2 LICENCE
+3 INSTALLATION
+4 CONFIGURATION
+5 USAGE
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+1 VERSION
+This version number is 1.4.1 (2005-1-30)
+NEW in version 1.4.1:
+
+* no more gap in long arrows symbols
+
+* two new symbols: \decosix and \starredbullet
+
+* Bernard Gaulle's Makefile come back.
+
+
+NEW in version 1.4 (2005-1-1):
+
+* The widespace option works again (was broken in 1.3)
+
+* Bold versions of FML encoded fonts (essentially greek and latin letters).
+Thanks to Timur Mukhamedjanov who designed a first version that was
+already pretty good.
+The \boldmath command and the bm package seem to be correctly supported.
+
+* Variants of varpi and partialdiff symbols (closer to the cm design). 
+The commands are \varvarpi and \varpartialdiff.
+
+* New amssymb-like symbols (\leftleftarrows, \rightrightarrows, \square, 
+\blacksquare, \curvearrowleft, \curvearrowright, \subsetneqq).
+
+* Ornaments are now provided by the fourier-orns package, which is required
+ by fourier, but may be called separately.
+
+* New ornaments symbols. The commands are \decothreeleft 
+\decothreeright \decofourleft \decofourright, \floweroneleft, \floweroneright,
+\lefthand, \righthand, \bomb.
+
+* No more gap between the square root and its overbar. Thanks to Hans Hagen
+ and Sebastian Sturm who find that (it was an italic correction problem).
+
+* \rmdefaut redefinition made before calling fontenc (in order to 
+allow fourier usage even if cork-encoded cm aren't insalled).
+Thanks to Robin Fairbanks who pointed that out.
+
+* Capital greek letters are now mathord (instead of mathalpha). Thanks
+to Yvon Henel who reported that.
+
+* Metrics improved in math... (I hope!). Thanks to all who reported
+metrics features. I do my best to do correction, but it is a long way... 
+
+* The \widehat and \widetilde symbols are no longer intercepted by amssymb.
+(Thanks to Peter Harmand for his help).
+
+NEW in  version 1.3 (2004-03-12).
+
+* There is now an UNIX makefile. Many thanks to Bernard Gaulle
+who made it.
+
+* Bug corrected in the ornaments font (the Poscript name didn't match
+ fourier.map)
+
+* There is a new symbol in the ornament font.
+
+
+NEW in version 1.2 (LaTeX Companion 2) 2004-03-02
+
+* Bug corrected in fourier.map. Thanks to Walter Schmidt for pointing this
+out.
+
+* The titling fonts are now named putrd8a.pfb, futrd8r.tfm, futrd8t.tfm,
+futrd8t.vf, according to the Karl Berry scheme. Thanks to Dr Peter Schenzel
+for pointing this out.
+
+* The commands \dblbrackleft and \dblbrackright are deprecated and replaced
+by \llbracket and \rrbracket.
+
+* It is now possible to call amsmath after fourier. Collaboration between the
+two packages had been improved (many thanks to Walter Schmidt).
+
+* There is a new option (widespace) which enlarge the default interword space
+of Utopia
+
+* There is a new ornament font with 15 new symbols.
+
+* The \eurologo is now in the ornament font (was in a wrong place in the
+TS1 encoding, shame on me). Thanks to Frank Mittelbach and Thierry Bouche
+for their help.
+
+* All character codes are now decimal number (no more clash with 
+(n)german.sty). Thanks to Walter Schmidt for pointing this out.
+
+
+
+
+2 LICENCE
+The licence of fourier-GUTenberg is lppl (latex public
+project licence). All the files of this distribution remain in directories 
+wich name is "fourier".
+texmf/dvips/fourier
+texmf/fonts/tfm/public/fourier
+texmf/fonts/type1/public/fourier
+texmf/fonts/vf/public/fourier
+texmf/tex/latex/fourier
+
+BEWARE
+fourier uses utopia as his base font. Utopia has been gracefully donated by 
+Adobe but his licence is more restrictive than LPPL (it is nocharge and 
+freely distributable software, but it's *not* free software.)
+Four files are concerned by this licence :
+texmf/fonts/type1/adobe/utopia/putr8a.pfb
+texmf/fonts/type1/adobe/utopia/putri8a.pfb
+texmf/fonts/type1/adobe/utopia/putb8a.pfb
+texmf/fonts/type1/adobe/utopia/putbi8a.pfb
+
+And here is the licence of utopia
+
+% The following notice accompanied the Utopia font:
+%
+%   Permission to use, reproduce, display and distribute the listed
+%   typefaces is hereby granted, provided that the Adobe Copyright notice
+%   appears in all whole and partial copies of the software and that the
+%   following trademark symbol and attribution appear in all unmodified
+%   copies of the software:
+%
+%           Copyright (c) 1989 Adobe Systems Incorporated
+%           Utopia (R)
+%           Utopia is a registered trademark of Adobe Systems Incorporated
+%
+%   The Adobe typefaces (Type 1 font program, bitmaps and Adobe Font
+%   Metric files) donated are:
+%
+%           Utopia Regular
+%           Utopia Italic
+%           Utopia Bold
+%           Utopia Bold Italic
+
+Note that Adobe sells two packages of fonts (utopia = 6 fonts, and utopia 
+expert = 16 fonts) which are fully usable with fourier (see expert and 
+oldstyle options below).
+
+3 - INSTALLATION
+The texmf tree provides a standard TDS.
+You have to install all the "fourier" directories of the fourier texmf tree 
+in one of yours texmf trees.
+
+If you don't still have the four utopia fonts (texmf/fonts/type1/adobe/utopia/), 
+you have to install them too.
+
+If you have a licence for the commercial utopia packages, you have to 
+rename the *.pfb files to suit the declarations in fourier-utopia-expert.map
+ (or to modify this file). Mac fonts should be contverted to pfb format (with 
+t1unmac, for instance).
+
+4 - CONFIGURATION
+With updmap
+run 
+% updmap --enable Map fourier.map
+
+if you need to install the commercial packages
+
+% updmap --enable Map fourier-utopia-expert.map
+
+If you don't have updmap or don't want to use it
+For dvips, add these lines in config.ps
+p +fourier.map
+eventually
+p +fourier-utopia-expert.map
+
+For pdf(la)tex add these lines in pdftex.cfg
+map +fourier.map
+eventually
+map +fourier-utopia-expert.map
+
+If you have problems when installing fourier, please tell me.
+
+5 - USAGE
+
+If you need more symbols ask me (I don't promise anything if you need a 
+complete alphabet!)
+
+Usage : \usepackage[<options>]{fourier}
+Don't call \usepackage[T1]{fontenc} or \usepackage{textcomp} as they are 
+already loaded by fourier.
+
+
+The options are
+
+*  maths : sloped (default) and upright. With upright greek lowercases are 
+upright and so are roman uppercases (a la french!). 
+
+\otheralpha, \otherbeta, etc. can be used to switch to the other-sloped 
+greek symbol.
+
+* text :
+-- poorman (default) the 4 standard fonts
+-- expert: expert full set (if you have the fonts!) with lining digits
+-- oldstyle: expert set with oldstyle text digits
+-- fulloldstyle: expert set with oldstye digits in text and in math.
+
+with the three last options the following commands are provided
+\sbseries \textsb semi-bold
+\blackseries \textblack extra-bold
+\titleshape \texttitle titling (caps only)
+
+ \lining and \oldstyle allow you to change the style of digits (use them in 
+a group).
+
+amsmath compatibility: full (I hope).
+
+amssymb :
+No need to call it if you only need:
+
+\mathbb (A..Z, 1, k)
+
+\leqslant\geqslant\vDash\intercal\blacktriangleleft\blacktriangleright
+\nleqslant\ngeqslant\nparallel\complement\hslash\nexists\varsubsetneq
+
+If you need others amssymb symbols please, call amssymb *before* fourier
+
+Other commands:
+
+A slanted parallel symbol (french poeple like it!)
+$\parallelslant$
+$\nparallelslant$
+
+More integrals
+$\iint,\iiint$
+$\oiint,\oiiint,\slashint$
+\[\iint,\iiint,\oiint,\oiiint,\slashint\]
+
+A special QED symbol for a false proof (of course you need it, don't you ?)
+$\thething$
+
+XSwords symbols
+$\xswordsup$ $\xswordsdown$
+

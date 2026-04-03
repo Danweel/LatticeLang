@@ -1,0 +1,222 @@
+# =============================================================================
+# GIT HOOKS SETUP
+# =============================================================================
+# Installed hooks
+.git/hooks/  (decide if you want other contributors to have the same submission rules)
+
+
+# =============================================================================
+# BUILD & DOCUMENTATION OUTPUT
+# =============================================================================
+# Sphinx documentation build artifacts
+docs/_build/
+docs/build/
+docs/generated/
+
+# General build directories
+_build/
+build/
+dist/
+sdist/
+var/
+
+# Distribution packages
+*.egg
+*.egg-info/
+eggs/
+.develop-eggs/
+downloads/
+lib/
+lib64/
+parts/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+.installed.cfg
+MANIFEST
+
+
+# =============================================================================
+# PYTHON ARTIFACTS
+# =============================================================================
+# Byte-compiled files
+*.py[cod]
+*$py.class
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments (tracked separately below)
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Poetry (keep poetry.lock in version control for reproducibility)
+# poetry.lock
+
+# Poetry cache
+envs.toml
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# pyenv
+.python-version
+
+# PEP 582
+__pypackages__/
+
+
+# =============================================================================
+# TESTING & COVERAGE
+# =============================================================================
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+
+# =============================================================================
+# TYPE CHECKING & STATIC ANALYSIS
+# =============================================================================
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pyre/envs.toml
+
+
+# =============================================================================
+# IDE & EDITOR SETTINGS
+# =============================================================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.spyderproject
+.spyproject
+.ropeproject
+
+
+# =============================================================================
+# ENVIRONMENT & CONFIGURATION
+# =============================================================================
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Local settings (if applicable)
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+
+# =============================================================================
+# JUPYTER NOTEBOOKS
+# =============================================================================
+.ipynb_checkpoints/
+
+
+# =============================================================================
+# APPLICATION-SPECIFIC
+# =============================================================================
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Flask
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Django
+*.log
+
+# IPython
+profile_default/
+ipython_config.py
+
+
+# =============================================================================
+# EXECUTABLES & BINARY FILES
+# =============================================================================
+*.so
+*.manifest
+*.spec
+
+
+# =============================================================================
+# TRANSLATIONS
+# =============================================================================
+*.mo
+*.pot
+
+
+# =============================================================================
+# MKDOCS
+# =============================================================================
+/site/
+
+
+# =============================================================================
+# WEB ASSETS
+# =============================================================================
+.webassets-cache/
+
+
+# =============================================================================
+# DOCKER
+# =============================================================================
+.docker/
+docker-compose.override.yml
+
+
+# =============================================================================
+# CLOUD SERVICES
+# =============================================================================
+.aws/
+.gcp/
+.azure/
+
+
+# =============================================================================
+# BACKUP FILES
+# =============================================================================
+*.bak
+*.backup
+
+
+# =============================================================================
+# USER FILES (PERSONAL, NOT SHARED)
+# =============================================================================
+/plugins
+TheViolenceLayerManager.pygoogleanalytics/
+docs/source/plugins/TheViolenceLayerManager.py
+docs/source/plugins/
+docs/source/plugins/
