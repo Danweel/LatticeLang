@@ -30,7 +30,11 @@ class Phoneme:
 
     Example:
         >>> p = Phoneme(symbol="p", category=PhonemeCategory.CONSONANT,
-        ...             features={"voiced": False, "place": "bilabial", "manner": "plosive"})
+        ...             features={
+                            "voiced": False,
+                            "place": "bilabial",
+                            "manner": "plosive"
+                        })
         >>> p.symbol
         'p'
         >>> p.features["voiced"]
