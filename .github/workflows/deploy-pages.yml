@@ -39,7 +39,7 @@ jobs:
       - name: Build documentation
         run: |
           cd docs
-          poetry run make html
+          poetry run python -m sphinx -b html -d _build/doctrees source _build/html
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
@@ -56,3 +56,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+serve:
+  @cd _build/html && python -m http.server 8000
+  @echo "Documentation available at http://localhost:8000"

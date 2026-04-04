@@ -1209,4 +1209,4 @@ docs = ["furo", "myst-parser", "sphinx", "sphinx-copybutton", "sphinx-design", "
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "265dbbe522173cec1167c81f224f5b58f63a239200c771b8833858788c3ab20f"
+content-hash = "4f5639081e8fe7123dcbdf6d298d7bc2a9c5565b3cb920c5739aac25c7cb97da"

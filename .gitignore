@@ -47,22 +47,24 @@ MANIFEST
 __pycache__/
 *.pyc
 
-# Virtual environments (tracked separately below)
+# Environments
+.venv
 .venv/
 venv/
-ENV/
-env/
-env.bak/
-venv.bak/
-
-# Environments
 .env
-.venv
-env/
-venv/
 ENV/
+env/
 env.bak/
 venv.bak/
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Local settings (if applicable)
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
 
 # Poetry (keep poetry.lock in version control for reproducibility)
 # poetry.lock
@@ -120,19 +122,6 @@ dmypy.json
 .spyproject
 .ropeproject
 
-
-# =============================================================================
-# ENVIRONMENT & CONFIGURATION
-# =============================================================================
-.env
-.env.*
-!.env.example
-!.env.template
-
-# Local settings (if applicable)
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
 
 
 # =============================================================================
@@ -215,8 +204,4 @@ docker-compose.override.yml
 # =============================================================================
 # USER FILES (PERSONAL, NOT SHARED)
 # =============================================================================
-/plugins
-TheViolenceLayerManager.pygoogleanalytics/
-docs/source/plugins/TheViolenceLayerManager.py
-docs/source/plugins/
-docs/source/plugins/
+
