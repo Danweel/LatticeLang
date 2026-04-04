@@ -56,7 +56,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-serve:
-  @cd _build/html && python -m http.server 8000
-  @echo "Documentation available at http://localhost:8000"
+        
