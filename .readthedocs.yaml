@@ -31,9 +31,6 @@ python:
       path: .
       extra_requirements:
         - docs
-        - pytest
-        - ruff
-        # You can add other dev tools (pytest, ruff, etc.) here.
 
 # Optionally build your docs in additional formats such as PDF and ePub
 # formats:

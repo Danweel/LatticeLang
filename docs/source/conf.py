@@ -28,10 +28,6 @@ release = '0.0.1'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-# Mock imports for modules that don't exist:
-autodoc_mock_imports = ['pymodulefordocs']
-# ISSUE: The python script these docs are about isn't included, so this is to prevent a stopping error
-
 templates_path = ['_templates']
 
 root_doc = 'index'
@@ -41,17 +37,16 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '_troubleshooting/*.rst'
 #
 
 extensions = [
-    'sphinx.ext.viewcode',         # Optional: Shows source code links if we ever host the .bpy
-    'sphinx.ext.intersphinx',      # Allows sphinx to interact with other Read the Docs pages
-    'sphinx.ext.todo',             # Allows for quick inline bugmaking on github
-    'sphinxcontrib.mermaid',       # Required for Mermaid diagrams
-    'sphinx.ext.autodoc',          # To autoread docstrings within py files
-    'sphinx.ext.napoleon',         # To accomodate Google/NumPy docstrings
-    'sphinx.ext.viewcode',         # Add "View Code"
-    'notfound.extension',          # Required for custom 404 page
-    'sphinx_copybutton',           # Allows for a copy button for codeblocks
-#    'sphinx_design',               # Cards, etc.
-    'myst_parser'                  # Required for fullpage Markdown support in case contibutors are more comfortable writing .md files
+    'sphinx.ext.viewcode',         # Shows source code links for documented Python objects
+    'sphinx.ext.intersphinx',      # Cross-reference other Sphinx docs
+    'sphinx.ext.todo',             # Inline .. todo:: directives
+    'sphinxcontrib.mermaid',       # Text-based diagrams
+    'sphinx.ext.autodoc',          # Auto-generate docs from docstrings
+    'sphinx.ext.napoleon',         # Google/NumPy docstring support
+    'notfound.extension',          # Custom 404 page
+    'sphinx_copybutton',           # Copy button on code blocks
+    'sphinx_design',               # Cards, tabs, panels — uncomment if needed
+    'myst_parser'                  # Markdown support
 ]                                  # KNOWN ISSUE: myst_parser is in an odd format. This is normal but can throw warnings (that can be safely ignored)
 
 # --------------------------------------------------------------------------
@@ -127,7 +122,7 @@ mermaid_init_js = "mermaid.initialize({startOnLoad:true});"
 myst_enable_extensions = [
     'colon_fence',      # Use ::: for directives
     'deflist',          # Definition lists
-#   'dollarmath',       # LaTeX math syntax
+    'dollarmath',       # LaTeX math syntax
     'html_admonition',  # HTML admonitions
     'linkify',          # Auto-link URLs
 ]

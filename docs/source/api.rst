@@ -1,12 +1,12 @@
 API Reference
 =============
 
-.. automodule:: latticelang.phonology
+.. automodule:: latticelang.core.phonology
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: latticelang.syllable
+.. automodule:: latticelang.core.syllable
    :members:
    :undoc-members:
    :show-inheritance:
