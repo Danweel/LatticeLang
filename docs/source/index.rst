@@ -1,41 +1,63 @@
-.. LatticeLang documentation master file, created by
-   sphinx-quickstart on Sat Mar 21 00:00:35 2026.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+LatticeLang
+===========
 
-.. Add your content using ``reStructuredText`` syntax. See the
-   documentation for details.
-   <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>
+LatticeLang is a phonology-based constructed language generator for
+conlangers, writers, and linguists. It bridges the gap between
+linguistic theory and practical word generation, with an emphasis on
+teaching as it goes.
 
-LatticeLang documentation
-=========================
+.. grid:: 1 2 2 2
+   :gutter: 2
 
-LatticeLang is a libre, open-source tool for constructing natural-sounding languages.
+   .. grid-item-card:: :octicon:`rocket` Getting Started
+      :link: user/quickstart
+
+      Install LatticeLang and generate your first words in five minutes.
+
+   .. grid-item-card:: :octicon:`comment-discussion` Use Cases
+      :link: use_cases/index
+
+      User workflows documented as Cockburn use cases, cross-linked
+      to API reference and troubleshooting.
+
+   .. grid-item-card:: :octicon:`book` API Reference
+      :link: api/index
+
+      Auto-generated documentation for every module, class, and function.
+
+   .. grid-item-card:: :octicon:`tools` Developer Handbook
+      :link: dev/architecture
+
+      Architecture decisions, testing strategy, and contribution guide.
+
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Getting Started
+   :hidden:
+   :caption: User Guide
 
-   installation
-   usage
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Reference
-
-   api
-   contributing
+   user/quickstart
+   user/installation
+   user/about
+   user/troubleshooting/index
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Project Info
+   :hidden:
+   :caption: Use Cases
 
-   roadmap
-   about
+   use_cases/index
 
-Indices and tables
-==================
+.. toctree::
+   :hidden:
+   :caption: API Reference
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   api/index
+
+.. toctree::
+   :hidden:
+   :caption: Developer Handbook
+
+   dev/architecture
+   dev/decision_log
+   dev/testing_strategy
+   dev/contributing
+   dev/roadmap

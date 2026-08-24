@@ -70,4 +70,3 @@ Contact
 
 .. note::
    This page will expand as the project grows. Check back for updates!
-   
