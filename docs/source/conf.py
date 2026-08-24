@@ -124,7 +124,7 @@ myst_enable_extensions = [
     'deflist',          # Definition lists
     'dollarmath',       # LaTeX math syntax
     'html_admonition',  # HTML admonitions
-    'linkify',          # Auto-link URLs
+    'gfm_autolink',     # Auto-link URLs
 ]
 
 # Optional: Configure how MyST handles certain syntax
