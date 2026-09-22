@@ -1,0 +1,873 @@
+{
+  "version": "2015",
+  "last_updated": "2026-08-24",
+  "license": {
+    "data_source": "PHOIBLE 2.0",
+    "data_url": "https://phoible.org",
+    "data_license": "CC-BY 4.0",
+    "data_citation": "Moran, Steven & McCloy, Daniel (eds.) 2019. PHOIBLE 2.0. Jena: Max Planck Institute for the Science of Human History.",
+    "symbol_system": "International Phonetic Alphabet",
+    "symbol_system_citation": "International Phonetic Association. Handbook of the IPA. Cambridge University Press.",
+  "consonants": [
+    {
+      "symbol": "p",
+      "description": "Voiceless bilabial plosive",
+      "place": "bilabial",
+      "manner": "plosive",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0070"],
+      "aliases": []
+    },
+    {
+      "symbol": "b",
+      "description": "Voiced bilabial plosive",
+      "place": "bilabial",
+      "manner": "plosive",
+      "voicing": "voiced",
+      "unicode_points": ["U+0062"],
+      "aliases": []
+    },
+    {
+      "symbol": "t",
+      "description": "Voiceless alveolar plosive",
+      "place": "alveolar",
+      "manner": "plosive",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0074"],
+      "aliases": []
+    },
+    {
+      "symbol": "d",
+      "description": "Voiced alveolar plosive",
+      "place": "alveolar",
+      "manner": "plosive",
+      "voicing": "voiced",
+      "unicode_points": ["U+0064"],
+      "aliases": []
+    },
+    {
+      "symbol": "ʈ",
+      "description": "Voiceless retroflex plosive",
+      "place": "retroflex",
+      "manner": "plosive",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0288"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɖ",
+      "description": "Voiced retroflex plosive",
+      "place": "retroflex",
+      "manner": "plosive",
+      "voicing": "voiced",
+      "unicode_points": ["U+0256"],
+      "aliases": []
+    },
+    {
+      "symbol": "c",
+      "description": "Voiceless palatal plosive",
+      "place": "palatal",
+      "manner": "plosive",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0063"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɟ",
+      "description": "Voiced palatal plosive",
+      "place": "palatal",
+      "manner": "plosive",
+      "voicing": "voiced",
+      "unicode_points": ["U+025F"],
+      "aliases": []
+    },
+    {
+      "symbol": "k",
+      "description": "Voiceless velar plosive",
+      "place": "velar",
+      "manner": "plosive",
+      "voicing": "voiceless",
+      "unicode_points": ["U+006B"],
+      "aliases": []
+    },
+    {
+      "symbol": "g",
+      "description": "Voiced velar plosive",
+      "place": "velar",
+      "manner": "plosive",
+      "voicing": "voiced",
+      "unicode_points": ["U+0067"],
+      "aliases": []
+    },
+    {
+      "symbol": "q",
+      "description": "Voiceless uvular plosive",
+      "place": "uvular",
+      "manner": "plosive",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0071"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɢ",
+      "description": "Voiced uvular plosive",
+      "place": "uvular",
+      "manner": "plosive",
+      "voicing": "voiced",
+      "unicode_points": ["U+0262"],
+      "aliases": []
+    },
+    {
+      "symbol": "ʔ",
+      "description": "Voiceless glottal plosive",
+      "place": "glottal",
+      "manner": "plosive",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0294"],
+      "aliases": []
+    },
+    {
+      "symbol": "m",
+      "description": "Bilabial nasal",
+      "place": "bilabial",
+      "manner": "nasal",
+      "voicing": "voiced",
+      "unicode_points": ["U+006D"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɱ",
+      "description": "Labiodental nasal",
+      "place": "labiodental",
+      "manner": "nasal",
+      "voicing": "voiced",
+      "unicode_points": ["U+0271"],
+      "aliases": []
+    },
+    {
+      "symbol": "n",
+      "description": "Alveolar nasal",
+      "place": "alveolar",
+      "manner": "nasal",
+      "voicing": "voiced",
+      "unicode_points": ["U+006E"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɳ",
+      "description": "Retroflex nasal",
+      "place": "retroflex",
+      "manner": "nasal",
+      "voicing": "voiced",
+      "unicode_points": ["U+0273"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɲ",
+      "description": "Palatal nasal",
+      "place": "palatal",
+      "manner": "nasal",
+      "voicing": "voiced",
+      "unicode_points": ["U+0272"],
+      "aliases": []
+    },
+    {
+      "symbol": "ŋ",
+      "description": "Velar nasal",
+      "place": "velar",
+      "manner": "nasal",
+      "voicing": "voiced",
+      "unicode_points": ["U+014B"],
+      "aliases": ["eng", "engma"]
+    },
+    {
+      "symbol": "ɴ",
+      "description": "Uvular nasal",
+      "place": "uvular",
+      "manner": "nasal",
+      "voicing": "voiced",
+      "unicode_points": ["U+0274"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɸ",
+      "description": "Voiceless bilabial fricative",
+      "place": "bilabial",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0278"],
+      "aliases": ["phi"]
+    },
+    {
+      "symbol": "β",
+      "description": "Voiced bilabial fricative",
+      "place": "bilabial",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+03B2"],
+      "aliases": ["beta"]
+    },
+    {
+      "symbol": "f",
+      "description": "Voiceless labiodental fricative",
+      "place": "labiodental",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0066"],
+      "aliases": []
+    },
+    {
+      "symbol": "v",
+      "description": "Voiced labiodental fricative",
+      "place": "labiodental",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+0076"],
+      "aliases": []
+    },
+    {
+      "symbol": "θ",
+      "description": "Voiceless dental fricative",
+      "place": "dental",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+03B8"],
+      "aliases": ["theta", "thorn-th"]
+    },
+    {
+      "symbol": "ð",
+      "description": "Voiced dental fricative",
+      "place": "dental",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+00F0"],
+      "aliases": ["eth", "dh"]
+    },
+    {
+      "symbol": "s",
+      "description": "Voiceless alveolar fricative",
+      "place": "alveolar",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0073"],
+      "aliases": []
+    },
+    {
+      "symbol": "z",
+      "description": "Voiced alveolar fricative",
+      "place": "alveolar",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+007A"],
+      "aliases": []
+    },
+    {
+      "symbol": "ʃ",
+      "description": "Voiceless post-alveolar fricative",
+      "place": "post-alveolar",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0283"],
+      "aliases": ["esh", "long-s"]
+    },
+    {
+      "symbol": "ʒ",
+      "description": "Voiced post-alveolar fricative",
+      "place": "post-alveolar",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+0292"],
+      "aliases": ["ezh", "yogh"]
+    },
+    {
+      "symbol": "ʂ",
+      "description": "Voiceless retroflex fricative",
+      "place": "retroflex",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0282"],
+      "aliases": []
+    },
+    {
+      "symbol": "ʐ",
+      "description": "Voiced retroflex fricative",
+      "place": "retroflex",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+0290"],
+      "aliases": []
+    },
+    {
+      "symbol": "ç",
+      "description": "Voiceless palatal fricative",
+      "place": "palatal",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+00E7"],
+      "aliases": ["c-cedilla"]
+    },
+    {
+      "symbol": "ʝ",
+      "description": "Voiced palatal fricative",
+      "place": "palatal",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+029D"],
+      "aliases": []
+    },
+    {
+      "symbol": "x",
+      "description": "Voiceless velar fricative",
+      "place": "velar",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0078"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɣ",
+      "description": "Voiced velar fricative",
+      "place": "velar",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+0263"],
+      "aliases": ["gamma"]
+    },
+    {
+      "symbol": "χ",
+      "description": "Voiceless uvular fricative",
+      "place": "uvular",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+03C7"],
+      "aliases": ["chi"]
+    },
+    {
+      "symbol": "ʁ",
+      "description": "Voiced uvular fricative",
+      "place": "uvular",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+0281"],
+      "aliases": ["inverted-r"]
+    },
+    {
+      "symbol": "ħ",
+      "description": "Voiceless pharyngeal fricative",
+      "place": "pharyngeal",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0127"],
+      "aliases": ["h-bar"]
+    },
+    {
+      "symbol": "ʕ",
+      "description": "Voiced pharyngeal fricative",
+      "place": "pharyngeal",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+0295"],
+      "aliases": ["ayin", "ain"]
+    },
+    {
+      "symbol": "h",
+      "description": "Voiceless glottal fricative",
+      "place": "glottal",
+      "manner": "fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+0068"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɦ",
+      "description": "Voiced glottal fricative",
+      "place": "glottal",
+      "manner": "fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+0266"],
+      "aliases": ["h-hook"]
+    },
+    {
+      "symbol": "ʋ",
+      "description": "Labiodental approximant",
+      "place": "labiodental",
+      "manner": "approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+028B"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɹ",
+      "description": "Alveolar approximant",
+      "place": "alveolar",
+      "manner": "approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+0279"],
+      "aliases": ["turned-r"]
+    },
+    {
+      "symbol": "ɻ",
+      "description": "Retroflex approximant",
+      "place": "retroflex",
+      "manner": "approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+027B"],
+      "aliases": []
+    },
+    {
+      "symbol": "j",
+      "description": "Palatal approximant",
+      "place": "palatal",
+      "manner": "approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+006A"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɰ",
+      "description": "Velar approximant",
+      "place": "velar",
+      "manner": "approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+0270"],
+      "aliases": []
+    },
+    {
+      "symbol": "ʙ",
+      "description": "Bilabial trill",
+      "place": "bilabial",
+      "manner": "trill",
+      "voicing": "voiced",
+      "unicode_points": ["U+0299"],
+      "aliases": ["small-capital-b"]
+    },
+    {
+      "symbol": "r",
+      "description": "Alveolar trill",
+      "place": "alveolar",
+      "manner": "trill",
+      "voicing": "voiced",
+      "unicode_points": ["U+0072"],
+      "aliases": []
+    },
+    {
+      "symbol": "ʀ",
+      "description": "Uvular trill",
+      "place": "uvular",
+      "manner": "trill",
+      "voicing": "voiced",
+      "unicode_points": ["U+0280"],
+      "aliases": ["small-capital-r"]
+    },
+    {
+      "symbol": "ⱱ",
+      "description": "Labiodental flap",
+      "place": "labiodental",
+      "manner": "flap",
+      "voicing": "voiced",
+      "unicode_points": ["U+2C71"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɾ",
+      "description": "Alveolar flap",
+      "place": "alveolar",
+      "manner": "flap",
+      "voicing": "voiced",
+      "unicode_points": ["U+027E"],
+      "aliases": ["fish-hook-r"]
+    },
+    {
+      "symbol": "ɽ",
+      "description": "Retroflex flap",
+      "place": "retroflex",
+      "manner": "flap",
+      "voicing": "voiced",
+      "unicode_points": ["U+027D"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɬ",
+      "description": "Voiceless alveolar lateral fricative",
+      "place": "alveolar",
+      "manner": "lateral fricative",
+      "voicing": "voiceless",
+      "unicode_points": ["U+026C"],
+      "aliases": ["belted-l"]
+    },
+    {
+      "symbol": "ɮ",
+      "description": "Voiced alveolar lateral fricative",
+      "place": "alveolar",
+      "manner": "lateral fricative",
+      "voicing": "voiced",
+      "unicode_points": ["U+026E"],
+      "aliases": []
+    },
+    {
+      "symbol": "l",
+      "description": "Alveolar lateral approximant",
+      "place": "alveolar",
+      "manner": "lateral approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+006C"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɭ",
+      "description": "Retroflex lateral approximant",
+      "place": "retroflex",
+      "manner": "lateral approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+026D"],
+      "aliases": []
+    },
+    {
+      "symbol": "ʎ",
+      "description": "Palatal lateral approximant",
+      "place": "palatal",
+      "manner": "lateral approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+028E"],
+      "aliases": ["turned-y"]
+    },
+    {
+      "symbol": "ʟ",
+      "description": "Velar lateral approximant",
+      "place": "velar",
+      "manner": "lateral approximant",
+      "voicing": "voiced",
+      "unicode_points": ["U+029F"],
+      "aliases": ["small-capital-l"]
+    },
+    {
+      "symbol": "ɺ",
+      "description": "Alveolar lateral flap",
+      "place": "alveolar",
+      "manner": "lateral flap",
+      "voicing": "voiced",
+      "unicode_points": ["U+027A"],
+      "aliases": []
+    }
+  ],
+  "vowels": [
+    {
+      "symbol": "i",
+      "description": "Close front unrounded vowel",
+      "height": "close",
+      "backness": "front",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0069"],
+      "aliases": []
+    },
+    {
+      "symbol": "y",
+      "description": "Close front rounded vowel",
+      "height": "close",
+      "backness": "front",
+      "roundedness": "rounded",
+      "unicode_points": ["U+0079"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɨ",
+      "description": "Close central unrounded vowel",
+      "height": "close",
+      "backness": "central",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0268"],
+      "aliases": ["barred-i"]
+    },
+    {
+      "symbol": "ʉ",
+      "description": "Close central rounded vowel",
+      "height": "close",
+      "backness": "central",
+      "roundedness": "rounded",
+      "unicode_points": ["U+0289"],
+      "aliases": ["barred-u"]
+    },
+    {
+      "symbol": "ɯ",
+      "description": "Close back unrounded vowel",
+      "height": "close",
+      "backness": "back",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+026F"],
+      "aliases": ["turned-m"]
+    },
+    {
+      "symbol": "u",
+      "description": "Close back rounded vowel",
+      "height": "close",
+      "backness": "back",
+      "roundedness": "rounded",
+      "unicode_points": ["U+0075"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɪ",
+      "description": "Near-close near-front unrounded vowel",
+      "height": "near-close",
+      "backness": "near-front",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+026A"],
+      "aliases": ["small-capital-i", " iota"]
+    },
+    {
+      "symbol": "ʏ",
+      "description": "Near-close near-front rounded vowel",
+      "height": "near-close",
+      "backness": "near-front",
+      "roundedness": "rounded",
+      "unicode_points": ["U+028F"],
+      "aliases": ["small-capital-y"]
+    },
+    {
+      "symbol": "ʊ",
+      "description": "Near-close near-back rounded vowel",
+      "height": "near-close",
+      "backness": "near-back",
+      "roundedness": "rounded",
+      "unicode_points": ["U+028A"],
+      "aliases": ["horseshoe-u"]
+    },
+    {
+      "symbol": "e",
+      "description": "Close-mid front unrounded vowel",
+      "height": "close-mid",
+      "backness": "front",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0065"],
+      "aliases": []
+    },
+    {
+      "symbol": "ø",
+      "description": "Close-mid front rounded vowel",
+      "height": "close-mid",
+      "backness": "front",
+      "roundedness": "rounded",
+      "unicode_points": ["U+00F8"],
+      "aliases": ["o-slash"]
+    },
+    {
+      "symbol": "ɘ",
+      "description": "Close-mid central unrounded vowel",
+      "height": "close-mid",
+      "backness": "central",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0258"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɵ",
+      "description": "Close-mid central rounded vowel",
+      "height": "close-mid",
+      "backness": "central",
+      "roundedness": "rounded",
+      "unicode_points": ["U+0275"],
+      "aliases": ["barred-o"]
+    },
+    {
+      "symbol": "ɤ",
+      "description": "Close-mid back unrounded vowel",
+      "height": "close-mid",
+      "backness": "back",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0264"],
+      "aliases": ["rams-horn"]
+    },
+    {
+      "symbol": "o",
+      "description": "Close-mid back rounded vowel",
+      "height": "close-mid",
+      "backness": "back",
+      "roundedness": "rounded",
+      "unicode_points": ["U+006F"],
+      "aliases": []
+    },
+    {
+      "symbol": "ə",
+      "description": "Mid central vowel (schwa)",
+      "height": "mid",
+      "backness": "central",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0259"],
+      "aliases": ["schwa"]
+    },
+    {
+      "symbol": "ɛ",
+      "description": "Open-mid front unrounded vowel",
+      "height": "open-mid",
+      "backness": "front",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+025B"],
+      "aliases": ["epsilon"]
+    },
+    {
+      "symbol": "œ",
+      "description": "Open-mid front rounded vowel",
+      "height": "open-mid",
+      "backness": "front",
+      "roundedness": "rounded",
+      "unicode_points": ["U+0153"],
+      "aliases": ["oe-ligature"]
+    },
+    {
+      "symbol": "ɜ",
+      "description": "Open-mid central unrounded vowel",
+      "height": "open-mid",
+      "backness": "central",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+025C"],
+      "aliases": ["reversed-epsilon"]
+    },
+    {
+      "symbol": "ɞ",
+      "description": "Open-mid central rounded vowel",
+      "height": "open-mid",
+      "backness": "central",
+      "roundedness": "rounded",
+      "unicode_points": ["U+025E"],
+      "aliases": ["closed-reversed-epsilon"]
+    },
+    {
+      "symbol": "ʌ",
+      "description": "Open-mid back unrounded vowel",
+      "height": "open-mid",
+      "backness": "back",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+028C"],
+      "aliases": ["turned-v", "caret"]
+    },
+    {
+      "symbol": "ɔ",
+      "description": "Open-mid back rounded vowel",
+      "height": "open-mid",
+      "backness": "back",
+      "roundedness": "rounded",
+      "unicode_points": ["U+0254"],
+      "aliases": ["open-o"]
+    },
+    {
+      "symbol": "æ",
+      "description": "Near-open front unrounded vowel",
+      "height": "near-open",
+      "backness": "front",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+00E6"],
+      "aliases": ["ash", "ae-ligature"]
+    },
+    {
+      "symbol": "ɐ",
+      "description": "Near-open central vowel",
+      "height": "near-open",
+      "backness": "central",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0250"],
+      "aliases": ["turned-a"]
+    },
+    {
+      "symbol": "a",
+      "description": "Open front unrounded vowel",
+      "height": "open",
+      "backness": "front",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0061"],
+      "aliases": []
+    },
+    {
+      "symbol": "ɶ",
+      "description": "Open front rounded vowel",
+      "height": "open",
+      "backness": "front",
+      "roundedness": "rounded",
+      "unicode_points": ["U+0276"],
+      "aliases": ["small-capital-oe"]
+    },
+    {
+      "symbol": "ɑ",
+      "description": "Open back unrounded vowel",
+      "height": "open",
+      "backness": "back",
+      "roundedness": "unrounded",
+      "unicode_points": ["U+0251"],
+      "aliases": ["script-a", "alpha"]
+    },
+    {
+      "symbol": "ɒ",
+      "description": "Open back rounded vowel",
+      "height": "open",
+      "backness": "back",
+      "roundedness": "rounded",
+      "unicode_points": ["U+0252"],
+      "aliases": ["turned-script-a"]
+    }
+  ],
+  "special_combinations": [
+    {
+      "combination": "t͡s",
+      "description": "Voiceless alveolar affricate",
+      "constituents": ["t", "s"],
+      "category": "affricate",
+      "unicode_points": ["U+0074", "U+0361", "U+0073"],
+      "alternate_forms": ["ts"]
+    },
+    {
+      "combination": "t͡ʃ",
+      "description": "Voiceless post-alveolar affricate",
+      "constituents": ["t", "ʃ"],
+      "category": "affricate",
+      "unicode_points": ["U+0074", "U+0361", "U+0283"],
+      "alternate_forms": ["tʃ"]
+    },
+    {
+      "combination": "t͡ɕ",
+      "description": "Voiceless alveolo-palatal affricate",
+      "constituents": ["t", "ɕ"],
+      "category": "affricate",
+      "unicode_points": ["U+0074", "U+0361", "U+0255"],
+      "alternate_forms": ["tɕ"]
+    },
+    {
+      "combination": "t͡ʂ",
+      "description": "Voiceless retroflex affricate",
+      "constituents": ["t", "ʂ"],
+      "category": "affricate",
+      "unicode_points": ["U+0074", "U+0361", "U+0282"],
+      "alternate_forms": ["tʂ"]
+    },
+    {
+      "combination": "d͡z",
+      "description": "Voiced alveolar affricate",
+      "constituents": ["d", "z"],
+      "category": "affricate",
+      "unicode_points": ["U+0064", "U+0361", "U+007A"],
+      "alternate_forms": ["dz"]
+    },
+    {
+      "combination": "d͡ʒ",
+      "description": "Voiced post-alveolar affricate",
+      "constituents": ["d", "ʒ"],
+      "category": "affricate",
+      "unicode_points": ["U+0064", "U+0361", "U+0292"],
+      "alternate_forms": ["dʒ"]
+    },
+    {
+      "combination": "d͡ʑ",
+      "description": "Voiced alveolo-palatal affricate",
+      "constituents": ["d", "ʑ"],
+      "category": "affricate",
+      "unicode_points": ["U+0064", "U+0361", "U+0291"],
+      "alternate_forms": ["dʑ"]
+    },
+    {
+      "combination": "d͡ʐ",
+      "description": "Voiced retroflex affricate",
+      "constituents": ["d", "ʐ"],
+      "category": "affricate",
+      "unicode_points": ["U+0064", "U+0361", "U+0290"],
+      "alternate_forms": ["dʐ"]
+    }
+  ]
+}

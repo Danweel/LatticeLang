@@ -1,4 +1,6 @@
-Usage Guide
+.. _quickstart:
+
+Quick Start
 ===========
 
 Command Line Interface
@@ -48,8 +50,7 @@ LatticeLang is organized into several core modules:
 - **mapper** — Orthography mapping
 - **validators** — Constraint validation
 
-Each module is documented in the :doc:`api` section.
+Each module is documented in the :ref:`index_api` section.
 
 .. note::
    This guide will expand with tutorials and examples as the project matures.
-   

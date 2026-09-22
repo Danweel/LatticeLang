@@ -1,10 +1,12 @@
+.. _index:
+
 LatticeLang
 ===========
 
 LatticeLang is a phonology-based constructed language generator for
 conlangers, writers, and linguists. It bridges the gap between
 linguistic theory and practical word generation, with an emphasis on
-teaching as it goes.
+teaching as it goes. Built on Python, Sphinx, and PySide6.
 
 .. grid:: 1 2 2 2
    :gutter: 2
@@ -32,32 +34,51 @@ teaching as it goes.
 
 
 .. toctree::
-   :hidden:
+   :maxdepth: 2
    :caption: User Guide
 
-   user/quickstart
-   user/installation
-   user/about
-   user/troubleshooting/index
+   user/index
+   glossary
 
 .. toctree::
-   :hidden:
-   :caption: Use Cases
+   :maxdepth: 2
+   :caption: Specification
 
    use_cases/index
+   data_contracts/index
 
 .. toctree::
-   :hidden:
+   :maxdepth: 2
+   :caption: Development
+
+   dev/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Research
+
+   research/index
+
+.. toctree::
+   :maxdepth: 2
    :caption: API Reference
 
    api/index
 
 .. toctree::
-   :hidden:
-   :caption: Developer Handbook
+   :maxdepth: 1
+   :caption: Community
 
-   dev/architecture
-   dev/decision_log
-   dev/testing_strategy
-   dev/contributing
-   dev/roadmap
+   community/index
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Project Tracking
+
+   todo/index
+
+Indices
+-------
+
+* :ref:`genindex`
+* :ref:`search`

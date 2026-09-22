@@ -151,6 +151,9 @@ instance/
 profile_default/
 ipython_config.py
 
+# Ruff linter
+.ruff_cache/
+
 
 # =============================================================================
 # EXECUTABLES & BINARY FILES
@@ -206,3 +209,6 @@ docker-compose.override.yml
 # =============================================================================
 
 live_preview.sh
+AGENTS.md
+build-docs.sh
+.omp

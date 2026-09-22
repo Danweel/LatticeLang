@@ -1,12 +1,17 @@
-API Reference
-=============
+.. _index_api:
 
-.. automodule:: latticelang.core.phonology
-   :members:
-   :undoc-members:
-   :show-inheritance:
+API Reference Index
+===================
 
-.. automodule:: latticelang.core.syllable
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Auto-generated documentation from source code docstrings.
+
+.. toctree::
+   :maxdepth: 2
+
+   core_api
+   orthography_rules_api
+   ui_api
+   core/generator_api
+   core/phonology_api
+   core/sonority_api
+   core/syllable_api

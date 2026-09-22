@@ -1,0 +1,163 @@
+{
+  "name": "English (General American)",
+  "description": "Test language for LatticeLang validation. Models General American English phonology with sonority-based syllable generation.",
+  "phonemes": [
+    {"symbol": "p", "category": "consonant", "features": ["voiceless", "bilabial", "stop"], "sonority_rank": 0, "frequency": 1.93},
+    {"symbol": "b", "category": "consonant", "features": ["voiced", "bilabial", "stop"], "sonority_rank": 1, "frequency": 1.75},
+    {"symbol": "t", "category": "consonant", "features": ["voiceless", "alveolar", "stop"], "sonority_rank": 0, "frequency": 7.44},
+    {"symbol": "d", "category": "consonant", "features": ["voiced", "alveolar", "stop"], "sonority_rank": 1, "frequency": 4.18},
+    {"symbol": "k", "category": "consonant", "features": ["voiceless", "velar", "stop"], "sonority_rank": 0, "frequency": 3.08},
+    {"symbol": "g", "category": "consonant", "features": ["voiced", "velar", "stop"], "sonority_rank": 1, "frequency": 1.14},
+
+    {"symbol": "f", "category": "consonant", "features": ["voiceless", "labiodental", "fricative"], "sonority_rank": 2, "frequency": 2.84},
+    {"symbol": "v", "category": "consonant", "features": ["voiced", "labiodental", "fricative"], "sonority_rank": 3, "frequency": 2.47},
+    {"symbol": "θ", "category": "consonant", "features": ["voiceless", "dental", "fricative"], "sonority_rank": 2, "frequency": 0.40},
+    {"symbol": "ð", "category": "consonant", "features": ["voiced", "dental", "fricative"], "sonority_rank": 3, "frequency": 0.87},
+    {"symbol": "s", "category": "consonant", "features": ["voiceless", "alveolar", "fricative"], "sonority_rank": 2, "frequency": 5.73},
+    {"symbol": "z", "category": "consonant", "features": ["voiced", "alveolar", "fricative"], "sonority_rank": 3, "frequency": 2.95},
+    {"symbol": "ʃ", "category": "consonant", "features": ["voiceless", "postalveolar", "fricative"], "sonority_rank": 2, "frequency": 1.83},
+    {"symbol": "ʒ", "category": "consonant", "features": ["voiced", "postalveolar", "fricative"], "sonority_rank": 3, "frequency": 0.21},
+    {"symbol": "h", "category": "consonant", "features": ["voiceless", "glottal", "fricative"], "sonority_rank": 2, "frequency": 1.92},
+
+    {"symbol": "tʃ", "category": "consonant", "features": ["voiceless", "postalveolar", "affricate"], "sonority_rank": 0, "frequency": 1.02},
+    {"symbol": "dʒ", "category": "consonant", "features": ["voiced", "postalveolar", "affricate"], "sonority_rank": 1, "frequency": 1.45},
+
+    {"symbol": "m", "category": "consonant", "features": ["voiced", "bilabial", "nasal"], "sonority_rank": 4, "frequency": 4.63},
+    {"symbol": "n", "category": "consonant", "features": ["voiced", "alveolar", "nasal"], "sonority_rank": 4, "frequency": 8.06},
+    {"symbol": "ŋ", "category": "consonant", "features": ["voiced", "velar", "nasal"], "sonority_rank": 4, "frequency": 0.97},
+
+    {"symbol": "l", "category": "consonant", "features": ["voiced", "alveolar", "lateral", "liquid"], "sonority_rank": 5, "frequency": 4.07},
+    {"symbol": "ɹ", "category": "consonant", "features": ["voiced", "alveolar", "approximant", "liquid"], "sonority_rank": 5, "frequency": 6.33},
+
+    {"symbol": "w", "category": "consonant", "features": ["voiced", "labiovelar", "glide"], "sonority_rank": 6, "frequency": 1.62},
+    {"symbol": "j", "category": "consonant", "features": ["voiced", "palatal", "glide"], "sonority_rank": 6, "frequency": 0.74},
+
+    {"symbol": "i", "category": "vowel", "features": ["high", "front", "unrounded", "tense"], "sonority_rank": 7, "frequency": 4.99},
+    {"symbol": "ɪ", "category": "vowel", "features": ["high", "front", "unrounded", "lax"], "sonority_rank": 7, "frequency": 6.91},
+    {"symbol": "ɛ", "category": "vowel", "features": ["mid", "front", "unrounded", "lax"], "sonority_rank": 8, "frequency": 3.98},
+    {"symbol": "æ", "category": "vowel", "features": ["low", "front", "unrounded", "lax"], "sonority_rank": 9, "frequency": 2.64},
+    {"symbol": "ɑ", "category": "vowel", "features": ["low", "back", "unrounded", "lax"], "sonority_rank": 9, "frequency": 2.27},
+    {"symbol": "ɔ", "category": "vowel", "features": ["mid", "back", "rounded", "lax"], "sonority_rank": 8, "frequency": 1.82},
+    {"symbol": "ʊ", "category": "vowel", "features": ["high", "back", "rounded", "lax"], "sonority_rank": 7, "frequency": 1.02},
+    {"symbol": "u", "category": "vowel", "features": ["high", "back", "rounded", "tense"], "sonority_rank": 7, "frequency": 1.67},
+    {"symbol": "ʌ", "category": "vowel", "features": ["mid", "central", "unrounded", "lax"], "sonority_rank": 8, "frequency": 3.11},
+    {"symbol": "ə", "category": "vowel", "features": ["mid", "central", "unrounded", "lax", "reduced"], "sonority_rank": 8, "frequency": 8.33},
+
+    {"symbol": "aɪ", "category": "vowel", "features": ["diphthong", "fronting"], "sonority_rank": 9, "frequency": 2.31},
+    {"symbol": "aʊ", "category": "vowel", "features": ["diphthong", "backing"], "sonority_rank": 9, "frequency": 1.16},
+    {"symbol": "ɔɪ", "category": "vowel", "features": ["diphthong", "fronting"], "sonority_rank": 9, "frequency": 0.44},
+    {"symbol": "oʊ", "category": "vowel", "features": ["diphthong", "backing"], "sonority_rank": 8, "frequency": 2.42}
+  ],
+  "syllable_templates": [
+    {
+      "name": "V",
+      "slots": [
+        {"position": "nucleus", "allowed_categories": ["vowel"], "min_count": 1, "max_count": 1}
+      ]
+    },
+    {
+      "name": "CV",
+      "slots": [
+        {"position": "onset", "allowed_categories": ["consonant"], "min_count": 1, "max_count": 1},
+        {"position": "nucleus", "allowed_categories": ["vowel"], "min_count": 1, "max_count": 1}
+      ]
+    },
+    {
+      "name": "VC",
+      "slots": [
+        {"position": "nucleus", "allowed_categories": ["vowel"], "min_count": 1, "max_count": 1},
+        {"position": "coda", "allowed_categories": ["consonant"], "min_count": 1, "max_count": 1}
+      ]
+    },
+    {
+      "name": "CVC",
+      "slots": [
+        {"position": "onset", "allowed_categories": ["consonant"], "min_count": 1, "max_count": 1},
+        {"position": "nucleus", "allowed_categories": ["vowel"], "min_count": 1, "max_count": 1},
+        {"position": "coda", "allowed_categories": ["consonant"], "min_count": 1, "max_count": 1}
+      ]
+    },
+    {
+      "name": "CCVC",
+      "slots": [
+        {"position": "onset", "allowed_categories": ["consonant"], "min_count": 2, "max_count": 2},
+        {"position": "nucleus", "allowed_categories": ["vowel"], "min_count": 1, "max_count": 1},
+        {"position": "coda", "allowed_categories": ["consonant"], "min_count": 1, "max_count": 1}
+      ]
+    },
+    {
+      "name": "CCVCC",
+      "slots": [
+        {"position": "onset", "allowed_categories": ["consonant"], "min_count": 2, "max_count": 2},
+        {"position": "nucleus", "allowed_categories": ["vowel"], "min_count": 1, "max_count": 1},
+        {"position": "coda", "allowed_categories": ["consonant"], "min_count": 2, "max_count": 2}
+      ]
+    },
+    {
+      "name": "CCCVC",
+      "slots": [
+        {"position": "onset", "allowed_categories": ["consonant"], "min_count": 3, "max_count": 3},
+        {"position": "nucleus", "allowed_categories": ["vowel"], "min_count": 1, "max_count": 1},
+        {"position": "coda", "allowed_categories": ["consonant"], "min_count": 1, "max_count": 1}
+      ]
+    }
+  ],
+  "phonotactic_constraints": [
+    "sonority_sequencing",
+    "allow_s_appendix",
+    "no_geminate_obstruents",
+    "max_onset_length_3",
+    "max_coda_length_4",
+    "s_appendix_restricts_position_2",
+    "no_ng_onset",
+    "no_h_coda"
+  ],
+  "constraint_details": {
+    "sonority_sequencing": {
+      "description": "Sonority must rise toward the nucleus and fall away from it within each syllable.",
+      "type": "built_in"
+    },
+    "allow_s_appendix": {
+      "description": "/s/ may appear as the first consonant in an onset cluster, preceding any consonant regardless of sonority (e.g., /sp/, /st/, /sk/, /sm/, /sn/, /sl/, /sw/).",
+      "type": "built_in",
+      "appendix_phoneme": "s",
+      "allowed_followers": ["p", "t", "k", "m", "n", "l", "ɹ", "w", "j"]
+    },
+    "no_geminate_obstruents": {
+      "description": "The same obstruent (stop or fricative) cannot appear twice consecutively within a single syllable.",
+      "type": "built_in"
+    },
+    "max_onset_length_3": {
+      "description": "Maximum of 3 consonants in the onset (only achievable with s + voiceless stop + liquid).",
+      "type": "built_in",
+      "max_length": 3
+    },
+    "max_coda_length_4": {
+      "description": "Maximum of 4 consonants in the coda (e.g., /ksθs/ in 'sixths').",
+      "type": "built_in",
+      "max_length": 4
+    },
+    "s_appendix_restricts_position_2": {
+      "description": "When /s/ is the first onset consonant, position 2 must be a voiceless stop (/p/, /t/, /k/), nasal (/m/, /n/), liquid (/l/, /ɹ/), or glide (/w/, /j/).",
+      "type": "built_in"
+    },
+    "no_ng_onset": {
+      "description": "/ŋ/ cannot appear in syllable-initial position (only in coda).",
+      "type": "built_in",
+      "forbidden_onset_phonemes": ["ŋ"]
+    },
+    "no_h_coda": {
+      "description": "/h/ cannot appear in syllable-final position (coda).",
+      "type": "built_in",
+      "forbidden_coda_phonemes": ["h"]
+    }
+  },
+  "generation_settings": {
+    "word_count": 100,
+    "min_syllables": 1,
+    "max_syllables": 4,
+    "weight_by_frequency": true,
+    "show_syllable_boundaries": true,
+    "seed": null
+  }
+}

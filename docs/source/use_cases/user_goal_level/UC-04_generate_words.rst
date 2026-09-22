@@ -1,178 +1,148 @@
+.. _UC-04_generate_words:
 .. _uc04:
 
 UC-04: Generate Words
 =====================
 
+:Doc Status: Review
 :Goal Level: User goal
-:Priority: MVP — Milestone 1 (Python API), Milestone 2 (CLI), Milestone 3 (GUI)
-:Status: Planned
+:Impl Status: Not Started
+:Phase: Beta (API), Gamma (GUI); CLI where scheduled
 
 Goal
 ----
-Produce a set of N words that conform to the currently loaded
-LanguageDefinition, applying frequency weights and phonotactic
-constraints, with optional reproducibility via seed.
+Produce a set of N unique words that conform to the currently loaded
+LanguageDefinition — honoring templates, frequency weighting, and
+phonotactic constraints — reproducibly via seed.
 
 Preconditions
 -------------
-- :ref:`uc01` is complete — phoneme inventory exists with at least one
-  vowel and one consonant
-- :ref:`uc02` is complete — at least one syllable template is defined
-- :ref:`uc03` is optionally complete — constraints improve output
-  quality but are not required for generation to function
+- :ref:`uc01` is complete — inventory passes the ``dc_inventory``
+  checks (at least one nucleus-capable phoneme; every category a
+  template references is populated)
+- :ref:`uc02` is complete — at least one syllable template defined
+- Constraints always exist in practice: new projects ship with
+  ``sonority_sequencing`` enabled (ADR-038)
+- Limits: 500 words per batch; 50 in GUI live preview
+- Each returned word carries both its IPA and romanization
+  (romanization equals the IPA string when no orthography rules
+  are defined — see :ref:`uc015`)
 
 Main Success Scenario
 ---------------------
 
-#. User sets generation parameters (word count, syllable range,
-   frequency weighting, seed) → system validates parameters:
-   - Word count > 0
-   - Min syllables ≥ 1
-   - Max syllables ≥ min syllables
-   - If seed is provided, it must be an integer
+1. User sets generation parameters (word count, syllable range,
+   frequency weighting, seed) → system validates them (count > 0
+   and ≤ 500; min syllables ≥ 1; max ≥ min; seed, if given, an
+   integer)
 
-#. System initializes :class:`~latticelang.core.generator.WordGenerator`
-   with the LanguageDefinition and parameters → generator stores
-   the inventory, templates, constraints, and seeds its PRNG
-   — see :attr:`~latticelang.core.generator.WordGenerator.seed`
+   Reproducibility (ADR-044): Reproducibility depends on the
+   entire pipeline drawing from deterministic per-slot streams
+   (ADR-044): no stage shares an RNG, so downstream edits don't
+   perturb upstream draw.
 
-#. For each requested word:
+2. System initializes
+   :class:`~latticelang.core.generator.WordGenerator` with the
+   LanguageDefinition and parameters, seeding its PRNG
 
-   a. System selects a syllable template at random (uniform across
-      defined templates) → calls
-      :meth:`~latticelang.core.generator.WordGenerator._select_template`
+3. For each word, the system delegates to :ref:`uc004`, which derives a per-slot deterministic stream (ADR-044).
 
-   b. For each slot in the selected template, system selects a phoneme:
-      - Filters inventory by allowed categories for the slot position
-      - If frequency weighting is enabled, weights selection by
-        :attr:`~latticelang.core.phonology.Phoneme.frequency`
-        → calls
-        :meth:`~latticelang.core.generator.WordGenerator._select_phoneme`
-      - Applies position restrictions (forbidden phonemes per slot)
-        from :ref:`uc03` constraints
+4. System checks the completed word against the existing word list
+   for duplicates → duplicates are regenerated (up to 50 attempts)
 
-   c. System assembles the selected phonemes into a candidate syllable
-      → creates a :class:`~latticelang.core.syllable.Syllable` object
+5. Steps 3–4 repeat until the requested word count is reached
 
-   d. System validates the candidate syllable against all active
-      constraints → delegates to :ref:`uc013`
-
-   e. If validation passes, syllable is accepted; if not, steps (a)–(d)
-      repeat with a new candidate (up to 100 attempts per syllable)
-
-   f. Steps (a)–(e) repeat until the word reaches the target syllable
-      count (randomly chosen between min and max)
-
-#. System checks the completed word against the existing word list for
-   duplicates → if duplicate, the word is regenerated (up to 50
-   attempts)
-
-#. Steps 3–4 repeat until the requested word count is reached
-
-#. System returns the word list as a list of IPA strings with
-   syllable boundaries marked (e.g. ``"stɹæm.bəl"``)
+6. 6. System returns the word list, each entry carrying the IPA
+   string with syllable boundaries (e.g., ``"stɹæm.bəl"``) and
+   its romanization per the project's orthography rules
+   (delegates to :ref:`uc015`) — e.g., ``"strambul"``.
 
 Postconditions
 --------------
 - A list of N unique words exists, all conforming to the
-  LanguageDefinition
-- If a seed was provided, the same parameters + definition + seed
-  will reproduce this exact list
-- Word list is available for display, export, or further processing
+  LanguageDefinition, including word-domain constraints
+- Same parameters + definition + seed reproduce the exact list
+- Word list is available for display, export, or further
+  processing
 
 Extensions
 ----------
 
-* **1a:** Invalid generation parameters
-  (e.g., word count = 0, min > max)
-  - 1a1: System raises
-    :class:`~latticelang.core.generator.ParameterError`
-  - 1a2: Error message identifies which parameter is invalid
+* **1a:** Invalid generation parameters (count = 0, min > max,
+  count > 500)
+  - 1a1: System raises :class:`~latticelang.core.generator.ParameterError`
+  - 1a2: Error identifies the invalid parameter
   - 1a3: User corrects and retries
 
-* **3b:** No phonemes available for a slot
-  (e.g., onset allows only consonants but no consonants are defined)
-  - 3b1: System raises
-    :class:`~latticelang.core.generator.GenerationError`
-  - 3b2: Error message: "No phonemes available for [position] slot in
-    template [name] — add phonemes to your inventory"
-  - 3b3: User is directed to :ref:`uc01`
+* **1b:** Requested count exceeds combinatorial maximum
+  - 1b1: System calculates the maximum unique words before generating
+  - 1b2: "Requested [N] words but only [M] unique combinations are possible with the current definition"
+  - 1b3: System offers to generate the maximum and stop, or cancel
 
-* **3e:** Syllable fails validation after 100 attempts
-  - 3e1: System skips this template for the current word
-  - 3e2: System logs warning: "Template [name] produced too many
-    invalid syllables — consider relaxing constraints"
-  - 3e3: If all templates are exhausted for a word, system raises
-    :class:`~latticelang.core.generator.NoValidTemplateError`
-  - 3e4: Error message lists which constraints are rejecting candidates
-  - 3e5: User is directed to :ref:`uc03` to review constraints
-  - → See :ref:`troubleshooting_no_output`
+* **3a:** Word-level validation fails repeatedly (10 attempts)
+  - 3a1: System reports which word-domain constraint rejects the word and at which junction (e.g., "geminate /b.b/ at syllables 2–3")
+  - 3a2: User is directed to :ref:`uc03`
+  - 3a3: If a single template's coda-onset combinations are systematically blocked, the system notes this as a likely cause
+
+* **3b:** Change results in zero valid words generated.
+  - System displays a warning: "No valid words — constraints may be too restrictive."
+  - System reports candidates surviving each filtering stage (template composition, constraint screening)
+  - User adjusts and retries.
 
 * **4a:** Duplicate word generated after 50 attempts
   - 4a1: System allows the duplicate with a note
-  - 4a2: Indicates that the LanguageDefinition may be too constrained
-    (small inventory + few templates → limited word space)
-  - 4a3: System calculates the combinatorial maximum: "With [X]
-    phonemes and [Y] templates, approximately [Z] unique words are
-    possible"
-  - 4a4: User adjusts inventory or templates — see :ref:`uc01`,
-    :ref:`uc02`
+  - 4a2: Indicates the definition may be too constrained (small inventory + few templates → limited word space)
+  - 4a3: System reports the combinatorial maximum: "With [X] phonemes and [Y] templates, approximately [Z] unique words are possible"
+  - 4a4: User adjusts inventory or templates — see :ref:`uc01`, :ref:`uc02`
 
-* **5a:** Word count exceeds combinatorial maximum
-  (e.g., requesting 10,000 words from a 6-phoneme inventory with
-  one CV template)
-  - 5a1: System calculates the maximum possible unique words before
-    generation begins
-  - 5a2: System informs user: "Requested [N] words but only [M]
-    unique combinations are possible with the current definition"
-  - 5a3: System offers to generate the maximum and stop, or cancel
+
+
 
 Frequency
 ---------
-Very high — called once per generation request in CLI mode, or
-continuously (debounced) in GUI live-preview mode.
+Very high — once per generation request in batch mode; continuously
+(debounced, capped at 50 words) in GUI live preview.
 
 Related
 -------
 
 **Calls (delegates to):**
-- :ref:`uc013` — Validate Syllable Against Constraints (Subfunction,
-  called in step 3d)
+- :ref:`uc014` — Compose a Candidate Syllable (Subfunction; the per-syllable loop, retry policy, and template-exhaustion handling live there)
+- :ref:`uc013` — Validate Syllable (called by UC-014 per syllable; the completed-word sweep here uses it with full context)
+- :ref:`uc015` — Apply Orthography Rules (Subfunction, called in step 6 to render each generated word in the project's spelling)
 
 **Called by:**
-- :ref:`uc08` — Work in GUI with Live Preview (Summary, calls UC-04
-  as part of the interactive editing loop)
+- :ref:`uc08` — Work in GUI with Live Preview (UC-04 is the generation engine inside the editing loop)
 - CLI entry point (``latticelang generate``)
-- Test suite (``test_english_validation.py``)
+- Test suite
 
 **Adjacent to:**
-- :ref:`uc07` — Export to LaTeX (receives this use case's output)
-- :ref:`uc005` — Serialize/Deserialize (loads the input for this use case)
+- :ref:`uc07` — Export to LaTeX (consumes this output)
+- :ref:`uc005` — Serialize/Deserialize (loads the input)
 
 Variations
 ----------
 
-* **Via CLI (Milestone 2):**
+* **Via CLI (where scheduled):**
 
   .. code-block:: bash
 
      latticelang generate --preset english_ga --count 50 --seed 42
 
-  Output: one word per line on stdout
-  Errors: exit code 1, message on stderr
+  Output: one word per line, romanized and IPA separated by a tab
+  (``--format ipa|romanized|both`` controls columns). Errors:
+  exit code 1, message on stderr. Output capped at 50 words, shown as two columns: romanization / IPA.
 
-* **Via GUI (Milestone 3):**
-  Triggered automatically on rule change (debounced 300ms) or manually
-  via "Generate" button. Output: displayed in live preview pane.
-  Errors: in-app notification with "Fix" button linking to relevant
-  use case (:ref:`uc01` or :ref:`uc03`).
-
-* **Via Python API (Milestone 1):**
+* **Via GUI (Phase Gamma):**
+  Triggered on rule change (debounced 300ms) or via "Generate".
+  Output capped at 50 words in the live preview pane. Errors:
+  in-app notification with "Fix" button linking to :ref:`uc01` or
+  :ref:`uc03`.
 
   .. code-block:: python
 
      from latticelang.core.generator import WordGenerator
-     from latticelang.orthography.json_io import load_project
+     from latticelang.io.language_json import load_project
 
      definition = load_project("english_ga.json")
      gen = WordGenerator(definition, seed=42)
@@ -180,24 +150,48 @@ Variations
          count=50,
          min_syllables=1,
          max_syllables=4,
-         frequency_weighted=True,
+         frequency_weighted=True,  # default; False for uniform
      )
      for word in words:
-         print(word)
+         print(word.romanization, word.ipa)  # GeneratedWord objects
 
 Notes
 -----
-The generator uses a seeded PRNG (Python's ``random.Random`` with
-the provided seed). The same LanguageDefinition + same seed always
-produces the same word list. This is critical for testing (see
-:ref:`testing_strategy`) and for users who want to share a specific
-"language snapshot" or reproduce results across sessions.
+Seeded PRNG (``random.Random``): same definition + same seed
+always reproduces the same list — critical for testing and for
+reproducing "language snapshots."
 
-The generation algorithm prioritizes correctness over speed: it
-attempts up to 100 candidate syllables before giving up on a template.
-This is acceptable for MVP word counts (≤ 1000 words). Post-MVP
-optimization may include precomputing valid clusters per template
-to avoid rejection sampling.
+Reproducibility depends on the *entire* pipeline being seeded:
+UC-014's slot filling and this case's word-level decisions draw
+from the same PRNG.
+
+Word-domain validation (step 3, second half) is deliberately a
+word-completion sweep rather than inline: syllables are validated
+as built with whatever context exists; the finished word gets one
+full-context check. SKIPPED results from per-syllable validation
+are provisional; a word is never reported valid until word-domain
+constraints have run with full context (Q37).
+
+.. todo::
+   :class: warning
+
+   **Troubleshooting page for UC-04**
+   Page needed under ``user/troubleshooting/``: no output / all
+   templates exhausted (surfaced from UC-014's exhaustion
+   extension in word context).
+
+.. todo::
+   :class: warning
+
+   **Contextual romanization rules (post-MVP)**
+   MVP maps single phonemes to grapheme strings only
+   (longest-match, left-to-right, within a syllable). Contextual
+   spelling rules (e.g., "c" → /s/ before front vowels, "k"
+   elsewhere) are deferred until the segment-level forward path
+   and the reverse-pipeline parser are both stable — they must be
+   implemented as exact inverses of each other or round-tripping
+   breaks. Revisit once generation (UC-04) and import (reverse
+   pipeline) are both basically working.
 
 Flow Diagram
 ------------
@@ -209,28 +203,18 @@ Flow Diagram
        B -->|No| C[Raise ParameterError]
        B -->|Yes| D[Initialize WordGenerator]
        D --> E[For Each Word:]
-       E --> F[Select Template at Random]
-       F --> G[For Each Slot: Select Phoneme]
-       G --> H{Phonemes Available?}
-       H -->|No| I[Raise GenerationError]
-       H -->|Yes| J[Apply Position Restrictions]
-       J --> K[Apply Frequency Weighting]
-       K --> L[Assemble Candidate Syllable]
-       L --> M{Constraints Pass?}
-       M -->|Yes| N{Syllable Count Met?}
-       M -->|No| O{Attempts < 100?}
-       O -->|Yes| F
-       O -->|No| P[Skip Template, Log Warning]
-       P --> Q{All Templates Exhausted?}
-       Q -->|Yes| R[Raise NoValidTemplateError]
-       Q -->|No| F
-       N -->|No| F
-       N -->|Yes| S{Duplicate?}
-       S -->|Yes| T{Attempts < 50?}
-       T -->|Yes| E
-       T -->|No| U[Accept Duplicate, Note]
-       S -->|No| V[Add to Word List]
-       U --> V
-       V --> W{Word Count Met?}
-       W -->|Yes| X[Return Word List]
-       W -->|No| E
+       E --> F[Compose Word from Syllables - via UC-014]
+       F --> G[Word-level Sweep: Word-domain Constraints]
+       G --> H{Word Passes?}
+       H -->|No| I{Attempts < 10?}
+       I -->|Yes| F
+       I -->|No| J[Report Rejecting Constraint + Junction]
+       H --> K{Duplicate?}
+       K -->|Yes| L{Attempts < 50?}
+       L -->|Yes| E
+       L -->|No| M[Accept Duplicate, Note]
+       K -->|No| N[Add to Word List]
+       M --> N
+       N --> O{Word Count Met?}
+       O -->|Yes| P[Return Word List]
+       O -->|No| E

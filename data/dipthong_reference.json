@@ -1,0 +1,155 @@
+{
+  "version": "2026-08-24",
+  "data_status": "APPROXIMATE — frequency values are estimates from typological literature, not PHOIBLE data dumps. Must be verified against PHOIBLE 2.0 segment data before release.",
+  "license": {
+    "data_source": "PHOIBLE 2.0",
+    "data_url": "https://phoible.org",
+    "data_license": "CC-BY 4.0",
+    "data_citation": "Moran, Steven & McCloy, Daniel (eds.) 2019. PHOIBLE 2.0."
+  },
+  "diphthongs": [
+    {
+      "symbol": "aɪ",
+      "components": ["a", "ɪ"],
+      "description": "Falling diphthong, open to near-close front",
+      "type": "falling",
+      "rarity_tier": 2,
+      "phoible_frequency": 0.183,
+      "example_languages": ["English (PRICE)", "German (Ei)", "Dutch (ij)"]
+    },
+    {
+      "symbol": "aʊ",
+      "components": ["a", "ʊ"],
+      "description": "Falling diphthong, open to near-close back",
+      "type": "falling",
+      "rarity_tier": 2,
+      "phoible_frequency": 0.121,
+      "example_languages": ["English (MOUTH)", "German (au)"]
+    },
+    {
+      "symbol": "ɔɪ",
+      "components": ["ɔ", "ɪ"],
+      "description": "Falling diphthong, open-mid back to near-close front",
+      "type": "falling",
+      "rarity_tier": 3,
+      "phoible_frequency": 0.078,
+      "example_languages": ["English (CHOICE)", "Dutch (ui)"]
+    },
+    {
+      "symbol": "eɪ",
+      "components": ["e", "ɪ"],
+      "description": "Falling diphthong, close-mid front to near-close front",
+      "type": "falling",
+      "rarity_tier": 2,
+      "phoible_frequency": 0.155,
+      "example_languages": ["English (FACE)", "Dutch (ee)"]
+    },
+    {
+      "symbol": "oʊ",
+      "components": ["o", "ʊ"],
+      "description": "Falling diphthong, close-mid back to near-close back",
+      "type": "falling",
+      "rarity_tier": 2,
+      "phoible_frequency": 0.094,
+      "example_languages": ["English (GOAT, American)"]
+    },
+    {
+      "symbol": "əʊ",
+      "components": ["ə", "ʊ"],
+      "description": "Falling diphthong, schwa to near-close back",
+      "type": "falling",
+      "rarity_tier": 3,
+      "phoible_frequency": 0.041,
+      "example_languages": ["English (GOAT, British RP)"]
+    },
+    {
+      "symbol": "ɪə",
+      "components": ["ɪ", "ə"],
+      "description": "Centring diphthong, near-close front to schwa",
+      "type": "centring",
+      "rarity_tier": 4,
+      "phoible_frequency": 0.023,
+      "example_languages": ["English (NEAR, British RP)"]
+    },
+    {
+      "symbol": "eə",
+      "components": ["e", "ə"],
+      "description": "Centring diphthong, close-mid front to schwa",
+      "type": "centring",
+      "rarity_tier": 4,
+      "phoible_frequency": 0.018,
+      "example_languages": ["English (SQUARE, British RP)"]
+    },
+    {
+      "symbol": "ʊə",
+      "components": ["ʊ", "ə"],
+      "description": "Centring diphthong, near-close back to schwa",
+      "type": "centring",
+      "rarity_tier": 4,
+      "phoible_frequency": 0.012,
+      "example_languages": ["English (CURE, British RP)"]
+    },
+    {
+      "symbol": "ai",
+      "components": ["a", "i"],
+      "description": "Falling diphthong, open to close front",
+      "type": "falling",
+      "rarity_tier": 2,
+      "phoible_frequency": 0.142,
+      "example_languages": ["Spanish (aire)", "Italian (mai)", "Japanese (kawaii)"]
+    },
+    {
+      "symbol": "au",
+      "components": ["a", "u"],
+      "description": "Falling diphthong, open to close back",
+      "type": "falling",
+      "rarity_tier": 2,
+      "phoible_frequency": 0.118,
+      "example_languages": ["Spanish (causa)", "German (Haus)"]
+    },
+    {
+      "symbol": "ei",
+      "components": ["e", "i"],
+      "description": "Falling diphthong, close-mid front to close front",
+      "type": "falling",
+      "rarity_tier": 2,
+      "phoible_frequency": 0.137,
+      "example_languages": ["Spanish (rey)", "German (Mailand)", "Japanese (sensei)"]
+    },
+    {
+      "symbol": "eu",
+      "components": ["e", "u"],
+      "description": "Falling diphthong, close-mid front to close back",
+      "type": "falling",
+      "rarity_tier": 3,
+      "phoible_frequency": 0.052,
+      "example_languages": ["Portuguese (eu)", "Catalan (reu)"]
+    },
+    {
+      "symbol": "oi",
+      "components": ["o", "i"],
+      "description": "Falling diphthong, close-mid back to close front",
+      "type": "falling",
+      "rarity_tier": 3,
+      "phoible_frequency": 0.071,
+      "example_languages": ["Spanish (oigo)", "Italian (poi)"]
+    },
+    {
+      "symbol": "ou",
+      "components": ["o", "u"],
+      "description": "Falling diphthong, close-mid back to close back",
+      "type": "falling",
+      "rarity_tier": 2,
+      "phoible_frequency": 0.089,
+      "example_languages": ["Greek (ού)", "French (au)"]
+    },
+    {
+      "symbol": "øʊ",
+      "rarity_tier": 6,
+      "warning": "unattested",
+      "component_rarity": {"ø": 4, "ʊ": 2},
+      "advisory": "This diphthong has not been documented. May be difficult to pronounce distinctly."
+}
+  ],
+  "notes": "Diphthongs are not atomic IPA symbols. They are sequences of two vowel segments that function as a single phonological unit within a syllable. This reference list provides common diphthongs for browsing; users may define any vowel sequence as a diphthong in their language definition."
+}

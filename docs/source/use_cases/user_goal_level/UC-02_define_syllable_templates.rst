@@ -1,11 +1,13 @@
+.. _UC-02_define_syllable_templates:
 .. _uc02:
 
 UC-02: Define Syllable Templates
 ================================
 
-:Goal Level: User goal
-:Priority: MVP — Milestone 1
-:Status: Planned
+:Doc Status: Draft
+:Goal Level: User Goal
+:Impl Status: Not started
+:Phase: Via CLI (Phase Beta), Via Python API (Phase Beta), Via GUI (Phase Gamma)
 
 Goal
 ----
@@ -17,10 +19,9 @@ syllables.
 
 Preconditions
 -------------
-- :ref:`uc01` is complete — a phoneme inventory exists with at least one
-  vowel
+- :ref:`uc01` is complete — a phoneme inventory exists with at least one vowel
 - The concept of syllable positions (onset/nucleus/coda) is understood
-  — see :ref:`reference_syllable_structure`
+- See :ref:`reference_syllable_structure`
 
 Main Success Scenario
 ---------------------
@@ -32,13 +33,17 @@ Main Success Scenario
 
 2. User defines slots in order:
    - Position type: onset, nucleus, or coda → system stores as
-     :class:`~latticelang.core.syllable.SlotPosition`
-   - Allowed categories: consonant, vowel, diphthong, tone → system
-     validates against the inventory from :ref:`uc01`
+   :class:`~latticelang.core.syllable.SlotPosition`
+   - Allowed categories: consonant, vowel, diphthong → system
+   validates against the inventory from :ref:`uc01`. Tone is not
+   a slot category; tonal behavior is enforced by the reserved
+   tone_assignment constraint (ADR-048) and configured by a
+   future tone-system stage.
    - Minimum count (integer, typically 0 or 1) → system validates
-     min ≤ max
-   - Maximum count (integer, typically 1–3) → system validates
-     max ≤ 3 (configurable limit)
+   min ≤ max
+   - Maximum count (integer, typically 1–3) → system validates max
+   within the recommended range (3, configurable), warning on exceed
+   with confirmation required
    - Each slot is stored as a :class:`~latticelang.core.syllable.Slot`
 
 3. System validates the template → calls
@@ -49,8 +54,7 @@ Main Success Scenario
 
 5. User repeats steps 1–3 for additional templates as desired
 
-6. User saves the project → system serializes the templates — see
-   :ref:`uc005`
+6. User saves the project → system serializes the templates — see :ref:`uc005`
 
 Postconditions
 --------------
@@ -64,25 +68,21 @@ Extensions
 
 * **2a:** Slot allows only categories not in inventory
   (e.g., onset allows only diphthongs but no diphthongs exist)
-  - 2a1: System warns: "Slot [position] allows only [category], but
-    no such phonemes exist in inventory"
-  - 2a2: User adds phonemes (links to :ref:`uc01`) or changes slot
-    categories
-  - → See :ref:`troubleshooting_empty_category`
+  - 2a1: System warns: "Slot [position] allows only [category], but no such phonemes exist in inventory"
+  - 2a2: User adds phonemes (links to :ref:`uc01`) or changes slot categories
+  - See :ref:`troubleshooting_empty_category`
 
 * **3a:** No nucleus slot defined
   - 3a1: System rejects template with explanation
   - 3a2: "Every syllable requires a nucleus (typically a vowel)"
   - 3a3: User adds nucleus slot and retries
-  - → See :ref:`troubleshooting_missing_nucleus`
+  - See :ref:`troubleshooting_missing_nucleus`
 
 * **3b:** Nucleus slot allows only consonants (syllabic consonant
   configuration)
-  - 3b1: System warns: "Nucleus allows only consonants — ensure you
-    intend syllabic consonants"
+  - 3b1: System warns: "Nucleus allows only consonants — ensure you intend syllabic consonants"
   - 3b2: User confirms or revises
-  - Note: Syllabic consonants are supported but rare in English-like
-    languages; this is documented behavior
+  - Note: Syllabic consonants are supported but rare in English-like languages; this is documented behavior
 
 * **3c:** Template name already exists
   - 3c1: System prompts to rename or overwrite
@@ -94,10 +94,9 @@ Extensions
   - 3d3: User adjusts and retries
 
 * **3e:** Max count exceeds system limit (3)
-  - 3e1: System warns: "Max count exceeds recommended maximum (3).
-    Longer clusters are rare in natural languages."
+  - 3e1: System warns: "Max count exceeds recommended maximum (3). Longer clusters are rare in natural languages."
   - 3e2: User confirms override or reduces max
-  - → See :ref:`uc013`, extension 4a
+  - See :ref:`uc013`, extension 4a
 
 * **8a:** File I/O error during save
   - 8a1: System displays error with file path and permissions hint
@@ -116,17 +115,14 @@ Related
 - :ref:`uc005` — Serialize/Deserialize (Subfunction, called in step 8)
 
 **Called by:**
-- :ref:`uc08` — Work in GUI with Live Preview (Summary, UC-02 is one
-  of the activities within the editing loop)
+- :ref:`uc08` — Work in GUI with Live Preview (Summary, UC-02 is one of the activities within the editing loop)
 
 **Prerequisite for:**
-- :ref:`uc03` — Define Phonotactic Constraints (templates define the
-  raw shapes; constraints filter them)
+- :ref:`uc03` — Define Phonotactic Constraints (templates define the raw shapes; constraints filter them)
 - :ref:`uc04` — Generate Words (consumes templates to build syllables)
 
 **Dependent on:**
-- :ref:`uc01` — Define Phoneme Inventory (provides phoneme categories
-  for slot validation)
+- :ref:`uc01` — Define Phoneme Inventory (provides phoneme categories for slot validation)
 
 Variations
 ----------
