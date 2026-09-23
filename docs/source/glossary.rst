@@ -204,7 +204,7 @@ Glossary
       and the system warns if they don't. Custom symbols not present
       in the IPA reference table are accepted but flagged, and receive
       no automatic features, rarity tier, or frequency data until reviewed.
-      See :ref:`ipa_reference` for the diphthong reference.
+      See :ref:`dc_ipa_reference` for the diphthong reference.
       Tautosyllabic by definition (one phoneme can't span syllables).
       In LatticeLang: one segment with ``components`` field,
       ``syllabic: "+"``, and a single slot occupation. Contrast with
@@ -232,7 +232,7 @@ Glossary
       mechanism: the glottis closes, trapping air, then the oral
       closure releases. Notated with a trailing apostrophe
       (e.g., /tʼ/). :term:`ejectives`, :term:`implosives`, :term:`clicks`.
-      Rare cross-linguistically. See :ref:`ipa_reference`.
+      Rare cross-linguistically. See :ref:`dc_ipa_reference`.
 
    faithfulness constraint
    faithfulness constraints
@@ -327,15 +327,15 @@ Glossary
       different syllables vs. within one syllable.
 
    hiatus
-   Two vowel sounds in adjacent syllabic positions, belonging to
-   *different syllables* (e.g., "re.act"). Contrast with a
-   :term:`diphthong`, where two vowel qualities form a single
-   phoneme in a single nucleus, and with a glide + vowel sequence
-   (e.g., /ja/), where the glide sits in a margin slot. All three
-   structures express "two vowel-like letters in a row" and are
-   distinct in LatticeLang: diphthong = one phoneme (:ref:`ADR-028`),
-   hiatus = adjacent syllables, glide sequence = margin + nucleus
-   (:ref:`ADR-034`).
+      Two vowel sounds in adjacent syllabic positions, belonging to
+      *different syllables* (e.g., "re.act"). Contrast with a
+      :term:`diphthong`, where two vowel qualities form a single
+      phoneme in a single nucleus, and with a glide + vowel sequence
+      (e.g., /ja/), where the glide sits in a margin slot. All three
+      structures express "two vowel-like letters in a row" and are
+      distinct in LatticeLang: diphthong = one phoneme (:ref:`ADR-028`),
+      hiatus = adjacent syllables, glide sequence = margin + nucleus
+      (:ref:`ADR-034`).
 
    homorganic
       Sharing the same place of articulation, e.g., /n/ and /t/
@@ -367,7 +367,7 @@ Glossary
    International Phonetic Alphabet
       A standardized system for representing the sounds of spoken
       language. Each symbol corresponds to exactly one :term:`phone`. See
-      :ref:`ipa_reference` and :cite:p:`ipa1999`.
+      :ref:`dc_ipa_reference` and :cite:p:`ipa1999`.
 
    labial : place of articulation
       Sounds articulated with the lips, :term:`place of articulation`. A
@@ -465,6 +465,10 @@ Glossary
       /p/ ≠ /b/). Contrast with :term:`complementary distribution`.
       Used to establish phonemic contrast. Imported corpora lacking
       minimal pairs may indicate under-specification in the inferred inventory.
+
+   monomoraic
+      A syllable consisting of a single mora (weight unit). Typically,
+      a short vowel or a coda-less syllable.
 
    mora
    morae

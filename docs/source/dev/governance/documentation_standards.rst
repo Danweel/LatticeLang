@@ -107,15 +107,15 @@ Roles and syntax:
 
 - Labels: ``.. _label-name:`` (lowercase, hyphenated); references
   use ``:ref:`label-name```.
-- Questions: ``.. _qXX-topic:`` → ``:ref:`qXX-topic``
-- Glossary terms: ``:term:`affricate``
-- Parenthetical citations: ``:cite:p:`key``
-- Textual citation: ``:cite:t:`key```, ``{see}:cite:t:`key`{p. 1166}``
+- Questions: .. _qXX-topic: or ref:`QXX`
+- Glossary terms: ``:term:`affricate```
+- Parenthetical citations: ``:cite:p:`key```
+- Textual citation: ``:cite:t:`key```, ``{see}:cite:t:`hayes2008`{p. 1166}``
 - Footnotes: ``:footcite:t:``, ``:footcite:p:``
 
 Label semantics (why refs fail silently):
 
-- Labels are exact-match: ``adr_037`` and ``adr-037`` are different
+- Labels are exact-match: ``ADR_037`` and ``ADR-037`` are different
   labels, and case matters (``ADR-032`` ≠ ``adr-032``).
 - Labels bind to the NEXT document node. A label placed between a
   section heading and its first paragraph attaches to the
@@ -126,8 +126,7 @@ Label semantics (why refs fail silently):
   create a document named ``api/index_api``. Toctree lines point at
   the real file (``<directory>/index``); prose references use the
   ``index_<area>`` label.
-- ADR labels are lowercase-hyphenated (``.. _adr-037:``), per the
-  general label rule.
+- ADR labels are uppercase-hyphenated (``.. _ADR-037:``).
 
 Same-commit hygiene:
 
@@ -171,7 +170,7 @@ keep both registries synchronized in the same commit:
    exists, or worse, both drift apart.
 
 2. **Update the question body.** Set its Status line to
-   ``ANSWERED (date, :ref:`adr-0XX`)`` (or a split status if only
+   ``ANSWERED (date, :ref:`ADR-0XX`)`` (or a split status if only
    part of the question is settled — say which part).
 
 3. **Update the Status Overview table.** The table row for that
@@ -251,36 +250,6 @@ Sphinx Extensions in Use
    "sphinx_notfound_page","Custom 404 page"
    "sphinx_copybutton","Copy buttons on code blocks"
    "myst_parser","Markdown support"
-
-IPA Reference Data Fields
--------------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 75
-
-   * - Field
-     - Description
-   * - symbol
-     - Canonical form (tie bar for affricates: t͡s)
-   * - description
-     - Human-readable description
-   * - place / manner / voicing
-     - Consonant features
-   * - height / backness / roundedness
-     - Vowel features
-   * - unicode_points
-     - Array of Unicode code points
-   * - aliases
-     - Informal names
-   * - alternate_forms
-     - Valid IPA variations (e.g., "ts" for "t͡s")
-   * - rarity_tier
-     - 1–5: universal to rare; 6: unattested
-   * - phoible_frequency
-     - Decimal 0–1, from PHOIBLE data
-   * - license
-     - License metadata for data source
 
 Toctree and filename coupling
 -----------------------------
@@ -483,7 +452,7 @@ Rules
 
 1. **Steps cite their warrants.** Any step implementing an ADR
    consequence or an answered question carries the reference
-   inline — ``(:ref:`ADR-034`)``, ``(Q7)`` — so research and
+   inline — ``(:ref:`ADR-034`)``, ``(:ref:`Q7`)`` — so research and
    reasoning are traceable from the step itself, not only
    backward from the ADR. If a step exists and no warrant can
    be named, that is a documentation defect.

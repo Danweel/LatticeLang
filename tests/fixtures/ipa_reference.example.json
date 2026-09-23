@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "pinned_sources": {
+    "phoible_release": "2.0",
+    "ipa_chart_year": "2015"
+  },
+  "attribution": {
+    "phoible": "PHOIBLE 2.0 (CC-BY 4.0), Moran & McCloy 2019",
+    "ipa_chart": "IPA Chart, 2015 revision — International Phonetic Association"
+  },
+  "consonants": [
+    {
+      "symbol": "p",
+      "description": "Voiceless bilabial plosive",
+      "place": "bilabial",
+      "manner": "plosive",
+      "voicing": "voiceless",
+      "features": { "syllabic": "-", "consonantal": "+", "sonorant": "-", "continuant": "-" },
+      "sonority_rank": 1,
+      "unicode_points": ["U+0070"],
+      "canonical_forms": ["p"],
+      "aliases": [],
+      "tipa": "\\textp",
+      "phoible_frequency": 0.95,
+      "rarity_tier": 1
+    }
+  ],
+  "vowels": [
+    {
+      "symbol": "ɑ",
+      "description": "Open back unrounded vowel",
+      "height": "open",
+      "backness": "back",
+      "roundedness": "unrounded",
+      "features": { "syllabic": "+", "consonantal": "-", "sonorant": "+" },
+      "sonority_rank": 9,
+      "unicode_points": ["U+0251"],
+      "canonical_forms": ["ɑ"],
+      "aliases": [],
+      "tipa": "\\ipaA",
+      "phoible_frequency": 0.95,
+      "rarity_tier": 1
+    }
+  ],
+  "special_combinations": [
+    {
+      "symbol": "t͡s",
+      "description": "Voiceless alveolar affricate",
+      "place": "alveolar",
+      "manner": "affricate",
+      "voicing": "voiceless",
+      "features": { "syllabic": "-", "consonantal": "+", "sonorant": "-", "continuant": "+" },
+      "sonority_rank": 2,
+      "unicode_points": ["U+0074", "U+0361", "U+0073"],
+      "canonical_forms": ["t͡s", "ts"],
+      "aliases": ["ts"],
+      "tipa": "\\textts",
+      "phoible_frequency": 0.43,
+      "rarity_tier": 2,
+      "combination_type": "tie_bar",
+      "constituents": ["t", "s"]
+    },
+    {
+      "symbol": "n̩",
+      "description": "Syllabic alveolar nasal",
+      "place": "alveolar",
+      "manner": "nasal",
+      "voicing": "voiced",
+      "features": { "syllabic": "+", "consonantal": "+", "sonorant": "+" },
+      "sonority_rank": 5,
+      "unicode_points": ["U+006E", "U+0329"],
+      "canonical_forms": ["n̩"],
+      "aliases": [],
+      "tipa": null,
+      "phoible_frequency": 0.09,
+      "rarity_tier": 3,
+      "combination_type": "syllabic_mark",
+      "constituents": ["n", "̩"]
+    },
+    {
+      "symbol": "aː",
+      "description": "Open back unrounded long vowel",
+      "height": "open",
+      "backness": "back",
+      "roundedness": "unrounded",
+      "features": { "syllabic": "+", "consonantal": "-", "sonorant": "+", "long": "+" },
+      "sonority_rank": 9,
+      "unicode_points": ["U+0061", "U+02D0"],
+      "canonical_forms": ["aː"],
+      "aliases": ["a:"],
+      "tipa": "\\ipaA:",
+      "phoible_frequency": 0.20,
+      "rarity_tier": 2,
+      "combination_type": "length",
+      "constituents": ["a", "ː"]
+    }
+  ]
+}
