@@ -111,6 +111,13 @@ Extensions
   - 6a2: Agreeing fields merge silently; conflicting fields
   collect into one grouped prompt: keep all existing / take all
   new / decide individually (ADR-040)
+  When the user chooses "merge features," the merge dialog
+  presents both records side-by-side with per-field selection,
+  prefilled with the deterministic outcomes of :ref:`adr-051`
+  (existing sonority rank retained, features unioned with
+  existing winning conflicts, frequencies summed). The user
+  confirms or adjusts — the dialog is a confirmation surface,
+  not a blank decision (:ref:`adr-035` pattern).
   - 6a3: ``sonority_rank`` is never merged — recomputed from the
   merged features; ``custom`` is never downgraded
   - 6a4: Pre-merge entry is recoverable (undo stack)

@@ -31,14 +31,14 @@ Main Success Scenario
 1. System selects a syllable template at random (uniform across
    defined templates)
 
-2. For each slot in the selected template, the system delegates to :ref:`uc004`, which derives a per-slot deterministic stream (ADR-044).
+2. For each slot in the selected template, the system delegates to :ref:`uc017`, which derives a per-slot deterministic stream (ADR-044).
 
 3. System removes phonemes disqualified by ``position_restrictions``
    constraints from the eligible set
 
 4. System selects one phoneme from the eligible set. System obtains the slot's
-   phoneme via :ref:`uc004`, which applies per-slot frequency weighting (:ref:`Q7`);
-   normalization is per-slot, never persisted (see :ref:`uc004`).
+   phoneme via :ref:`uc017`, which applies per-slot frequency weighting (:ref:`Q7`);
+   normalization is per-slot, never persisted (see :ref:`uc017`).
 
 5. System assembles the selected phonemes into a candidate
    :class:`~latticelang.core.syllable.Syllable`

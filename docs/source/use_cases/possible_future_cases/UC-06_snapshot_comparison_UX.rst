@@ -1,4 +1,4 @@
-.. _UC_06_snapshot_comparison_UX:
+.. _UC-06_snapshot_comparison_ux:
 .. _uc06:
 
 Snapshot Comparison UX

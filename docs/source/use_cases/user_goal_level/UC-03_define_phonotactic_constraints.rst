@@ -98,14 +98,14 @@ Extensions
 
 **3b:** User disables the default ``sonority_sequencing``
   - 3b1: System warns: "Disabling SSP will allow unnatural
-  clusters like /pt/ or /mk/ in onsets. Are you sure?"
+    clusters like /pt/ or /mk/ in onsets. Are you sure?"
   - 3b2: User confirms — some languages do allow SSP violations,
-  and the system does not hard-block this (ADR-035: overrides
-  are explicit and allowed; ADR-038: the default is visible,
-  so disabling is an informed act, not a hidden one)
+    and the system does not hard-block this (ADR-035: overrides
+    are explicit and allowed; ADR-038: the default is visible,
+    so disabling is an informed act, not a hidden one)
   - 3b3: System records the override on the constraint instance
-  (persisted as data, dc_constraints); the override event is
-  reported through the active interface (GUI/CLI) and is not persisted.
+    (persisted as data, dc_constraints); the override event is
+    reported through the active interface (GUI/CLI) and is not persisted.
 
 **3c:** User defines a constraint with no parameters (e.g., ``no_geminate_obstruents`` takes none)
   - 3c1: System accepts the constraint as a boolean-enabled rule
@@ -115,10 +115,10 @@ Extensions
   - 4a1: System warns: "Constraint [A] and constraint [B] may conflict — [description]"
   - 4a2: User resolves (adjusts parameters) or acknowledges the conflict (system allows both but logs it)
   - 4a3: System displays the survival funnel — candidates composed per template,
-  then survivors after each active constraint in evaluation order — and names the
-  most-rejected constraint with one rejected candidate as a concrete example.
-  "Most-rejected" is a heuristic ranking of where candidates died, not a causal
-  claim about unsatisfiability; see :ref:ADR-046.
+    then survivors after each active constraint in evaluation order — and names the
+    most-rejected constraint with one rejected candidate as a concrete example.
+    "Most-rejected" is a heuristic ranking of where candidates died, not a causal
+    claim about unsatisfiability; see :ref:ADR-046.
 **7a:** File I/O error during save
   - 7a1: System displays error with file path and permissions hint
   - 7a2: User retries or saves to alternate location

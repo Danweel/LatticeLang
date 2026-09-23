@@ -1,3 +1,5 @@
+SPHINXOPTS ?=
+
 .PHONY: docs docs-live docs-clean help
 
 help:
@@ -6,7 +8,7 @@ help:
 	@echo "docs-clean - remove docs/_build"
 
 docs:
-	poetry run sphinx-build -b html docs/source docs/_build/html
+	poetry run sphinx-build -b html $(SPHINXOPTS) docs/source docs/_build/html
 
 docs-live:
 	poetry run sphinx-autobuild docs/source docs/_build/html

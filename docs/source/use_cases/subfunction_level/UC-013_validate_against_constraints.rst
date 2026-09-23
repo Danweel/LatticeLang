@@ -50,11 +50,8 @@ Main Success Scenario
    sequence in isolation → PASSED or FAILED with a reason string
 
 4. For each word-domain constraint:
-   - If ``word_context`` is available, system evaluates across
-   segment boundaries (the coda-onset junctions where
-   geminates and word-domain clusters live)
-   - If ``word_context`` is unavailable, the result is SKIPPED —
-   reported as such, distinct from PASSED (Q37 four-value, :ref:`adr-039`)
+   - If ``word_context`` is available, system evaluates across segment boundaries (the coda-onset junctions where geminates and word-domain clusters live)
+   - If ``word_context`` is unavailable, the result is SKIPPED — reported as such, distinct from PASSED (Q37 four-value, :ref:`adr-039`)
 
 5. System aggregates the results into an overall verdict:
    PASSED if and only if no constraint FAILED. SKIPPED results do
@@ -83,10 +80,10 @@ Extensions
   - 3a2: Overall verdict is not PASSED — fail-closed, never fail-silent
 
   * System displays the survival funnel — candidates composed per
-  template, then survivors after each active constraint in evaluation order
-  — and names the most-rejected constraint with one rejected candidate as a
-  concrete example. "Most-rejected" is a heuristic ranking of where candidates
-  died, not a causal claim about unsatisfiability; see :ref:ADR-046.
+    template, then survivors after each active constraint in evaluation order
+    — and names the most-rejected constraint with one rejected candidate as a
+    concrete example. "Most-rejected" is a heuristic ranking of where candidates
+    died, not a causal claim about unsatisfiability; see :ref:ADR-046.
 
 **4a:** Two constraints in known conflict (per UC-03 extension 4a) both FAIL the sequence
   - 4a1: Both results are reported with their reasons

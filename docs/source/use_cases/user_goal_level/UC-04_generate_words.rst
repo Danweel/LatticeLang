@@ -45,7 +45,7 @@ Main Success Scenario
    :class:`~latticelang.core.generator.WordGenerator` with the
    LanguageDefinition and parameters, seeding its PRNG
 
-3. For each word, the system delegates to :ref:`uc004`, which derives a per-slot deterministic stream (ADR-044).
+3. For each word, the system delegates to :ref:`uc017`, which derives a per-slot deterministic stream (ADR-044).
 
 4. System checks the completed word against the existing word list
    for duplicates → duplicates are regenerated (up to 50 attempts)

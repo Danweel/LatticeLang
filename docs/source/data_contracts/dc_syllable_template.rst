@@ -10,8 +10,7 @@ Syllable Template Data Contract
 
 .. note::
    This contract was reviewed during the 2026-09-16 use-case
-   and spec-completeness audit. See :ref:`audit-september-2026`
-   for the full findings table. Key design decisions:
+   and spec-completeness audit. Key design decisions:
    :ref:`adr-047` (logical schema vs. adapters),
    :ref:`adr-048` (tone as separate stage),
    :ref:`adr-049` (coordinate-addressed random streams),
@@ -25,7 +24,7 @@ one syllable type: a sequence of margin and nucleus slots, each
 admitting phoneme categories per the eligibility rules below.
 Templates are data — the generation pipeline composes words by
 selecting templates (:ref:`ADR-049`, domain ``template``) and
-filling their slots (:ref:`uc004`).
+filling their slots (:ref:`uc017`).
 
 Logical schema per :ref:`ADR-047`; the JSON form is the Phase
 Beta binding.
@@ -46,7 +45,7 @@ Templates
    survive serialization round-trips (:ref:`uc005`).
 
 Slots
-''''
+'''''
 
 ``slots[].slot_index``
    Integer; zero-based position within the template's slot
@@ -65,7 +64,7 @@ Slots
 ``slots[].allowed_phonemes``
    Optional array of IPA symbols restricting the slot beyond
    category eligibility; must intersect the category-eligible
-   set (:ref:`uc004` receives template constraints as part of
+   set (:ref:`uc017` receives template constraints as part of
    its inputs).
 
 Reserved (post-MVP, not in Phase Beta schema): ``weight``
@@ -111,7 +110,7 @@ Relations
 ---------
 
 Extends: :ref:`ADR-034` (eligibility), :ref:`ADR-047` (logical
-schema). Enforced by: :ref:`uc013` (validation), :ref:`uc004` /
+schema). Enforced by: :ref:`uc013` (validation), :ref:`uc017` /
 :ref:`uc014` (selection). Contrasts: hiatus (adjacent nuclei),
 glide margins (:ref:`ADR-034`).
 
@@ -177,10 +176,16 @@ the semantic rules above are the stable part):
   ``TypologicalRangeWarning``
 - Preset example: ``english_ga.json``
 
-(verify):
+
+.. _note_uc005_vs_uc013:
+
+note_uc005_vs_uc013
+===================
+
+(Verify when complete):
 Adjust constructor/class names to the real API when it exists;
 what's normative is the case list: each row of that table maps
-a decision (ADR-028/034/035, dc_inventory invariant 2, UC-005
+a decision (ADR-028/034/035, :ref:`dc_inventory` invariant 2, UC-005
 round-trip) to an assertion. If a test can't be written because
 the contract is ambiguous, that's the contract telling you where
 it's under-specified — the max_count warning case, for instance,

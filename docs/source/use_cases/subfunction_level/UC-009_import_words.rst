@@ -73,6 +73,16 @@ Postconditions
 Extensions
 ----------
 
+* **1a** Duplicate symbols encountered during batch import
+  - 1a1: Duplicate symbols encountered during batch import are
+  resolved per the deterministic field-class rules of
+  :ref:`adr-051` — no per-collision prompting interrupts the
+  batch. Every resolution is written to the collision log;
+  after import, the report surfaces all merges performed
+  (feature unions, frequency summations, retained ranks) so
+  the user can review what the fallback decided on their
+  behalf (:ref:`adr-046`'s report pattern).
+
 * **2a:** No appropriate dialect profile is available.
   - 2a1: System offers "Custom/Manual" mode.
   - 2a2: In custom mode, system bypasses dialect conversion
@@ -119,7 +129,7 @@ Related
 -------
 
 **Calls:**
-- :ref:`UC-005_serialize_deserialize_LanguageDefinitions` (saves inferred inventory)
+- :ref:`UC-005_serialize_deserialize_LanguageDefinition` (saves inferred inventory)
 - :ref:`UC-012_segment_ipa_input`
 - :ref:`UC-01_define_phoneme_inventory` (user reviews and confirms inferred phonemes)
 

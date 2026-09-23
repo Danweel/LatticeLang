@@ -64,7 +64,7 @@ Related
 **Adjacent to:**
 - :ref:`UC-06_snapshot_comparison_UX`
 - :ref:`UC-07_export_to_latex` (accessed from GUI)
-- :ref:`UC-008_preview_regeneration`
+- :ref:`UC-016_preview_regeneration`
 - :ref:`UC-009_import_words` (accessed from GUI)
 
 Variations

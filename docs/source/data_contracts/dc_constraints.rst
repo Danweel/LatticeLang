@@ -12,8 +12,7 @@ Constraint Data Contract
 
 .. note::
    This contract was reviewed during the 2026-09-16 use-case
-   and spec-completeness audit. See :ref:`audit-september-2026`
-   for the full findings table. Key design decisions:
+   and spec-completeness audit. Key design decisions:
    :ref:`adr-047` (logical schema vs. adapters),
    :ref:`adr-048` (tone as separate stage),
    :ref:`adr-049` (coordinate-addressed random streams),

@@ -33,12 +33,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .venv
-          key: venv-$${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
         run: |
           if [ ! -d ".venv" ]; then
-            poetry install --with dev,docs
+            poetry install --extras dev
           fi
 
       - name: Run linter
@@ -48,9 +48,7 @@ jobs:
         run: poetry run pytest -v
 
       - name: Build documentation
-        run: |
-          cd docs
-          poetry run make html
+        run: make docs SPHINXOPTS=-W
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

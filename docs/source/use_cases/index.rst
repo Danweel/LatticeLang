@@ -66,28 +66,30 @@ interface design and documentation tone, not use case structure.
    user_goal_level/UC-02_define_syllable_templates
    user_goal_level/UC-03_define_phonotactic_constraints
    user_goal_level/UC-04_generate_words
-   user_goal_level/UC-06_snapshot_comparison_UX
    user_goal_level/UC-07_export_to_latex
-   user_goal_level/UC-09_design_a_tone_system
    user_goal_level/UC-11_define_orthography_mapping
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Subfunction Level
 
-   subfunction_level/UC-004_select_a_phoneme_for_a_slot
+
    subfunction_level/UC-005_serialize_deserialize_LanguageDefinition
-   subfunction_level/UC-008_preview_regeneration
    subfunction_level/UC-009_import_words
    subfunction_level/UC-012_segment_ipa_input
    subfunction_level/UC-013_validate_against_constraints
    subfunction_level/UC-014_compose_a_candidate_syllable
    subfunction_level/UC-015_apply_orthography_rules
+   subfunction_level/UC-016_preview_regeneration
+   subfunction_level/UC-017_select_a_phoneme_for_a_slot
 
 .. toctree::
    :maxdepth: 2
    :caption: Possible Future Cases
 
-   possible_future_cases/UC-05_design_a_phonology
+
    possible_future_cases/UC-06_snapshot_comparison_UX
    possible_future_cases/UC-10_compare_sample_vs_generated_output
+   possible_future_cases/UC-18_design_a_tone_system
+   possible_future_cases/UC-19_inspect_a_syllable

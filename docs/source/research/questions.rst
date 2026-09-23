@@ -273,6 +273,7 @@ Questions
 ---------
 
 .. _q1-segmenter-ambiguity:
+.. _q1:
 
 Q1: Segmenter Ambiguity Resolution
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -337,6 +338,7 @@ Q1: Segmenter Ambiguity Resolution
      "ts" → /t/ + /s/ without
 
 .. _q2-dialect-rules:
+.. _q2:
 
 Q2: Dialect Rules Architecture
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -371,6 +373,7 @@ Q2: Dialect Rules Architecture
    without requiring changes.
 
 .. _q3-dialect-coverage:
+.. _q3:
 
 Q3: [PHONO] Dialect Coverage Beyond GA and RP
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -406,6 +409,7 @@ Q3: [PHONO] Dialect Coverage Beyond GA and RP
    - [ ] Ensure data contract design doesn't preclude this
 
 .. _q4-ambiguity-confidence:
+.. _q4:
 
 Q4: [PHONO] Ambiguity Confidence Levels and Batch Processing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -457,6 +461,7 @@ Q4: [PHONO] Ambiguity Confidence Levels and Batch Processing
      uncertain items)
 
 .. _q5-project-file-versioning:
+.. _q5:
 
 Q5: [SUITE] Project File Versioning Across Modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -519,6 +524,7 @@ Q5: [SUITE] Project File Versioning Across Modules
    - I believe this is about merging: Divergence indicates either a feature edit was made without refreshing category or the derivation table changed between versions. Should not auto-correct. See :ref:`dc_inventory`.
 
 .. _q6-feature-system-adoption:
+.. _q6:
 
 Q6: [PHONO] Feature System Standard Adoption
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -687,6 +693,7 @@ Q6: [PHONO] Feature System Standard Adoption
    refinement, documented in :ref:`theoretical_framework`
 
 .. _q7-generation-determinism:
+.. _q7:
 
 Q7: [PHONO] Word Generation Determinism and Seed Stability
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -764,6 +771,7 @@ word 50 requires replaying words 1–49.
 
 
 .. _q8-constraint-expressiveness:
+.. _q8:
 
 Q8: [PHONO] Constraint System Expressiveness Beyond MVP Types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -809,6 +817,7 @@ Q8: [PHONO] Constraint System Expressiveness Beyond MVP Types
    - [ ] Ensure ``word_context`` parameter is in the interface
 
 .. _q9-morpheme-allomorphy:
+.. _q9:
 
 Q9: [SUITE] Morpheme Storage and Allomorphy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -840,6 +849,7 @@ Q9: [SUITE] Morpheme Storage and Allomorphy
      that morphology can call
 
 .. _q10-etymology-tracking:
+.. _q10:
 
 Q10: [SUITE] Etymology Tracking Granularity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -869,6 +879,7 @@ Q10: [SUITE] Etymology Tracking Granularity
      is planned
 
 .. _q11-syntax-formalism:
+.. _q11:
 
 Q11: [SUITE] Syntax Rule Formalism
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -897,6 +908,7 @@ Q11: [SUITE] Syntax Rule Formalism
    - [ ] Survey conlanging community for desired syntax features
 
 .. _q12-interlinear-glossing:
+.. _q12:
 
 Q12: [SUITE] Interlinear Glossing Standard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -920,6 +932,7 @@ Q12: [SUITE] Interlinear Glossing Standard
    - [ ] Evaluate: Leipzig Glossing Rules as default with opt-out
 
 .. _q13-semantic-field-ontology:
+.. _q13:
 
 Q13: [SUITE] Semantic Field Ontology
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -945,6 +958,7 @@ Q13: [SUITE] Semantic Field Ontology
    - [ ] Survey existing semantic field ontologies for suitability
 
 .. _q14-unicode-font-handling:
+.. _q14:
 
 Q14: [SUITE] Unicode and IPA Font Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -968,6 +982,7 @@ Q14: [SUITE] Unicode and IPA Font Management
    - [ ] Track for Phase Epsilon (custom script font management)
 
 .. _q15-module-isolation-testing:
+.. _q15:
 
 Q15: [SUITE] Module Isolation and Testing Strategy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -998,6 +1013,7 @@ Q15: [SUITE] Module Isolation and Testing Strategy
    - [ ] Establish testing pyramid: unit (mocked) → integration (fixture) → system (full)
 
 .. _q16-community-sharing:
+.. _q16:
 
 Q16: [SUITE] Community and Language Definition Sharing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1021,6 +1037,7 @@ Q16: [SUITE] Community and Language Definition Sharing
    - [ ] Track sharing infrastructure for Phase Delta+
 
 .. _q17-performance-envelope:
+.. _q17:
 
 Q17: [SUITE] Performance Envelope
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1048,6 +1065,7 @@ Q17: [SUITE] Performance Envelope
    - [ ] Set performance budgets for Phase Gamma GUI work
 
 .. _q18-accessibility:
+.. _q18:
 
 Q18: [SUITE] Accessibility
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1077,6 +1095,7 @@ Q18: [SUITE] Accessibility
    - [ ] Track for Phase Gamma (GUI accessibility audit)
 
 .. _q19-i18n-ui:
+.. _q19:
 
 Q19: [SUITE] Internationalization of the UI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1100,6 +1119,7 @@ Q19: [SUITE] Internationalization of the UI
      even if translations aren't provided initially
 
 .. _q20-license-compatibility:
+.. _q20:
 
 Q20: License Compatibility
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1124,6 +1144,7 @@ Q20: License Compatibility
    :ref:`dc_ipa_reference` and :ref:`bibliography`.
 
 .. _q21-conllu-interchange:
+.. _q21:
 
 Q21: CoNLL-U Interchange Format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1155,6 +1176,7 @@ Q21: CoNLL-U Interchange Format
    - [ ] Add CoNLL-U reference to bibliography
 
 .. _q22-unimorph-integration:
+.. _q22:
 
 Q22: UniMorph Integration
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1181,6 +1203,7 @@ Q22: UniMorph Integration
    - [ ] Evaluate UniMorph license compatibility when the time comes
 
 .. _q23-universal-override-model:
+.. _q23:
 
 Q23: Universal→Override Model (from UD patterns)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1226,6 +1249,7 @@ Q23: Universal→Override Model (from UD patterns)
 
 
 .. _q24-feature-representation:
+.. _q24:
 
 [PHONO] Q24: Feature Representation — Enum vs Strings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1280,6 +1304,7 @@ Q23: Universal→Override Model (from UD patterns)
    file, not the code, is the source of truth.
 
 .. _q25-constraint-dsl:
+.. _q25:
 
 [PHONO] Q25: Constraint DSL — Python Callables vs Declarative Mini-Language
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1309,6 +1334,7 @@ Q23: Universal→Override Model (from UD patterns)
    - [ ] Track DSL design for Phase Delta
 
 .. _q26-panphon-integration:
+.. _q26:
 
 [PHONO] Q26: panphon Integration vs Lightweight Feature Set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1343,6 +1369,7 @@ Q23: Universal→Override Model (from UD patterns)
    - [ ] Decide before implementing OCP/harmony constraints
 
 .. _q27-gui-state-management:
+.. _q27:
 
 [PHONO] Q27: GUI State Management — MVC vs Reactive Framework
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1368,6 +1395,7 @@ Q23: Universal→Override Model (from UD patterns)
    - [ ] Confirm during Phase Gamma architecture work
 
 .. _q28-test-dialect:
+.. _q28:
 
 [PHONO] Q28: Multi-Dialect English — Which Dialect to Model?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1398,6 +1426,7 @@ Q23: Universal→Override Model (from UD patterns)
    - [ ] Decide before creating dialect profiles in Phase Beta
 
 .. _q29-syllable-boundary-detection:
+.. _q29:
 
 [PHONO] Q29: Syllable Boundary Detection for MVP?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1439,6 +1468,7 @@ Q23: Universal→Override Model (from UD patterns)
    - [ ] Imported words: defer syllabification to post-MVP
 
 .. _q30-myst-dollarmath:
+.. _q30:
 
 [SUITE] Q30: MyST Dollarmath in Documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1469,6 +1499,7 @@ Q23: Universal→Override Model (from UD patterns)
    theoretical notation.
 
 .. _q31-ipa-normalization-input:
+.. _q31:
 
 [PHONO] Q31: IPA Normalization for User Input
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1507,6 +1538,7 @@ Q23: Universal→Override Model (from UD patterns)
    - [ ] Design override mechanism in orthography data contract
 
 .. _q32-orthography-complexity:
+.. _q32:
 
 [PHONO] Q32: Orthography Complexity Scope
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1538,6 +1570,7 @@ Q23: Universal→Override Model (from UD patterns)
    - [ ] Design orthography data contract accordingly
 
 .. _q33-profile-based-inference:
+.. _q33:
 
 [PHONO] Q33: Profile-Based Inference — Persistent vs Transient
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1569,6 +1602,7 @@ Q23: Universal→Override Model (from UD patterns)
 
 
 .. _q34-harmony-mvp-scope:
+.. _q34:
 
 Q34: [PHONO] Harmony Constraint — MVP Scope Confirmation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1604,6 +1638,7 @@ Q34: [PHONO] Harmony Constraint — MVP Scope Confirmation
    - [ ] Add test case: cross-syllable harmony not evaluated (not an error, just ignored)
 
 .. _q35-prohibited-clusters-domain:
+.. _q35:
 
 Q35: [PHONO] Prohibited Clusters — Domain Parameter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1672,6 +1707,7 @@ Q35: [PHONO] Prohibited Clusters — Domain Parameter
    per-type constraints on which values are permitted.
 
 .. _q36-rarity-tier-finalization:
+.. _q36:
 
 Q36: [PHONO] Rarity Tier System — Finalization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1706,6 +1742,10 @@ Q36: [PHONO] Rarity Tier System — Finalization
       "5","Rare","Found in very few languages"
       "6","Unattested","In IPA chart but not in PHOIBLE database"
 
+A note about current implementation: phoible_frequency is a 0–1 fraction of inventories,
+while dc_phoneme's frequency is an unbounded relative weight pre-filled from PHOIBLE.
+How a fraction maps to a weight at UC-01 pre-fill time is undefined.
+
    **Action items:**
 
    - [ ] Confirm: add tier 6 to IPA reference JSON
@@ -1713,6 +1753,7 @@ Q36: [PHONO] Rarity Tier System — Finalization
    - [ ] Add UI warning when user selects tier 5–6 phonemes
 
 .. _q37-word-context-parameter:
+.. _q37:
 
 Q37: [PHONO] Constraint Interface — Word Context Parameter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1793,6 +1834,7 @@ Q37: [PHONO] Constraint Interface — Word Context Parameter
    (passed/failed/skipped/error) outcome. :ref:`adr-046`
 
 .. _q38-ipa-reference-sourcing:
+.. _q38:
 
 Q38: [PHONO] IPA Reference Data Sourcing Strategy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1913,6 +1955,7 @@ Q38: [PHONO] IPA Reference Data Sourcing Strategy
    bibliography (:ref:`adr-029`, :ref:`q20-license-compatibility`)
 
 .. _q39-merge-semantics:
+.. _q39:
 
 Q39: [PHONO] Merge Semantics for Duplicate Symbols
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1922,7 +1965,7 @@ Q39: [PHONO] Merge Semantics for Duplicate Symbols
 
    **Status:** ANSWERED (2026-09-06) — interactive grouped-prompt
    merge; bulk first-wins-plus-report (blocked :ref:`UC01` implementation)
-   :ref:`adr-040`
+   :ref:`adr-040`, ADR-051.
 
    **Question:**
    When a user adds a phoneme whose normalized symbol already
@@ -2003,7 +2046,7 @@ Q39: [PHONO] Merge Semantics for Duplicate Symbols
 
    - [ ] Confirm interactive vs bulk policy split
    - [ ] Specify ``merge_phonemes()`` in ``dc_phoneme``
-   - [ ] Design corpus-import duplicate reporting (009)
+   - [ ] Design corpus-import duplicate reporting (uc009)
    - [ ] Suggest tests: merge unions features and recomputes
      ``sonority_rank`` (stale rank never survives); bulk import defaults to
      first-wins and records collisions to the report; merged ``custom`` flag
@@ -2046,6 +2089,7 @@ Q39: [PHONO] Merge Semantics for Duplicate Symbols
    report is the flag-the-uncertain surface.
 
 .. _q40-near-miss-similarity:
+.. _q40:
 
 Q40: [PHONO] Near-Miss Symbol Similarity Rule
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2163,6 +2207,7 @@ Q40: [PHONO] Near-Miss Symbol Similarity Rule
 
 
 .. _q41-corpus-inference:
+.. _q41:
 
 Q41: [PHONO] Corpus Inference Strategy — Orthographic Profiles vs Cross-linguistic Priors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2237,6 +2282,7 @@ Q41: [PHONO] Corpus Inference Strategy — Orthographic Profiles vs Cross-lingui
    - [ ] Curate the first profile (English) as pilot when corpus work begins
 
 .. _q42-harmony-parameterization:
+.. _q42:
 
 Q42: [PHONO] Harmony Constraint Parameterization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2294,6 +2340,7 @@ Q42: [PHONO] Harmony Constraint Parameterization
      (neutral), not a violation
 
 .. _q43-nasal-sonority-split:
+.. _q43:
 
 Q43: Do Nasals Form a Single Natural Class for Sonority?
 --------------------------------------------------------
@@ -2330,8 +2377,8 @@ ranking (Clements 1990).
 **See Also:** :ref:`ADR-038`, glossary entry ``sonority``,
 :ref:`constraint-types-overview` (sonority_sequencing constraint)
 
-
 .. _q44-maxent-phonotactic-learning:
+.. _q44:
 
 Q44: Could LatticeLang Learn Constraint Weights from User Choices?
 ------------------------------------------------------------------
@@ -2373,6 +2420,7 @@ entries ``optimality theory``, ``faithfulness constraint``
 
 
 .. _q45-ot-learnability-framework:
+.. _q45:
 
 Q45: Does OT Learnability Theory Inform Our Constraint Design?
 --------------------------------------------------------------

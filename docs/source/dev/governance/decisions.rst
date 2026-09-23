@@ -2237,6 +2237,10 @@ phoneme whose normalized symbol already exists; bulk corpus import
 promoted from :ref:`q39-merge-semantics` (backfill of an existing
 decision).
 
+Superseded in part by :ref:`adr-051` (2026-09-23), which
+defines the concrete field-class merge rules this decision
+left open.
+
 Decision
 ~~~~~~~~
 
@@ -2867,7 +2871,7 @@ Decision
    sole MVP enforcement point for tonal behavior, exercising
    minimal functionality.
 3. A future "Design a Tone System" user-goal case (stubbed as
-   :ref:`uc16` in ``possible_future_cases/``) owns tone configuration;
+   :ref:`uc016` in ``possible_future_cases/``) owns tone configuration;
    ``tone_assignment`` executes what it configures. Normative
    division: tone behavior is *configured* in the tone stage and
    *enforced* by ``tone_assignment``.
@@ -2894,7 +2898,7 @@ Timing
 Deferred by design. The MVP validates with segmental-only
 phonologies; the tone stage is additive at every seam (extensible
 constraint catalog, versioned schema, feature-vector data). No
-structural work precedes it. See :ref:`UC-09_design_a_tone_system`
+structural work precedes it. See :ref:`UC-18_design_a_tone_system`
 
 Relations
 ~~~~~~~~~
@@ -2969,7 +2973,7 @@ Consequences
 ~~~~~~~~~~~~
 
 - :ref:`uc014` step 1 draws from domain ``template``; :ref:`uc04`'s count
-  from ``syllable_count``; :ref:`uc004`'s weighted selection from
+  from ``syllable_count``; :ref:`uc017`'s weighted selection from
   ``slot`` — cite this ADR at those steps.
 - :ref:`Q7` resolves: seeds recorded in generation records;
   stability is within-version; frequency normalization remains
@@ -3034,3 +3038,101 @@ Resolves: :ref:`q4-ambiguity-confidence` (surfacing and batch
 policy; mechanics remain :ref:`q1-segmenter-ambiguity`).
 Implements: :ref:`uc012` steps 5–6, extensions 4a–5a.
 Boundary: :ref:`adr-045`.
+
+
+.. _adr-051:
+
+ADR-051: Merge Field-Class Semantics for Duplicate Phonemes
+============================================================
+
+:Date: 2026-09-23
+:Status: Accepted
+:Scope: Generation Pipeline
+:Deciders: Danweel, Lumo advisory
+
+:Context: UC-01 extension 6a2 (duplicate symbol merge), UC-009
+          (corpus import), ADR-040 (merge safety), Q7 (frequency semantics)
+:Relates to: :ref:`adr-032` (derived category), :ref:`adr-035`
+             (confirm-don't-block), :ref:`adr-040`, :ref:`adr-041` (near-miss detection)
+
+Context
+-------
+
+When a phoneme is added whose ``symbol`` already exists in the
+inventory — via manual UC-01 entry, UC-009 corpus import, or
+importing a shared definition — the two records must become one.
+The audit round of 2026-09-16 flagged this as undefined: which
+phoneme's values win on conflict, and whether ``frequency`` and
+``sonority_rank`` participate in the merge or only features.
+
+Blanket rules fail differently on each side. "New wins"
+overwrites user-confirmed values with data the user never
+vetted; "existing wins" prevents corpus imports from ever
+enriching a phoneme's frequency evidence, crippling the import
+path. Per-field prompting is unusable in batch contexts
+(UC-009 may process dozens of collisions headlessly) and is not
+deterministically testable.
+
+The underlying insight is that fields differ in *provenance*:
+some incoming data is authority the user doesn't have
+(attestation frequency from a corpus), and some existing data is
+authority the incoming source can't supply (a confirmed
+sonority rank).
+
+Decision
+--------
+
+Merges resolve by **field-class rules**, applied through two
+paths:
+
+1. **Interactive path** (UC-01 manual add): a dialog presents
+   both records side-by-side with per-field selection,
+   prefilled with the deterministic outcomes below — the
+   confirm-don't-block pattern of :ref:`adr-035`.
+2. **Deterministic fallback** (UC-009 batch import, headless
+   runs, test fixtures): the field-class rules apply as-is.
+
+The field-class rules:
+
+- ``features`` — union: new keys are added; conflicting values
+  retain the existing value. Feature corrections are deliberate
+  acts (ADR-040's never-downgrade).
+- ``sonority_rank`` — existing wins, always. The stored value is
+  authoritative once confirmed (UC-01 extension 4a).
+- ``frequency`` — values are summed; normalization happens at
+  selection time and is never persisted (Q7). Duplicates
+  represent double-counted attestation.
+- ``category`` — never merged; recomputed from the merged
+  feature set per :ref:`adr-032`.
+- ``components``, ``custom``, ``metadata`` — new-only fill:
+  empty fields adopt the incoming value; populated fields
+  retain theirs.
+
+Every fallback decision is written to a collision log, enabling
+interactive replay later and providing a pure-function test
+surface. Near-miss candidates (symbols differing only by
+diacritic) are handled *before* merge consideration, per
+:ref:`adr-041` — they surface as suggestions, not collisions.
+
+Consequences
+------------
+
+Positive: merge behavior is deterministic and testable without
+a UI; the batch import path needs no interruption; different
+data provenances are honored asymmetrically where they deserve
+it; the collision log preserves user agency by allowing after-
+the-fact review.
+
+Negative: two code paths (interactive and fallback) must stay
+consistent — mitigated by prefilling the dialog from the same
+rules; the field-class table is one more normative artifact to
+keep synchronized with ``dc_phoneme`` (which is now its
+contract-level home).
+
+The frequency-sum rule implies that importing the same corpus
+twice doubles all frequencies — documented as expected
+behavior; re-importing is an intentional act.
+
+Follow-through: ``dc_phoneme`` carries these rules as its Merge
+Semantics section; ``tests/test_phoneme_merge.py`` (future)
+asserts each row of the table.
