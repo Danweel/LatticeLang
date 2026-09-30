@@ -132,7 +132,7 @@ Post-MVP: the reverse pipeline's plausibility audit
 same checks, extending the rule table rather than replacing it.
 
 Implementation Bindings
-----------------------
+-----------------------
 
 Assumed surface (2026-09-30 implementation pass; subject to
 change without contract amendment):

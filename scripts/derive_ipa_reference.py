@@ -20,6 +20,12 @@ import csv
 import json
 from pathlib import Path
 
+"""Q38 IPA Reference Generator.
+
+Pinned data source: PHOIBLE 2.0 (Zenodo DOI 10.5281/zenodo.2626687).
+Versioning policy: see docs/source/data_contracts/dc_phoible_source.rst.
+"""
+
 # Mini-fixture world: total inventories for frequency math.
 # The real PHOIBLE 2.0 figure is 3,020 (Q38 answer text).
 TOTAL_INVENTORIES = 4000

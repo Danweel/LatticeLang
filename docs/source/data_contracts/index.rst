@@ -27,3 +27,4 @@ than duplicating field definitions. See :ref:`adr-026`.
    dc_orthography_rules
    dc_phoneme
    dc_syllable_template
+   dc_phoible_source
