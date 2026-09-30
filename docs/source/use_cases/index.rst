@@ -74,7 +74,6 @@ interface design and documentation tone, not use case structure.
    :maxdepth: 2
    :caption: Subfunction Level
 
-
    subfunction_level/UC-005_serialize_deserialize_LanguageDefinition
    subfunction_level/UC-009_import_words
    subfunction_level/UC-012_segment_ipa_input
@@ -88,8 +87,8 @@ interface design and documentation tone, not use case structure.
    :maxdepth: 2
    :caption: Possible Future Cases
 
-
    possible_future_cases/UC-06_snapshot_comparison_UX
    possible_future_cases/UC-10_compare_sample_vs_generated_output
    possible_future_cases/UC-18_design_a_tone_system
    possible_future_cases/UC-19_inspect_a_syllable
+   possible_future_cases/UC-021_user_creates_a_project

@@ -278,6 +278,6 @@ part):
   (d) ``KNOWN_FEATURE_KEYS`` in ``tests/test_ipa_reference.py``
   overstates its fixture scope in its comment — cosmetic cleanup
   pending. (e) The missing-diphthong-component warning (validation rules,
-"diphthong" entry) is evaluated at the Inventory boundary per
-ADR-036, not inside Phoneme — its test home is the future
-``tests/test_inventory*.py``, not this file.
+  "diphthong" entry) is evaluated at the Inventory boundary per
+  ADR-036, not inside Phoneme — its test home is the future
+  ``tests/test_inventory*.py``, not this file.

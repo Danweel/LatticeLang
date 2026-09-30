@@ -45,14 +45,14 @@ Main Success Scenario
    :class:`~latticelang.core.generator.WordGenerator` with the
    LanguageDefinition and parameters, seeding its PRNG
 
-3. For each word, the system delegates to :ref:`uc017`, which derives a per-slot deterministic stream (ADR-044).
+3. For each word, the system delegates to :ref:`uc014`, which derives a per-slot deterministic stream (ADR-044).
 
 4. System checks the completed word against the existing word list
    for duplicates → duplicates are regenerated (up to 50 attempts)
 
 5. Steps 3–4 repeat until the requested word count is reached
 
-6. 6. System returns the word list, each entry carrying the IPA
+6. System returns the word list, each entry carrying the IPA
    string with syllable boundaries (e.g., ``"stɹæm.bəl"``) and
    its romanization per the project's orthography rules
    (delegates to :ref:`uc015`) — e.g., ``"strambul"``.
@@ -94,9 +94,6 @@ Extensions
   - 4a2: Indicates the definition may be too constrained (small inventory + few templates → limited word space)
   - 4a3: System reports the combinatorial maximum: "With [X] phonemes and [Y] templates, approximately [Z] unique words are possible"
   - 4a4: User adjusts inventory or templates — see :ref:`uc01`, :ref:`uc02`
-
-
-
 
 Frequency
 ---------
@@ -161,9 +158,12 @@ Seeded PRNG (``random.Random``): same definition + same seed
 always reproduces the same list — critical for testing and for
 reproducing "language snapshots."
 
-Reproducibility depends on the *entire* pipeline being seeded:
-UC-014's slot filling and this case's word-level decisions draw
-from the same PRNG.
+Reproducibility depends on the entire pipeline deriving from
+deterministic per-domain streams (ADR-044, ADR-049): template
+selection, syllable count, and slot filling each draw from their
+own stream keyed by (project_seed, word_position, domain). No
+stage shares an RNG with another, so downstream edits don't perturb
+upstream draws.
 
 Word-domain validation (step 3, second half) is deliberately a
 word-completion sweep rather than inline: syllables are validated

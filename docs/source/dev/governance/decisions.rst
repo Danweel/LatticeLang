@@ -89,7 +89,7 @@ ADR Index
      - Danweel
    * - :ref:`ADR-008`
      - [PHONO]
-     - TITLE
+     - LaTeX is Export-Only
      - Accepted
      - 2026-04-04
      - Danweel
@@ -168,7 +168,7 @@ ADR Index
    * - :ref:`ADR-021`
      - [SUITE]
      - Reference Notes vs. Research Notes
-     - Accepted
+     - Superceded in part
      - 2026-08-23
      - Danweel
    * - :ref:`ADR-022`
@@ -282,7 +282,7 @@ ADR Index
    * - :ref:`ADR-040`
      - [PHONO]
      - Merge Semantics for Duplicate Symbols
-     - Accepted
+     - Superseded in part by :ref:`ADR-051` (field class merge rules)
      - 2026-09-06
      - Danweel, Lumo
    * - :ref:`ADR-041`
@@ -348,7 +348,7 @@ ADR Index
 
 ---
 
-.. _adr-001:
+.. _ADR-001:
 
 ADR-001: [SUITE] GPL-3.0-or-later License
 -----------------------------------------
@@ -384,7 +384,7 @@ PHOIBLE-derived data) retain their respective licenses (see
 
 ---
 
-.. _adr-002:
+.. _ADR-002:
 
 ADR-002: [SUITE] src/ Layout for Package
 ----------------------------------------
@@ -411,7 +411,7 @@ Standard practice. Prevents import shadowing during development and testing.
 
 ---
 
-.. _adr-003:
+.. _ADR-003:
 
 ADR-003: [DOCS-WIDE] PEP 621 Extras for Dependencies
 ----------------------------------------------------
@@ -452,7 +452,7 @@ None.
 
 ---
 
-.. _adr-004:
+.. _ADR-004:
 
 ADR-004: [DOCS-WIDE] Sphinx Pinned Below 9.0
 --------------------------------------------
@@ -486,7 +486,7 @@ reviewed and bumped.
 
 ---
 
-.. _adr-005:
+.. _ADR-005:
 
 ADR-005: [DOCS-WIDE] Dev Tools Excluded from RTD Build
 ------------------------------------------------------
@@ -516,7 +516,7 @@ builds.
 
 ---
 
-.. _adr-006:
+.. _ADR-006:
 
 ADR-006: [DOCS-WIDE] Ruff E501 Suppression in conf.py
 -----------------------------------------------------
@@ -545,7 +545,7 @@ them adds friction without benefit.
 
 ---
 
-.. _adr-007:
+.. _ADR-007:
 
 ADR-007: [PHONO] PySide6 Over PyQt6
 -----------------------------------
@@ -576,7 +576,7 @@ community.
 
 ---
 
-.. _adr-008:
+.. _ADR-008:
 
 ADR-008: [PHONO] LaTeX is Export-Only
 -------------------------------------
@@ -605,7 +605,7 @@ portable, and well-supported by Python's standard library and ecosystem.
 
 ---
 
-.. _adr-009:
+.. _ADR-009:
 
 ADR-009: [PHONO] English as Validation Language
 -----------------------------------------------
@@ -640,7 +640,7 @@ easy to verify against published analyses.
 
 ---
 
-.. _adr-010:
+.. _ADR-010:
 
 ADR-010: [PHONO] Core Layer is Zero-Dependency
 ----------------------------------------------
@@ -669,7 +669,7 @@ Core can run on any Python installation.
 
 ---
 
-.. _adr-011:
+.. _ADR-011:
 
 ADR-011: [PHONO] Live Preview is a Core Differentiator
 ------------------------------------------------------
@@ -700,7 +700,7 @@ the generate-then-review workflow of other tools.
 
 ---
 
-.. _adr-012:
+.. _ADR-012:
 
 ADR-012: [PHONO] Bidirectional Pipeline Architecture
 ----------------------------------------------------
@@ -738,7 +738,7 @@ same LanguageDefinition format that forward generation consumes.
 
 ---
 
-.. _adr-013:
+.. _ADR-013:
 
 ADR-013: [PHONO] Orthography Decoupled from Core
 ------------------------------------------------
@@ -769,7 +769,7 @@ independently.
 
 ---
 
-.. _adr-014:
+.. _ADR-014:
 
 ADR-014: [PHONO] IPA Segmenter Lives in Core
 --------------------------------------------
@@ -801,7 +801,7 @@ never vice versa).
 
 ---
 
-.. _adr-015:
+.. _ADR-015:
 
 ADR-015: [SUITE] Pedagogy is a UI-Layer Concern
 -----------------------------------------------
@@ -833,7 +833,7 @@ information appropriately for their context.
 
 ---
 
-.. _adr-016:
+.. _ADR-016:
 
 ADR-016: [DOCS-WIDE] Use Cases Link to API via Sphinx Roles
 -----------------------------------------------------------
@@ -864,7 +864,7 @@ zero maintenance burden for keeping signatures in sync.
 
 ---
 
-.. _adr-017:
+.. _ADR-017:
 
 ADR-017: [DOCS-WIDE] Combined Steps in Use Cases
 ------------------------------------------------
@@ -895,7 +895,7 @@ detail to the subfunctions they call.
 
 ---
 
-.. _adr-018:
+.. _ADR-018:
 
 ADR-018: [DOCS-WIDE] Hard-Coded Extension Labels
 ------------------------------------------------
@@ -932,7 +932,7 @@ frequency of renumbering.
 
 ---
 
-.. _adr-019:
+.. _ADR-019:
 
 ADR-019: [DOCS-WIDE] Primary Actor Documented Once
 --------------------------------------------------
@@ -956,7 +956,7 @@ Individual use cases reference it without repeating the full description.
 
 ---
 
-.. _adr-020:
+.. _ADR-020:
 
 ADR-020: [SUITE] Use Case Numbering Convention
 ----------------------------------------------
@@ -986,13 +986,13 @@ the hierarchy.
 
 ---
 
-.. _adr-021:
+.. _ADR-021:
 
 ADR-021: [SUITE] Reference Notes vs. Research Notes
 ---------------------------------------------------
 
 :Date: 2026-08-23
-:Status: Accepted
+:Status: Superceded in part
 :Scope: Suite-wide (documentation)
 :Deciders: Danweel, Danweel
 
@@ -1025,7 +1025,7 @@ another. No audience confusion.
 
 ---
 
-.. _adr-022:
+.. _ADR-022:
 
 ADR-022: [PHONO] Extensible Constraint System
 ---------------------------------------------
@@ -1062,7 +1062,7 @@ See :ref:`constraints` for the full catalog and :ref:`architecture` for the inte
 
 ---
 
-.. _adr-023:
+.. _ADR-023:
 
 ADR-023: [PHONO] No Implementation Before Use Cases Complete
 ------------------------------------------------------------
@@ -1101,7 +1101,7 @@ fully documented.
 
 ---
 
-.. _adr-024:
+.. _ADR-024:
 
 ADR-024: [PHONO] Seeded PRNG for Reproducibility
 ------------------------------------------------
@@ -1136,7 +1136,7 @@ guarantees reproducible snapshots.
 
 ---
 
-.. _adr-025:
+.. _ADR-025:
 
 ADR-025: [PHONO] Three-Level Exception Hierarchy
 ------------------------------------------------
@@ -1172,7 +1172,7 @@ constraints).
 
 ---
 
-.. _adr-026:
+.. _ADR-026:
 
 ADR-026: [SUITE] Separating Use Cases from Interface Details
 ------------------------------------------------------------
@@ -1244,7 +1244,7 @@ Consequences
 
 ---
 
-.. _adr-027:
+.. _ADR-027:
 
 ADR-027: [PHONO] Rule-Based Constraints for MVP
 -----------------------------------------------
@@ -1297,7 +1297,7 @@ See :ref:`theoretical_framework` for the full theoretical comparison.
 
 ---
 
-.. _adr-028:
+.. _ADR-028:
 
 ADR-028: [PHONO] Tie-Bar Policy for Affricates
 ----------------------------------------------
@@ -1334,7 +1334,7 @@ conventions :cite:p:`ipa1999`.
 
 ---
 
-.. _adr-029:
+.. _ADR-029:
 
 ADR-029: [PHONO] PHOIBLE CC-BY 4.0 Compatible with MIT/GPL
 ----------------------------------------------------------
@@ -1373,7 +1373,7 @@ See :ref:`q20-license-compatibility` for the full research record.
 
 ---
 
-.. _adr-030:
+.. _ADR-030:
 
 ADR-030: [DOCS-WIDE] CSV Tables Over Grid Tables
 ------------------------------------------------
@@ -1410,7 +1410,7 @@ All existing grid tables in the documentation should be converted
 to ``csv-table`` or ``list-table`` format.
 See :ref:`documentation_standards` for the formatting rules.
 
-.. _adr-031:
+.. _ADR-031:
 
 ADR-031: [SUITE] PEP 621 Extras Only — No Poetry Groups
 -------------------------------------------------------
@@ -1504,7 +1504,7 @@ Additional note: `esbonio` retired 2026-09-10 (Lumo) — sandboxed interpreter
 made its diagnostics unreliable; live preview replaced by
 make docs-live (sphinx-autobuild).
 
-.. _adr-032:
+.. _ADR-032:
 
 ADR-032: [PHONO] Derive Phoneme Category from Features
 ------------------------------------------------------
@@ -1552,7 +1552,7 @@ Decision
 4. Diphthongs remain stored as single phonemes with a
    ``components`` field — a documented deviation from standard
    sequence analyses, kept for one-slot-per-segment syllable
-   template mechanics (see :ref:`adr-028` for the related
+   template mechanics (see :ref:`ADR-028` for the related
    tie-bar policy).
 
 5. The LCK-derived presentation order is retained in the UI
@@ -1604,7 +1604,7 @@ Supersedes
 Partially supersedes the :ref:`uc01` step-2 workflow as originally
 drafted (manual category selection), which followed the LCK.
 
-.. _adr-033:
+.. _ADR-033:
 
 ADR-033: [PHONO] Adopt PHOIBLE-Aligned Feature System with Controlled Vocabulary
 --------------------------------------------------------------------------------
@@ -1724,7 +1724,7 @@ Resolves: :ref:`q6-feature-system-adoption`, :ref:`q24-feature-representation` (
 Feeds: :ref:`q38-ipa-reference-sourcing` (hybrid sourcing), :ref:`q36-rarity-tier-finalization` (tier thresholds computed from
 the same aggregation), :ref:`UC01` (implementation-ready).
 
-.. _adr-034:
+.. _ADR-034:
 
 ADR-034: [PHONO] Slot Eligibility — Category Matching with Syllabic Admission
 -----------------------------------------------------------------------------
@@ -1763,7 +1763,7 @@ Decision
    restrict glides to onset/margin positions.
 
 3. **Diphthongs** occupy exactly one nucleus slot when admitted
-   (diphthong-as-unit-phoneme, per :ref:`adr-028`, :ref:`adr-032`'s documented
+   (diphthong-as-unit-phoneme, per :ref:`ADR-028`, :ref:`ADR-032`'s documented
    deviation). Listing them in ``allowed_categories`` is
    explicit, never assumed.
 
@@ -1829,7 +1829,7 @@ Relations
 Extends: :ref:`ADR-032` (categories), ADR-033 :ref:`ADR-033` (edge rules).
 Resolves: :ref:`uc02` audit issues 1–3. Governs: :ref:`uc02`, :ref:`uc04`, :ref:`uc013`.
 
-.. _adr-035:
+.. _ADR-035:
 
 ADR-035: [SUITE] Naturalistic Defaults — Design Principle
 ---------------------------------------------------------
@@ -1907,7 +1907,7 @@ Relations
 First applied by: :ref:`ADR-034`. Grounds: :ref:`q4-ambiguity-confidence` (best-guess defaults),
 :ref:`q41-corpus-inference` (corpus seeding). Constrains: all future module design.
 
-.. _adr-036:
+.. _ADR-036:
 
 ADR-036: [PHONO] Dedicated Inventory Data Contract
 --------------------------------------------------
@@ -1977,7 +1977,7 @@ Relations
 Implements: the inventory-validation flags from the
 ``dc_phoneme`` audit. Governs: :ref:`uc01`, :ref:`uc04`, :ref:`uc009`.
 
-.. _adr-037:
+.. _ADR-037:
 
 ADR-037: [PHONO] Constraint Catalog — Nine MVP Types, Ten Reserved
 ------------------------------------------------------------------
@@ -2049,7 +2049,7 @@ Corrects: domain column of ``dev/design/constraints.rst``
 References: :ref:`q34-harmony-mvp-scope`, :ref:`q35-prohibited-clusters-domain`, :ref:`q37-word-context-parameter`, :ref:`q42-harmony-parameterization`, :ref:`ADR-034`, :ref:`ADR-035`.
 Governs: :ref:`uc03` step 2, ``dc_constraints``.
 
-.. _adr-038:
+.. _ADR-038:
 
 ADR-038: [PHONO] Default Constraint State — Visible SSP On
 ----------------------------------------------------------
@@ -2137,7 +2137,7 @@ Applies: :ref:`ADR-035` (first application to constraint defaults).
 Implemented by: :ref:`uc03` "Default State" section. Governs: :ref:`uc04`
 (preconditions — a new project is generatable immediately).
 
-.. _adr-039:
+.. _ADR-039:
 
 ADR-039: [PHONO] Constraint Domains and Word Context
 ----------------------------------------------------
@@ -2218,13 +2218,13 @@ Resolves: :ref:`q34-harmony-mvp-scope`, :ref:`q35-prohibited-clusters-domain`,
 :ref:`q37-word-context-parameter`. Referenced by: :ref:`ADR-037`.
 Governs: :ref:`uc03`, :ref::`uc04`, :ref:`uc013`, ``dc_constraints``.
 
-.. _adr-040:
+.. _ADR-040:
 
 ADR-040: [PHONO] Merge Semantics for Duplicate Symbols
 -------------------------------------------------------
 
 :Date: 2026-09-06
-:Status: Accepted
+:Status: Superseded in part by :ref:`ADR-051` (field class merge rules)
 :Scope: Phonology Tool
 :Deciders: Danweel, Lumo
 
@@ -2237,7 +2237,7 @@ phoneme whose normalized symbol already exists; bulk corpus import
 promoted from :ref:`q39-merge-semantics` (backfill of an existing
 decision).
 
-Superseded in part by :ref:`adr-051` (2026-09-23), which
+Superseded in part by :ref:`ADR-051` (2026-09-23), which
 defines the concrete field-class merge rules this decision
 left open.
 
@@ -2285,7 +2285,7 @@ Resolves: :ref:`q39-merge-semantics`. Depends on: :ref:`ADR-032`,
 :ref:`ADR-035`. Governs: UC01, UC009, ``dc_phoneme``,
 ``merge_phonemes()``.
 
-.. _adr-041:
+.. _ADR-041:
 
 ADR-041: [PHONO] Near-Miss Symbol Similarity
 --------------------------------------------
@@ -2342,7 +2342,7 @@ Resolves: :ref:`q40-near-miss-similarity`. Depends on: ADR-028
 (normalization precedes detection). Governs: UC01, ``dc_phoneme``.
 Feeds: dc_inventory's near-identical-entry check.
 
-.. _adr-042:
+.. _ADR-042:
 
 ADR-042: [PHONO] Harmony Constraint Parameterization
 ----------------------------------------------------
@@ -2404,7 +2404,7 @@ Resolves: :ref:`q42-harmony-parameterization`. Depends on:
 :ref:`ADR-033` (controlled vocabulary), :ref:`ADR-039` (within-syllable scope).
 Referenced by: :ref:`ADR-037`. Governs: ``dc_constraints``.
 
-.. _adr-043:
+.. _ADR-043:
 
 ADR-043: [PHONO] Segmenter Ambiguity — Longest-Match with Override
 ------------------------------------------------------------------
@@ -2466,7 +2466,7 @@ Resolves: :ref:`q1-segmenter-ambiguity`. Reinforces: ADR-028
 (normalization precedes matching). Governs: the segmenter,
 UC012, ``dc_orthography_rules``. Batch confidence: :ref:`q4-ambiguity-confidence`.
 
-.. _adr-044:
+.. _ADR-044:
 
 ADR-044: [PHONO] Seed Stability — Per-Slot Deterministic Streams
 ----------------------------------------------------------------
@@ -2479,7 +2479,7 @@ ADR-044: [PHONO] Seed Stability — Per-Slot Deterministic Streams
 Context
 ~~~~~~~
 
-:ref:`uc04` specifies a seed for reproducibility (:ref:`adr-024`)
+:ref:`uc04` specifies a seed for reproducibility (:ref:`ADR-024`)
 :cite:p:`matsumotonishimura1998`?. But a single shared
 ``random.Random(seed)`` stream consumes draws sequentially:
 changing one phoneme's frequency weight shifts every subsequent
@@ -2514,7 +2514,7 @@ Decision
    touches may select differently. Arguably correct behavior — the
    change is attributed, not invisible.
 5. **Documented fallback position.** If per-slot streams prove
-   fragile during implementation, shipping full reseed (:ref:`adr-024`
+   fragile during implementation, shipping full reseed (:ref:`ADR-024`
    as written) is an acceptable fallback: the program still
    accomplishes the author's goal, the reverse pipeline still
    works, and the loss is confined to feedback quality — trial
@@ -2526,7 +2526,7 @@ Rationale
 
 Per-slot streams are the only option that makes the live preview
 actually serve ADR-011's differentiation, and they preserve
-:ref:`adr-024`'s determinism guarantee intact. The implementation delta
+:ref:`ADR-024`'s determinism guarantee intact. The implementation delta
 is one stream derivation per slot. Under the naturalistic-defaults
 principle (:ref:`ADR-035`), "the user cannot evaluate their change" is a
 silent failure mode of the shared-stream design.
@@ -2548,10 +2548,10 @@ Relations
 
 Resolves: the determinism core of :ref:`q7-generation-determinism`
 (weight semantics resolved via ``dc_phoneme``). Extends: :ref:`uc04`
-(deterministic seeded PRNG), :ref:`adr-011` (live preview). Governs:
+(deterministic seeded PRNG), :ref:`ADR-011` (live preview). Governs:
 :ref:`uc04`'s generation loop, the live preview pathway.
 
-.. _adr-045:
+.. _ADR-045:
 
 ADR-045: [PHONO] Deferral of Constraint-Weight Learning — Evaluation vs. Acquisition Scope
 ------------------------------------------------------------------------------------------
@@ -2659,7 +2659,7 @@ Records the deferral requested by: :ref:`q44-maxent-phonotactic-learning`,
 :ref:`q45-ot-learnability-framework`. Governs: nothing in the MVP
 (by design).
 
-.. _adr-046:
+.. _ADR-046:
 
 ADR-046: [GEN] Generation Diagnostics — Instrumented Funnel Reporting for Rejected-Word Diagnosis
 -------------------------------------------------------------------------------------------------
@@ -2757,7 +2757,7 @@ pipeline design (:ref:`ADR-037`). Records the disposition requested by
 the :ref:`uc08` audit (2026-09-16). Related: :ref:`q4-ambiguity-confidence`
 (error reporting philosophy kinship).
 
-.. _adr-047:
+.. _ADR-047:
 
 ADR-047: [CORE] Project Persistence — Logical Schema, Adapters, Phased Container Formats
 ----------------------------------------------------------------------------------------
@@ -2835,7 +2835,7 @@ Consequences
   ADR; the suite-vision sentence stands as a description of
   Phase Beta.
 
-.. _adr-048:
+.. _ADR-048:
 
 ADR-048: [PHONO] Tone Handled as a Separate Design Stage, Not a Slot Category
 ------------------------------------------------------------------------------
@@ -2908,7 +2908,7 @@ Extends: :ref:`ADR-037` (reserved types).
 Cites: :cite:p:`goldsmith1976`, :cite:p:`goldsmith1990`, :cite:p:`yip2002`.
 Creates: UC-16 stub (future case).
 
-.. _adr-049:
+.. _ADR-049:
 
 ADR-049: [GEN] Stream Derivation Keys — Coordinate-Addressed Streams for All Random Decisions
 ---------------------------------------------------------------------------------------------
@@ -2981,7 +2981,7 @@ Consequences
 - Future tone draws have a reserved domain; no re-keying when
   the tone stage arrives.
 
-  .. _adr-050:
+.. _adr-050:
 
 ADR-050: [PHONO] Ambiguity Confidence — Qualitative Tiers, Non-Interruptive Batching
 ------------------------------------------------------------------------------------
@@ -3037,26 +3037,26 @@ Relations
 Resolves: :ref:`q4-ambiguity-confidence` (surfacing and batch
 policy; mechanics remain :ref:`q1-segmenter-ambiguity`).
 Implements: :ref:`uc012` steps 5–6, extensions 4a–5a.
-Boundary: :ref:`adr-045`.
+Boundary: :ref:`ADR-045`.
 
 
-.. _adr-051:
+.. _ADR-051:
 
-ADR-051: Merge Field-Class Semantics for Duplicate Phonemes
-============================================================
+ADR-051: [PHONO] Merge Field-Class Semantics for Duplicate Phonemes
+-------------------------------------------------------------------
 
 :Date: 2026-09-23
 :Status: Accepted
-:Scope: Generation Pipeline
+:Scope: Phonology/inventory
 :Deciders: Danweel, Lumo advisory
 
-:Context: UC-01 extension 6a2 (duplicate symbol merge), UC-009
-          (corpus import), ADR-040 (merge safety), Q7 (frequency semantics)
-:Relates to: :ref:`adr-032` (derived category), :ref:`adr-035`
-             (confirm-don't-block), :ref:`adr-040`, :ref:`adr-041` (near-miss detection)
+:Relates to: :ref:`ADR-032` (derived category), :ref:`ADR-035`
+             (confirm-don't-block), :ref:`ADR-040`, :ref:`ADR-041` (near-miss detection)
 
 Context
--------
+~~~~~~~
+
+UC-01 extension 6a2 (duplicate symbol merge), UC-009 (corpus import), ADR-040 (merge safety), Q7 (frequency semantics)
 
 When a phoneme is added whose ``symbol`` already exists in the
 inventory — via manual UC-01 entry, UC-009 corpus import, or
@@ -3080,7 +3080,7 @@ authority the incoming source can't supply (a confirmed
 sonority rank).
 
 Decision
---------
+~~~~~~~~
 
 Merges resolve by **field-class rules**, applied through two
 paths:
@@ -3088,7 +3088,7 @@ paths:
 1. **Interactive path** (UC-01 manual add): a dialog presents
    both records side-by-side with per-field selection,
    prefilled with the deterministic outcomes below — the
-   confirm-don't-block pattern of :ref:`adr-035`.
+   confirm-don't-block pattern of :ref:`ADR-035`.
 2. **Deterministic fallback** (UC-009 batch import, headless
    runs, test fixtures): the field-class rules apply as-is.
 
@@ -3103,7 +3103,7 @@ The field-class rules:
   selection time and is never persisted (Q7). Duplicates
   represent double-counted attestation.
 - ``category`` — never merged; recomputed from the merged
-  feature set per :ref:`adr-032`.
+  feature set per :ref:`ADR-032`.
 - ``components``, ``custom``, ``metadata`` — new-only fill:
   empty fields adopt the incoming value; populated fields
   retain theirs.
@@ -3112,10 +3112,10 @@ Every fallback decision is written to a collision log, enabling
 interactive replay later and providing a pure-function test
 surface. Near-miss candidates (symbols differing only by
 diacritic) are handled *before* merge consideration, per
-:ref:`adr-041` — they surface as suggestions, not collisions.
+:ref:`ADR-041` — they surface as suggestions, not collisions.
 
 Consequences
-------------
+~~~~~~~~~~~~
 
 Positive: merge behavior is deterministic and testable without
 a UI; the batch import path needs no interruption; different

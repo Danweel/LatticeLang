@@ -33,7 +33,7 @@ physical layout — everything below is container-independent.
    of an imported corpus. This is metadata (provenance), not active
    logic — once words are converted to IPA, the dialect setting
    doesn't influence subsequent generation or validation. Users
-   select this once during import (UC-018); changing it later
+   select this once during import (UC-021); changing it later
    doesn't retroactively re-translate existing words.
 
 Information Nicknames
