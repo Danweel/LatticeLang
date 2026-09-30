@@ -228,3 +228,136 @@ def merge_phonemes(existing: Phoneme, incoming: Phoneme) -> Phoneme:
         metadata=dict(existing.metadata) if existing.metadata
             else dict(incoming.metadata),
     )
+
+@dataclass
+class InventoryReport:
+    """Result of Inventory.check(): advisory surfaces per
+    dc_inventory.rst's severity policy. Only errors block
+    (and only in UC-04's precondition — check() itself never
+    raises); warnings and notes are informational.
+    """
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
+
+
+class Inventory:
+    """Validation view over the phoneme collection
+    (dc_inventory.rst, ADR-036).
+
+    Owns no serialization — dc_language_definition remains the
+    envelope. Duplicate adds route through merge_phonemes
+    (ADR-051 deterministic fallback; the interactive path
+    prefills its dialog from the same outcomes).
+
+    Assumes (pending dc_inventory Implementation Bindings):
+    nucleus capacity = syllabic='+' feature or category in
+    {vowel, diphthong}, mirroring ADR-034 rule 1 exactly —
+    one predicate definition shared with the template engine.
+    """
+
+    def __init__(self) -> None:
+        # Dict keyed by symbol: insertion-ordered, gives both
+        # the unique-symbol guarantee and O(1) duplicate lookup.
+        self._phonemes: dict[str, Phoneme] = {}
+
+    def __len__(self) -> int:
+        return len(self._phonemes)
+
+    def __iter__(self):
+        return iter(self._phonemes.values())
+
+    def add(self, phoneme: Phoneme) -> None:
+        """Add a phoneme; duplicates merge (ADR-051 fallback).
+
+        The check-triggering mutation per dc_inventory's
+        load-time enforcement: callers re-run check() after any
+        add/remove/merge (checks are computed fresh, never
+        cached — see test_checks_rerun_after_add).
+        """
+        existing = self._phonemes.get(phoneme.symbol)
+        if existing is None:
+            self._phonemes[phoneme.symbol] = phoneme
+        else:
+            merged = merge_phonemes(existing, phoneme)
+            self._phonemes[phoneme.symbol] = merged
+
+    @staticmethod
+    def _nucleus_capable(p: Phoneme) -> bool:
+        """ADR-034 rule 1 predicate, mirrored by INV-1."""
+        return (p.features.get("syllabic") == "+"
+                or p.category in ("vowel", "diphthong"))
+
+    def check(self, templates: list | None = None) -> InventoryReport:
+        """Run the six-rule validation table (dc_inventory.rst).
+
+        Args:
+            templates: optional template stand-ins exposing
+                nucleus_categories (dc_syllable_template shape).
+                Without templates, INV-3 is silent — we cannot
+                judge a requirement we can't see (ruled
+                2026-09-30; see Implementation Bindings).
+
+        Returns:
+            InventoryReport; never raises. INV-1's error is
+            the only blocking surface, and propagation into
+            UC-04's precondition is the caller's job.
+        """
+        report = InventoryReport()
+        entries = list(self)
+
+        # INV-1: nucleus capacity (Error) — remediation hint
+        # per dc_inventory's Nucleus Capacity section.
+        if not any(self._nucleus_capable(p) for p in entries):
+            report.errors.append(
+                "No nucleus-capable phoneme in the inventory — "
+                "add a vowel or a syllabic consonant.")
+
+        # INV-2: consonant absence (Warning).
+        if not any(p.category == "consonant" for p in entries):
+            report.warnings.append(
+                "Inventory contains no consonants.")
+
+        # INV-3: vowel absence (Warning, template-aware).
+        # Fires only when a template's nucleus requires vowel
+        # category and none exists — a syllabic-consonant
+        # nucleus with a matching template is silent.
+        has_vowel = any(p.category == "vowel" for p in entries)
+        if not has_vowel and templates:
+            for t in templates:
+                if "vowel" in t.get("nucleus_categories", []):
+                    report.warnings.append(
+                        "Inventory contains no vowels, but a "
+                        "template's nucleus requires vowel "
+                        "category — no syllabic consonant can "
+                        "fill it.")
+
+        # INV-4: identical feature sets (Warning).
+        seen: dict[frozenset, str] = {}
+        for p in entries:
+            signature = frozenset(p.features.items())
+            if signature in seen:
+                report.warnings.append(
+                    f"Phonemes {seen[signature]!r} and "
+                    f"{p.symbol!r} carry identical feature "
+                    f"sets — allophones recorded separately, "
+                    f"or an entry mistake?")
+            else:
+                seen[signature] = p.symbol
+
+        # INV-5: minimal feature sets (Note) — pairing-gated by
+        # ADR-041, which is not yet implemented; deliberately
+        # emits nothing. See test_near_miss.py (future).
+
+        # Rule 6: missing diphthong component (Warning) —
+        # dc_phoneme ledger item (e): evaluated here per ADR-036.
+        for p in entries:
+            if p.category == "diphthong":
+                for component in p.components:
+                    if component not in self._phonemes:
+                        report.warnings.append(
+                            f"Diphthong {p.symbol!r} component "
+                            f"{component!r} is not in the "
+                            f"inventory.")
+
+        return report

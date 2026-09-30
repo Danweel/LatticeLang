@@ -131,6 +131,33 @@ Post-MVP: the reverse pipeline's plausibility audit
 (:ref:`q41-corpus-inference` layer 4) reports against these
 same checks, extending the rule table rather than replacing it.
 
+Implementation Bindings
+----------------------
+
+Assumed surface (2026-09-30 implementation pass; subject to
+change without contract amendment):
+
+- ``latticelang.core.phonology.Inventory`` — class home per
+  UC-01; ``add()`` routes duplicate symbols through the
+  :ref:`ADR-051` deterministic fallback; ``check(templates)``
+  returns an ``InventoryReport`` (errors/warnings/notes lists)
+  and never raises
+- Nucleus-capable predicate: ``syllabic='+'`` or category in
+  {vowel, diphthong} — one definition mirroring :ref:`ADR-034`
+  rule 1, shared with the future template engine
+- INV-3 without templates is silent (ruled 2026-09-30): the
+  warning fires only when a template's nucleus requires vowel
+  category; with no template context the requirement cannot
+  be judged, so no warning is emitted
+- Templates arrive as stand-ins exposing
+  ``nucleus_categories``; binding tightens to the real
+  dc_syllable_template objects when the template engine lands
+- INV-5 emits nothing until ADR-041 near-miss detection
+  exists (pairing-gated per Relations); positive cases live
+  in the future ``tests/test_near_miss.py``
+- Tests: ``tests/test_inventory.py`` (one test per rule,
+  red-first 2026-09-30)
+
 Relations
 ---------
 
