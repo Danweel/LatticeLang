@@ -1,0 +1,11 @@
+{
+  "p": {
+    "description": "Voiceless bilabial plosive",
+    "aliases": [],
+    "tipa": "\\textp"
+  },
+  "k͡p": {
+    "description": "Voiceless labial-velar plosive",
+    "aliases": ["kp"]
+  }
+}

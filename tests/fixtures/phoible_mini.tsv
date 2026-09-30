@@ -1,0 +1,7 @@
+symbol	syllabic	consonantal	sonorant	continuant	delayed_release	height	backness	roundedness	place	manner	voice	inventory_count
+p	-	+	-	-	-	-	-	-	bilabial	plosive	voiceless	3800
+b	-	+	-	-	-	-	-	-	bilabial	plosive	voiced	3600
+t	-	+	-	-	-	-	-	-	alveolar	plosive	voiceless	3700
+ɑ	+	-	+	+	-	open	back	unrounded	-	-	-	3950
+ɪ	+	-	+	+	-	close	front	unrounded	-	-	-	1900
+k͡p	-	+	-	-	-	-	-	-	labial-velar	plosive	voiceless	120
