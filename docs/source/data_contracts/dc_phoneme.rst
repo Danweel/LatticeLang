@@ -205,6 +205,18 @@ Every fallback decision is written to the collision log, making
 an interactive replay possible later and giving the rules a pure,
 pytest-able surface.
 
+Category recompute at merge is silent by design (ruled
+2026-09-29): ``CategoryDivergenceWarning`` fires only on load,
+when a stored category disagrees with recomputation of the
+author's stored features. A merge recomputes from features that
+were either just chosen under the author's eye (interactive path,
+UC-01 extension 6a2–6a3) or resolved deterministically in batch
+(UC-009); warning there would duplicate a surface the user has
+already seen or will see in the collision log. The collision-log
+entry for a merge that changed the category records the old and
+new values. Principle: warn where expectations can be violated
+silently; log where attention is already engaged.
+
 Near-Miss Detection
 -------------------
 
@@ -253,3 +265,19 @@ part):
   2026-09-29), ``tests/test_phoneme_contract.py`` (drafted),
   ``tests/test_phoneme_merge.py`` (field-class rules are pure
   functions), ``tests/test_near_miss.py``
+
+- Assumption ledger (2026-09-29 implementation pass): (a) the
+  constructor surface is three entry paths — direct
+  construction, ``Phoneme.from_reference`` (UC-01 prefill), and
+  ``to_json``/``from_json`` round-trip — assumed, not yet
+  specced; finalize wording when ``Phoneme`` lands. (b) ``__eq``
+  is value equality over serialized fields (needed by the
+  round-trip test) — assumed. (c) Outlier segments with
+  stop-like features (e.g., clicks, continuant '-') currently
+  propose rank 0 rather than null; revisit during Q38 curation.
+  (d) ``KNOWN_FEATURE_KEYS`` in ``tests/test_ipa_reference.py``
+  overstates its fixture scope in its comment — cosmetic cleanup
+  pending. (e) The missing-diphthong-component warning (validation rules,
+"diphthong" entry) is evaluated at the Inventory boundary per
+ADR-036, not inside Phoneme — its test home is the future
+``tests/test_inventory*.py``, not this file.

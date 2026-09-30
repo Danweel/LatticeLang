@@ -6,6 +6,34 @@ runtime (UC-01 step 4) and by the Q38 derive script
 (dc_ipa_reference.rst build step 3).
 """
 
+def expected_rank_range(features: dict[str, str]) -> tuple[int, int] | None:
+    """The contracted band for these features, or None.
+
+    Single source of truth for the dc_phoneme.rst rank table:
+    propose_sonority_rank returns this band's floor (with vowel
+    height promotion), and Phoneme's rank validation warns when
+    a stored rank falls outside it (UC-01 extension 4a).
+    """
+    syllabic = features.get("syllabic")
+    consonantal = features.get("consonantal")
+    sonorant = features.get("sonorant")
+    continuant = features.get("continuant")
+
+    if syllabic == "+" and consonantal == "-":
+        return (8, 9)   # vowel
+    if sonorant == "-":
+        if continuant == "-":
+            return (1, 3) if features.get("delayed_release") == "+" else (0, 1)
+        if continuant == "+":
+            return (2, 3)  # fricative
+    elif sonorant == "+" and consonantal == "+":
+        if continuant == "-":
+            return (4, 5)  # nasal (dual nasal hypothesis)
+        if continuant == "+":
+            return (6, 7)  # liquid
+    elif sonorant == "+" and consonantal == "-":
+        return (8, 8)      # glide — the one exact row
+    return None             # no table row applies
 
 def propose_sonority_rank(features: dict[str, str]) -> int | None:
     """Propose a sonority rank (0–9) from phonemic features.
@@ -28,47 +56,18 @@ def propose_sonority_rank(features: dict[str, str]) -> int | None:
         to place the phoneme on any table row (UC-01 treats
         a null rank as a prompt, not an error).
     """
+    rng = expected_rank_range(features)
+    if rng is None:
+        return None
+
+    # Vowel band: check height for the 8-9 distinction
     syllabic = features.get("syllabic")
     consonantal = features.get("consonantal")
-    sonorant = features.get("sonorant")
-    continuant = features.get("continuant")
-
-    # Vowels first (checked via syllabic, not sonorant, so a
-    # [+syllabic] segment never falls into a consonant row).
     if syllabic == "+" and consonantal == "-":
-        # Vowel band 8-9: the close->open gradient is flattened
-        # to two values for now — open-ness promotes to 9.
         height = features.get("height")
         if height in ("open", "near-open", "open-mid"):
             return 9
         return 8
 
-    # Obstruents: [-sonorant] splits by continuancy, and the
-    # delayed-release feature separates affricates from stops.
-    if sonorant == "-":
-        if continuant == "-":
-            # Delayed release marks affricates (band 1-3);
-            # plain stops sit at the bottom (band 0-1).
-            if features.get("delayed_release") == "+":
-                return 1
-            return 0
-        if continuant == "+":
-            return 2  # Fricative band 2-3
-        return None   # sonorant known, continuancy unknown
-
-    # Sonorant consonants: nasality vs. liquidity split by
-    # continuancy (nasal band 4-5, liquid band 6-7).
-    if sonorant == "+" and consonantal == "+":
-        if continuant == "-":
-            return 4  # Nasal
-        if continuant == "+":
-            return 6  # Liquid
-        return None
-
-    # Glides: [-syllabic, -consonantal, +sonorant] — the one
-    # exact value in the table (a permitted tie with close
-    # vowels; dc_ipa_reference Field Check 6).
-    if sonorant == "+" and consonantal == "-":
-        return 8
-
-    return None  # Uncertain: no table row applies
+    # All other classes: return band floor
+    return rng[0]

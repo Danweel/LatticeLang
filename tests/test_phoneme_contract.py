@@ -53,10 +53,13 @@ def test_known_symbol_is_not_custom():
     assert p.custom is False
 
 def test_unknown_symbol_is_custom_with_no_prefill():
-    """Custom phonemes get no automatic features, rank, or frequency
-    until reviewed (UC-01 ext 1a3)."""
-    q = Phoneme(symbol="ʠ", features={})
+    """Custom phonemes get no automatic features, rank, or
+    frequency until reviewed (UC-01 ext 1a3). The custom flag
+    is a membership fact, determined against the reference
+    table via from_reference."""
+    q = Phoneme.from_reference("ʠ", FIXTURE)
     assert q.custom is True
+    assert q.features == {}
     assert q.sonority_rank is None
     assert q.frequency == 1.0  # Q7 default for unattested
 
@@ -82,22 +85,19 @@ def test_diphthong_requires_two_components():
     d = Phoneme(symbol="aɪ", features={}, components=["a", "ɪ"])
     assert d.category == "diphthong"
 
-def test_missing_component_warns_not_errors():
-    """Component absent from inventory -> warning (non-blocking)."""
-    with pytest.warns(UserWarning):
-        Phoneme(symbol="aɪ", features={},
-                components=["a", "ɪ"])  # 'ɪ' not in this fixture
-
 
 # --- Category divergence (validation rules) --------------------------
 
 def test_divergent_stored_category_warns_and_retains():
     """Q5 (resolved 2026-09-16): recompute is advisory; stored
-    category is the author's ruling."""
+    category is the author's ruling. The warning fires on LOAD
+    (from_json), not construction — construction with an
+    explicit category is the UC-01 extension 2a override path,
+    which records silently."""
+    stored = Phoneme(symbol="p", features=P["features"], category="vowel")
     with pytest.warns(CategoryDivergenceWarning):
-        p = Phoneme(symbol="p", features=P["features"],
-                    category="vowel")  # features say consonant
-    assert p.category == "vowel"
+        loaded = Phoneme.from_json(stored.to_json())
+    assert loaded.category == "vowel"  # stored value retained
 
 
 # --- ADR-051 merge semantics (pure functions) ------------------------
@@ -111,7 +111,7 @@ def test_merge_features_union_existing_wins_conflicts():
 
 def test_merge_sonority_rank_existing_wins_always():
     old = Phoneme(symbol="p", features=P["features"], sonority_rank=0)
-    new = Phoneme(symbol="p", features=P["features"], sonority_rank=3)
+    new = Phoneme(symbol="p", features=P["features"], sonority_rank=1)  # was 3
     assert merge_phonemes(old, new).sonority_rank == 0
 
 def test_merge_frequency_summed_not_averaged():

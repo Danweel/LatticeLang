@@ -1,150 +1,38 @@
 """Phonology module for LatticeLang.
 
-This module provides classes for representing and manipulating phoneme
-inventories in constructed languages.
+Phoneme representation, category derivation (ADR-032/033), and
+the merge surface (ADR-051). The Phoneme class is being rewritten
+against dc_phoneme.rst, replacing the Phase Alpha scaffold.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any
-
-
-class PhonemeCategory(Enum):
-    """Categories of phonemes."""
-
-    CONSONANT = "consonant"
-    VOWEL = "vowel"
-    DIPHTHONG = "diphthong"
-    TONE = "tone"
-
-
-@dataclass
-class Phoneme:
-    """Represents a single phoneme with its linguistic features.
-
-    A phoneme is the smallest unit of sound that distinguishes meaning
-    in a language. Each phoneme has an IPA symbol and a set of features
-    that describe its articulatory properties.
-
-    Example:
-        >>> p = Phoneme(symbol="p", category=PhonemeCategory.CONSONANT,
-        ...             features={
-                            "voiced": False,
-                            "place": "bilabial",
-                            "manner": "plosive"
-                        })
-        >>> p.symbol
-        'p'
-        >>> p.features["voiced"]
-        False
-    """
-
-    symbol: str
-    category: PhonemeCategory
-    features: dict[str, Any] = field(default_factory=dict)
-
-    def __post_init__(self) -> None:
-        """Validate the phoneme after initialization."""
-        if not self.symbol:
-            raise ValueError("Phoneme symbol cannot be empty")
-
-    def has_feature(self, feature: str, value: Any = True) -> bool:
-        """Check if this phoneme has a specific feature value.
-
-        Args:
-            feature: The feature name to check.
-            value: The expected value (defaults to True for boolean features).
-
-        Returns:
-            True if the phoneme has the feature with the specified value.
-
-        Example:
-            >>> p = Phoneme("b", PhonemeCategory.CONSONANT, {"voiced": True})
-            >>> p.has_feature("voiced")
-            True
-            >>> p.has_feature("nasal")
-            False
-        """
-        return self.features.get(feature) == value
-
-    def __str__(self) -> str:
-        """Return the IPA symbol as the string representation."""
-        return self.symbol
-
-    def __repr__(self) -> str:
-        """Return a detailed representation for debugging."""
-        return f"Phoneme('{self.symbol}', {self.category.value}, {self.features})"
 import json
-from typing import List
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+import warnings
 
-class PhonemeInventory:
-    """Represents a collection of phonemes in a language.
 
-    This class allows for adding, removing, and retrieving phonemes
-    from the inventory. It also supports serialization and deserialization
-    of the inventory to JSON format.
-    """
+# Names kept for ADR-051's interactive-path future; merge_phonemes
+# arrives in the next chunk (tests already drafted, currently RED).
+# from latticelang.core.sonority import propose_sonority_rank  # see note below
 
-    def __init__(self):
-        self.phonemes: List[Phoneme] = []
-
-    def add_phoneme(self, phoneme: Phoneme) -> None:
-        """Add a phoneme to the inventory."""
-        self.phonemes.append(phoneme)
-
-    def remove_phoneme(self, symbol: str) -> None:
-        """Remove a phoneme from the inventory by its symbol."""
-        self.phonemes = [p for p in self.phonemes if p.symbol != symbol]
-
-    def get_phoneme(self, symbol: str) -> Phoneme | None:
-        """Retrieve a phoneme from the inventory by its symbol."""
-        for phoneme in self.phonemes:
-            if phoneme.symbol == symbol:
-                return phoneme
-        return None
-
-    def to_json(self) -> str:
-        """Serialize the phoneme inventory to a JSON string."""
-        phoneme_dict_list = [
-            {
-                "symbol": phoneme.symbol,
-                "category": phoneme.category.value,
-                "features": phoneme.features
-            }
-            for phoneme in self.phonemes
-        ]
-        return json.dumps(phoneme_dict_list, indent=4)
-
-    @classmethod
-    def from_json(cls, json_str: str) -> 'PhonemeInventory':
-        """Deserialize the phoneme inventory from a JSON string."""
-        phoneme_dict_list = json.loads(json_str)
-        inventory = cls()
-        for phoneme_dict in phoneme_dict_list:
-            phoneme = Phoneme(
-                symbol=phoneme_dict["symbol"],
-                category=PhonemeCategory[phoneme_dict["category"]],
-                features=phoneme_dict["features"]
-            )
-            inventory.add_phoneme(phoneme)
-        return inventory
 
 def derive_category(features: dict[str, str]) -> str | None:
     """Derive a phoneme's category from its major-class features.
 
     Implements the ADR-032 derivation table in dc_phoneme.rst.
-    Categories are returned as controlled-vocabulary strings
-    (ADR-033), never enums. The 'syllabic' feature takes
-    precedence over 'consonantal' when both are '+' (ADR-033
-    edge case: syllabic consonants get vowel-like slot
-    treatment but remain consonants).
+    Categories are controlled-vocabulary strings (ADR-033),
+    never enums. 'syllabic' takes precedence over
+    'consonantal' when both are '+' (ADR-033 edge case:
+    syllabic consonants get vowel-like slot treatment but
+    remain consonants).
 
     Args:
         features: Flat feature dict with '+', '-', or atom
-            string values (e.g., 'coronal'). Boolean values
-            are invalid per ADR-033.
+            string values (e.g., 'coronal'). Booleans are
+            invalid per ADR-033.
 
     Returns:
         One of 'consonant', 'vowel', 'glide'; or None when
@@ -155,23 +43,188 @@ def derive_category(features: dict[str, str]) -> str | None:
         Nothing — missing features are a None, not an error,
         because UC-01 treats unknowns as prompts.
     """
-    # The two features that drive the entire ADR-032 table.
     syllabic = features.get("syllabic")
     consonantal = features.get("consonantal")
 
-    # Rows 4 and 2: syllabic takes precedence over consonantal,
-    # so we branch on it first.
+    # 'syllabic' branches first: it takes precedence (row 4).
     if syllabic == "+":
-        # [+syllabic, +consonantal] = syllabic consonant (n̩):
-        # category 'consonant', vowel-like slot treatment later.
         if consonantal == "+":
-            return "consonant"
-        # [+syllabic, -consonantal] = vowel.
+            return "consonant"  # syllabic consonant (n̩)
         return "vowel"
     if syllabic == "-":
         if consonantal == "+":
-            return "consonant"  # Row 1: stops, fricatives, nasals...
+            return "consonant"  # stops, fricatives, nasals...
         if consonantal == "-":
-            return "glide"      # Row 3: /j/, /w/
-    # Any missing or unexpected combination: uncertain.
-    return None
+            return "glide"      # /j/, /w/
+    return None  # uncertain — never guess
+
+
+class CategoryDivergenceWarning(UserWarning):
+    """Stored category disagrees with recomputation on load (Q5)."""
+
+
+@dataclass
+class Phoneme:
+    """A phoneme: symbol, features, and derived metadata.
+
+    Constructor surface (assumption ledger, dc_phoneme.rst):
+    - direct construction (symbol + features required)
+    - from_reference() — UC-01 prefill from ipa_reference.json
+    - to_json()/from_json() — persistence round-trip
+
+    Category and sonority_rank are proposed from features when
+    not supplied; the stored values are authoritative once
+    confirmed (UC-01 step 4, dc_phoneme validation rules).
+    """
+
+    symbol: str
+    features: dict[str, str]
+    category: str | None = None
+    sonority_rank: int | None = None
+    frequency: float = 1.0
+    components: list[str] = field(default_factory=list)
+    custom: bool = False
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        """Validate basics; propose category and rank when unset."""
+        if not self.symbol:
+            raise ValueError("Phoneme symbol cannot be empty")
+        for key, value in self.features.items():
+            if isinstance(value, bool):
+                raise TypeError(
+                    f"feature {key!r} must be a string ('+'/'-'), "
+                    f"got boolean {value!r} (ADR-033)"
+                )
+
+        # Q7 item 3: zero/negative weights are invalid
+        if self.frequency is not None and self.frequency <= 0:
+            raise ValueError(
+                f"frequency must be positive, got {self.frequency!r} (Q7)"
+            )
+
+        # UC-01 ext 4a: warn if stored rank outside band for features
+        if self.sonority_rank is not None:
+            from latticelang.core.sonority import expected_rank_range
+            band = expected_rank_range(self.features)
+            if band and not (band[0] <= self.sonority_rank <= band[1]):
+                warnings.warn(
+                    f"Rank {self.sonority_rank} is unusual for "
+                    f"{self.category} with these features. "
+                    f"Expected range: {band[0]}-{band[1]}",
+                    UserWarning,
+                )
+
+        # Diphthong determination: components present (dc_phoneme
+        # notes; diphthong row keys on components, not features).
+        if not self.category:
+            if self.components:
+                self.category = "diphthong"
+            else:
+                self.category = derive_category(self.features)
+        if self.sonority_rank is None:
+            from latticelang.core.sonority import propose_sonority_rank
+            self.sonority_rank = propose_sonority_rank(self.features)
+
+    @classmethod
+    def from_reference(cls, symbol: str, fixture: Path) -> "Phoneme":
+        """Build a Phoneme from ipa_reference.json (UC-01 prefill).
+
+        Unknown symbols return a custom Phoneme: no automatic
+        features, rank, or frequency (UC-01 extension 1a3).
+        """
+        with open(fixture, encoding="utf-8") as f:
+            ref = json.load(f)
+        for entry in (
+            ref.get("consonants", []) + ref.get("vowels", [])
+            + ref.get("special_combinations", [])
+        ):
+            if entry.get("symbol") == symbol:
+                return cls(
+                    symbol=symbol,
+                    features=entry.get("features", {}),
+                    sonority_rank=entry.get("sonority_rank"),
+                    frequency=entry.get("phoible_frequency") or 1.0,
+                    custom=False,
+                    metadata={"description": entry.get("description")},
+                )
+        return cls(symbol=symbol, features={}, custom=True)
+
+    def to_json(self) -> str:
+        """Serialize to a JSON string."""
+        return json.dumps({
+            "symbol": self.symbol,
+            "category": self.category,
+            "features": self.features,
+            "sonority_rank": self.sonority_rank,
+            "frequency": self.frequency,
+            "components": self.components,
+            "custom": self.custom,
+            "metadata": self.metadata,
+        }, indent=2, ensure_ascii=False)
+
+    @classmethod
+    def from_json(cls, data: str | dict[str, Any]) -> "Phoneme":
+        """Deserialize from a JSON string or dict."""
+        if isinstance(data, str):
+            data = json.loads(data)
+        phoneme = cls(
+            symbol=data["symbol"],
+            features=data.get("features", {}),
+            category=data.get("category"),
+            frequency=data.get("frequency", 1.0),
+            components=data.get("components", []),
+            custom=data.get("custom", False),
+            metadata=data.get("metadata", {}),
+        )
+
+        # Q5 ruling: divergence warns on LOAD (not construction)
+        from latticelang.core.sonority import propose_sonority_rank
+        recomputed = derive_category(phoneme.features)
+        if (phoneme.category is not None and recomputed is not None
+                and phoneme.category != recomputed):
+            warnings.warn(
+                f"Stored category {phoneme.category!r} for "
+                f"{phoneme.symbol!r} diverges from recomputation "
+                f"{recomputed!r}; stored value retained.",
+                CategoryDivergenceWarning,
+            )
+        return phoneme
+
+def merge_phonemes(existing: Phoneme, incoming: Phoneme) -> Phoneme:
+    """Merge a duplicate-symbol pair per ADR-051 field classes.
+
+    Deterministic fallback path (batch import, headless runs,
+    test fixtures). The interactive path (UC-01 extension 6a)
+    prefills its dialog from these same outcomes. Category
+    recompute is silent by design (ruled 2026-09-29, recorded in
+    dc_phoneme.rst); divergence warnings fire on load only.
+
+    Args:
+        existing: The stored phoneme (authoritative ranks,
+            confirmed values).
+        incoming: The newly encountered duplicate (import,
+            re-entry, shared-definition arrival).
+
+    Returns:
+        A new merged Phoneme; inputs are not mutated.
+    """
+    # features: union, existing wins conflicts (never-downgrade,
+    # ADR-040 via ADR-051).
+    merged_features = dict(incoming.features)
+    merged_features.update(existing.features)
+
+    # frequency: sum (double-counted attestation, Q7).
+    # sonority_rank: existing wins, always.
+    # components/custom/metadata: new-only fill (populated
+    # fields retain).
+    return Phoneme(
+        symbol=existing.symbol,
+        features=merged_features,
+        sonority_rank=existing.sonority_rank,
+        frequency=existing.frequency + incoming.frequency,
+        components=(existing.components or list(incoming.components)),
+        custom=existing.custom or incoming.custom,
+        metadata=dict(existing.metadata) if existing.metadata
+            else dict(incoming.metadata),
+    )
