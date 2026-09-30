@@ -1,8 +1,7 @@
 .. _dc-phoible-source:
 
-===========================================
 Data Contract: PHOIBLE Source Pinning (DC-PHOIBLE-01)
-===========================================
+=====================================================
 
 Date established: 2026-09-30
 Related components: scripts/derive_ipa_reference.py, data/ipa_reference.json
@@ -38,8 +37,7 @@ The derived output file ``data/ipa_reference.json`` must include:
       "pinned_sources": {
         "phoible_release": "2.0",
         "ipa_chart_year": "2015"
-      },
-      ...
+      }
     }
 
 The ``build_step_1`` function in the derive pipeline validates that the vendored

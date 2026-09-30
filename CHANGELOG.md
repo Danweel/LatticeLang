@@ -5,52 +5,45 @@ All notable changes to LatticeLang will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### To Be Added
-- Real PHOIBLE 2.0 TSV vendoring (mini-scale fixture currently in place)
-- Rarity-tier finalization per Q36 (thresholds currently assumed)
-- ADR-028 normalization pass for special combinations (naive `_split_constituents` currently in use)
-
----
-
 ## [0.3.0] — 2026-09-30
 
 ### Added
 - Add Q38 IPA Reference derive pipeline (`scripts/derive_ipa_reference.py`)
-  - Five-step build: parse → filter → derive → merge → validate → emit
-  - 14 tests in `tests/test_derive_ipa_reference.py`
-  - Shared sonority rank derivation with runtime prefill
-- Add Mini-scale fixtures:
-  - `tests/fixtures/phoible_mini.tsv` (6 rows, 13 columns, PHOIBLE-style TSV)
-  - `tests/fixtures/overrides_mini.json` (curated overlay sample)
-- Data contract for source pinning (`docs/source/data_contracts/dc_phoible_source.rst`)
-- Output schema with `pinned_sources` in `data/ipa_reference.json`
+  - Build in five steps: parse → filter → derive → merge → validate → emit
+  - Share sonority rank derivation with runtime prefill (one derivation, two consumers)
+  - Cover with 14 tests in `tests/test_derive_ipa_reference.py`
+- Add mini-scale fixtures: `tests/fixtures/phoible_mini.tsv` (6 rows, 13 columns,
+  PHOIBLE-style TSV) and `tests/fixtures/overrides_mini.json` (curated overlay sample)
+- Add DC-PHOIBLE-01 data contract (`docs/source/data_contracts/dc_phoible_source.rst`)
+- Emit `pinned_sources` block in `data/ipa_reference.json` output schema
+- Implement Field Check 4 (alias/symbol collision detection)
 
 ### Changed
-- `tests/test_derive_ipa_reference.py` hardened:
-  - Vacuous alias test replaced with real assertion
-  - Negative assertions added to pin pipeline boundaries (step-1 ≠ step-3 shape)
-- Field Check 4 implementation (alias/symbol collision detection)
+- Harden `tests/test_derive_ipa_reference.py`: replace vacuous alias test with
+  real assertion; pin pipeline boundaries with negative assertions (step-1 shape
+  ≠ step-3 shape)
 
 ### Fixed
-- Column alignment in PHOIBLE-style TSV (inventory_count / features / vowel columns)
-- Placeholder ellipsis removal in `derive_category` (previously returning `None` for all categories)
+- Fix column alignment in PHOIBLE-style TSV (inventory_count / features / vowel
+  columns previously slid by one slot)
+- Fix placeholder ellipsis in `derive_category` (previously returned `None` for
+  all categories)
 
 ### Removed
-- Legacy AI debris: `PhonemeCategory(Enum)`, `PhonemeInventory` naming, orphaned test files
-- Stale comments referencing "script doesn't exist yet"
-- Unused `tempfile` import
+- Remove legacy AI debris: `PhonemeCategory(Enum)`, `PhonemeInventory` naming,
+  orphaned test files
+- Remove stale comments referencing "script doesn't exist yet"
+- Remove unused `tempfile` import
 
 ### Dependencies
-- PHOIBLE 2.0 pinned via Zenodo DOI (`10.5281/zenodo.2626687`, 2019)
-- Annual-review upgrade cadence established (January each year, per DC-PHOIBLE-01)
+- Pin PHOIBLE 2.0 via Zenodo DOI (`10.5281/zenodo.2626687`, 2019)
+- Adopt annual-review upgrade cadence (January each year, per DC-PHOIBLE-01)
 
 ### Tests
-- Total: 71 passing
+- Grow suite to 71 passing:
   - `test_derive_ipa_reference`: 14
   - `test_ipa_reference`: 10
-  - `test_phoneme_contract`: 15
+  - `test_phonome_contract`: 15
   - `test_phoneme_derivation`: 18
   - `test_inventory`: 14
 
