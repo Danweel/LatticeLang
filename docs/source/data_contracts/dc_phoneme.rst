@@ -134,6 +134,14 @@ a clearer mechanism for glide vs. close vowel.
 :cite:p:`clements1990`, :cite:p:`hayes2009` as basis,
 :cite:p:`kramer2020` as known simplification.
 
+Implementation ruling (2026-09-29): rank proposals resolve each
+band to its floor (stop→0, affricate→1, fricative→2, nasal→4,
+liquid→6, glide→8, vowel→8 with open-ness promoting to 9). Band
+floors preserve the monotonic ordering the ranks exist for;
+within-band refinement is deferred to the Q38 pinned vocabulary
+(see the todo below). Segments matching no table row return
+null — UC-01 treats the null as a prompt, not an error.
+
 .. todo::
    :class: warning
 
@@ -234,7 +242,14 @@ Planned homes (no code exists yet; subject to change without
 contract amendment — the semantic rules above are the stable
 part):
 
-- ``latticelang.core.phonemes`` — ``Phoneme`` class, merge logic
+- ``latticelang.core.phonology`` — ``Phoneme`` class, merge logic
+  (module home per :ref:`ADR-014` and UC-01's existing references;
+  ruled 2026-09-29, superseding the provisional ``core.phonemes``
+  spelling)
+- ``latticelang.core.sonority`` — ``propose_sonority_rank``
+- ``latticelang.core.phonology`` — ``derive_category``
 - Warnings: ``CategoryDivergenceWarning``, near-miss report types
-- Tests: ``tests/test_phoneme_merge.py`` (field-class rules are
-  pure functions), ``tests/test_near_miss.py``
+- Tests: ``tests/test_phoneme_derivation.py`` (implemented,
+  2026-09-29), ``tests/test_phoneme_contract.py`` (drafted),
+  ``tests/test_phoneme_merge.py`` (field-class rules are pure
+  functions), ``tests/test_near_miss.py``

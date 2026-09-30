@@ -131,3 +131,47 @@ class PhonemeInventory:
             inventory.add_phoneme(phoneme)
         return inventory
 
+def derive_category(features: dict[str, str]) -> str | None:
+    """Derive a phoneme's category from its major-class features.
+
+    Implements the ADR-032 derivation table in dc_phoneme.rst.
+    Categories are returned as controlled-vocabulary strings
+    (ADR-033), never enums. The 'syllabic' feature takes
+    precedence over 'consonantal' when both are '+' (ADR-033
+    edge case: syllabic consonants get vowel-like slot
+    treatment but remain consonants).
+
+    Args:
+        features: Flat feature dict with '+', '-', or atom
+            string values (e.g., 'coronal'). Boolean values
+            are invalid per ADR-033.
+
+    Returns:
+        One of 'consonant', 'vowel', 'glide'; or None when
+        the major-class features are missing (uncertain
+        derivations are surfaced, never guessed).
+
+    Raises:
+        Nothing — missing features are a None, not an error,
+        because UC-01 treats unknowns as prompts.
+    """
+    # The two features that drive the entire ADR-032 table.
+    syllabic = features.get("syllabic")
+    consonantal = features.get("consonantal")
+
+    # Rows 4 and 2: syllabic takes precedence over consonantal,
+    # so we branch on it first.
+    if syllabic == "+":
+        # [+syllabic, +consonantal] = syllabic consonant (n̩):
+        # category 'consonant', vowel-like slot treatment later.
+        if consonantal == "+":
+            return "consonant"
+        # [+syllabic, -consonantal] = vowel.
+        return "vowel"
+    if syllabic == "-":
+        if consonantal == "+":
+            return "consonant"  # Row 1: stops, fricatives, nasals...
+        if consonantal == "-":
+            return "glide"      # Row 3: /j/, /w/
+    # Any missing or unexpected combination: uncertain.
+    return None

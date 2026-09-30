@@ -5,8 +5,8 @@ UC-01: Define Phoneme Inventory
 ===============================
 
 :Doc Status: Review
-:Goal Level: Summary
-:Impl Status: Not Started
+:Goal Level: User Goal
+:Impl Status: In Progress
 :Phase: Beta
 
 Goal
@@ -34,29 +34,39 @@ Main Success Scenario
    segments) are validated against the IPA reference table
 
 2. System derives the phoneme category (consonant, vowel, glide,
-   diphthong) from the symbol's features: see
+   diphthong, custom) from the symbol's features: see
    :term:`phoneme category`, user confirms or overrides.
    Override is intended for custom symbols and deliberate
-   non-standard analyses (ADR-032).
+   non-standard analyses (:ref:`ADR-032`). Custom symbols (not in the
+   IPA reference table) have no derivation available: the user
+   assigns the category manually, and the ``custom`` flag is set
+   on the record (:ref:`dc_phoneme`)
 
 3. User assigns phonetic features (voiced, place, manner, height,
    backness, etc.) → system shows only the feature fields relevant
-   to the derived category → features are stored as a dictionary
+   to the derived category, drawn from the pinned controlled
+   vocabulary (:ref:`ADR-033`; user-defined features are held separately
+   as ``custom_features``) → features are stored as a dictionary
    on the :class:`~latticelang.core.phonology.Phoneme` instance
 
 4. System proposes a sonority rank from the phoneme's features
    (integer 0–9, where 0 = least sonorous) → user confirms or
    adjusts → system validates the rank is within the expected
    range for the category and features — see :term:`sonority scale`
+   and the rank-proposal table in :ref:`dc_phoneme`
 
-5. System pre-fills the frequency weight from PHOIBLE
-   attestation data (float, default: 1.0 if unattested) → user
+5. System pre-fills the frequency weight from PHOIBLE attestation
+   data (float, default: 1.0 if unattested — see
+   :ref:`dc_ipa_reference` for the attestation fields) → user
    optionally adjusts → stored for use in generation — see
    :attr:`~latticelang.core.phonology.Phoneme.frequency`
 
 6. System checks for duplicate symbols in the
    :class:`~latticelang.core.phonology.Inventory` → if unique,
-   phoneme is added
+   phoneme is added → inventory-level diagnostics (INV-2 through
+   INV-5, :ref:`dc_inventory`) surface non-blockingly where the
+   new entry completes or trips an advisory check (identical
+   feature sets, minimal pairs — informational, never blocking)
 
 7. User repeats steps 1–6 for each phoneme in the language
 
@@ -70,6 +80,10 @@ Postconditions
   phonemes with complete feature sets
 - Each phoneme has a unique symbol, a category (derived or
   overridden), and a sonority rank
+- Inventory-level validation passes or warnings are acknowledged:
+  the set conforms to ``dc_inventory`` (INV-1 nucleus capacity is
+  a blocking error for generation, UC-04 precondition; INV-2–5
+  are advisory)
 - Project file (``.json``) persists the inventory
 - Live preview regenerates word list if any words were previously
   generated (Phase Gamma)
@@ -84,7 +98,7 @@ Extensions
 
 * **1b:** IPA symbol is valid but represents multiple phonemes
   (e.g., ``"ts"`` could be one affricate /t͡s/ or two phonemes /t/+/s/)
-  - 1b1: System applies the longest-match default (ADR-043):
+  - 1b1: System applies the longest-match default (:ref:`ADR-043`):
   prefer /t͡s/ if the affricate exists in the inventory, else the /t/+/s/ sequence
   - 1b2: System flags the interpretation with a low-friction
   correction affordance (user can switch to the alternative)
@@ -110,16 +124,23 @@ Extensions
   - 6a1: System shows existing entry with its features and rank
   - 6a2: Agreeing fields merge silently; conflicting fields
   collect into one grouped prompt: keep all existing / take all
-  new / decide individually (ADR-040)
+  new / decide individually (:ref:`ADR-040`)
   When the user chooses "merge features," the merge dialog
   presents both records side-by-side with per-field selection,
-  prefilled with the deterministic outcomes of :ref:`adr-051`
+  prefilled with the deterministic outcomes of :ref:`ADR-051`
   (existing sonority rank retained, features unioned with
   existing winning conflicts, frequencies summed). The user
   confirms or adjusts — the dialog is a confirmation surface,
-  not a blank decision (:ref:`adr-035` pattern).
-  - 6a3: ``sonority_rank`` is never merged — recomputed from the
-  merged features; ``custom`` is never downgraded
+  not a blank decision (:ref:`ADR-035` pattern).
+  - 6a3: Merge rules follow ADR-051's field classes:
+  ``features`` union (existing wins conflicts);
+  ``sonority_rank`` retained (existing is authoritative);
+  ``frequency`` summed (normalization is per-slot at
+  selection time, never persisted — Q7);
+  ``category`` recomputed from the merged features
+  (:ref:`ADR-032`); ``components`` / ``custom`` / ``metadata``
+  new-only fill. Every deterministic fallback is written to the
+  collision log for after-the-fact review.
   - 6a4: Pre-merge entry is recoverable (undo stack)
   - 6a5: User may instead replace entirely or cancel
 
@@ -181,9 +202,17 @@ Variations
      inv = Inventory()
      inv.add(Phoneme(
          symbol="p",
-         features={"voiced": False, "place": "bilabial", "manner": "stop"},
+         features={
+             "syllabic": "-",
+             "consonantal": "+",
+             "sonorant": "-",
+             "continuant": "-",
+             "place": "bilabial",
+             "manner": "plosive",
+             "voice": "-",
+         },
          frequency=1.93,
-     ))  # category and rank derived from features (ADR-032)
+     ))  # category and rank derived from features (ADR-032, ADR-033)
 
 Notes
 -----
@@ -228,15 +257,6 @@ selection. See ADR-032 and :term:`phoneme category`.
    derivation. Target scope: PHOIBLE-attested segments plus
    standard chart symbols (~1,000–2,500 entries).
    See :ref:`dc_ipa_reference`.
-
-.. todo::
-   :class: attention
-
-   **Finalize category derivation rules**
-   Blockers resolved (Q6, Q24; ADR-033). The mapping table —
-   including glide and diphthong handling, and syllabic
-   consonants — lands in :ref:`dc_phoneme`. Remove this todo
-   when the contract's mapping section is drafted.
 
 Flow Diagram
 ------------
