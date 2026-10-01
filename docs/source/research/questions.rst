@@ -196,8 +196,8 @@ Status Overview (changes)
      - :ref:`dc_constraints`
    * - Q36
      - Rarity tier thresholds
-     - OPEN (provisional buckets in build script)
-     - Blocks tier 6 decision
+     - ANSWERED (2026-10-01; :ref:`dc_ipa_reference`)
+     - Resolved
      - :ref:`q38-ipa-reference-sourcing`
    * - Q37
      - Constraint interface word_context parameter
@@ -759,15 +759,15 @@ Q7: [PHONO] Word Generation Determinism and Seed Stability
    the above; UC04's generation algorithm references the
    per-slot normalization formula.
 
-Notes: Larman's Protected Variations says the thing to protect is
-the key structure — the scheme by which any random decision
-finds its stream — while the derivation mechanics behind it
-stay swappable. Martin's dependency rule says the derivation
-function is core, but core-safe (stdlib-only, honoring ADR-010).
-And UC-013's determinism note forbids hidden global state — which
-rules out sequential spawning (derive word 1's stream, consume it,
-derive word 2's from what's left), because then regenerating
-word 50 requires replaying words 1–49.
+   Notes: Larman's Protected Variations says the thing to protect is
+   the key structure — the scheme by which any random decision
+   finds its stream — while the derivation mechanics behind it
+   stay swappable. Martin's dependency rule says the derivation
+   function is core, but core-safe (stdlib-only, honoring ADR-010).
+   And UC-013's determinism note forbids hidden global state — which
+   rules out sequential spawning (derive word 1's stream, consume it,
+   derive word 2's from what's left), because then regenerating
+   word 50 requires replaying words 1–49.
 
 
 .. _q8-constraint-expressiveness:
@@ -1715,7 +1715,7 @@ Q36: [PHONO] Rarity Tier System — Finalization
 .. dropdown:: Click to expand
    :color: warning
 
-   **Status:** OPEN
+   **Status:**  ANSWERED (2026-10-01); resolution recorded in-question — see dc_ipa_reference Implementation Bindings, Rarity tiers
 
    **Question:**
    The IPA reference data includes a ``rarity_tier`` field (1–5:
@@ -1742,66 +1742,69 @@ Q36: [PHONO] Rarity Tier System — Finalization
       "5","Rare","Found in very few languages"
       "6","Unattested","In IPA chart but not in PHOIBLE database"
 
-A note about current implementation: phoible_frequency is a 0–1 fraction of inventories,
-while dc_phoneme's frequency is an unbounded relative weight pre-filled from PHOIBLE.
-How a fraction maps to a weight at UC-01 pre-fill time is undefined.
+   A note about current implementation: phoible_frequency is a 0–1 fraction of inventories,
+   while dc_phoneme's frequency is an unbounded relative weight pre-filled from PHOIBLE.
+   How a fraction maps to a weight at UC-01 pre-fill time is undefined.
 
    **Action items:**
 
-   - [ ] Confirm: add tier 6 to IPA reference JSON
-   - [ ] Update :ref:`dc_ipa_reference`
-   - [ ] Add UI warning when user selects tier 5–6 phonemes
+   - [x] Confirm: add tier 6 to IPA reference JSON
+   - [x] Update :ref:`dc_ipa_reference`
 
-Resolved 2026-10-01. Ladder chosen at observed cliffs in the trumped
-distribution (2,155 denominator): >=80% / >=50% / >=25% / >=5% / >=1% /
-hapax split. Member counts 9 / 10 / 15 / 70 / 164 / 1065 / 827; see
-:rarity-tier-note: for the full analysis and caveats (T6a is a
-dataset-hapax claim, not a linguistic uniqueness claim).
+   Resolved 2026-10-01. Ladder chosen at observed cliffs in the trumped
+   distribution (2,155 denominator): >=80% / >=50% / >=25% / >=5% / >=1% /
+   hapax split. Member counts 9 / 10 / 15 / 70 / 164 / 1065 / 827 (T6b is a
+   dataset-hapax claim, not a linguistic uniqueness claim).
 
-Rarity Tier Ladder — Analysis (Q36, resolved 2026-10-01)
+   Rarity Tier Ladder — Analysis (Q36, resolved 2026-10-01):
 
-Denominator: 2,155 trumped inventories (counted at build time from
-``phoible-phonemes.tsv`` distinct ``InventoryID``; not hardcoded).
-Continuous frequency remains the machine-facing weight; tiers are
-advisory display labels only and never gate generation.
+   Denominator: 2,155 trumped inventories (counted at build time from
+   ``phoible-phonemes.tsv`` distinct ``InventoryID``; not hardcoded).
+   Continuous frequency remains the machine-facing weight; tiers are
+   advisory display labels only and never gate generation.
 
-Thresholds were chosen at observed discontinuities in the ranked
-frequency list (cliff-based cuts, not round-number impositions):
+   Thresholds were chosen at observed discontinuities in the ranked
+   frequency list (cliff-based cuts, not round-number impositions,
+   despite what it looks like):
 
-====== ========== ======= ==============================
-Tier   Threshold  Members Boundary evidence
-====== ========== ======= ==============================
-T1     >= 80%         9   n->s cliff (80.8 -> 77.2)
-T2     >= 50%         10   coincides with g/NG cliff
-T3     >= 25%         15   u:-long cliff (26.1 -> 24.7)
-T4     >= 5%          70
-T5     >= 1%         164
-T6a    hapax (=1)  1065   "isolates" (display label)
-T6b    otherwise    827
-====== ========== ======= ==============================
+   .. csv-table::
+      :header-rows: 1
+      :widths: 15 15 15 55
 
-Member counts sum to 2,160 distinct attested symbols.
+      "Tier","Threshold","Members","Boundary evidence"
+      "T1",">= 80%","9","n->s cliff (80.8 -> 77.2)"
+      "T2",">= 50%","10","coincides with g/NG cliff"
+      "T3",">= 25%","15","u:-long cliff (26.1 -> 24.7)"
+      "T4",">= 5%","70","-"
+      "T5",">= 1%","164","-"
+      "T6a","otherwise (2 to 21 attestations)","827","-"
+      "T6b","hapax (=1)","1065","isolates (display label)"
 
-Caveats
-~~~~~~~
-- Tier 6a means "attested in exactly one trumped inventory of this
-  2,155-language sample." This conflates genuine rarity with sampling
-  and trumping artifacts and is not a linguistic uniqueness claim.
-- Mark-complexity correlates with rarity (avg combining/modifier
-  marks per symbol: T1 0.00, T2 0.10, T3 0.33, T4 0.61, T5+ ~1.07)
-  but does not explain it entirely: 440 of the sub-1% symbols carry
-  no diacritics (clicks, uvulars, ejectives).
-- d̠ʒ verified at 647/2155 = 30.02% (boundary-adjacent symbol,
-  archived for the record).
+   Member counts sum to 2,160 distinct attested symbols.
 
-Open follow-ups (non-blocking, numbered)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- F-1: T6 subdivision semantics (if display ever needs finer
-  granularity than hapax/non-hapax).
-- F-2: Admission policy for the 85 features-only unattested
-  symbols (potential "unattested" tier or exclusion).
-- F-3: Diacritic composition for the 83 attested-but-unlisted
-  symbols (independent work project, per ADR-028-normalization seam).
+   Caveats
+   ~~~~~~~
+   - Tier 6b means "attested in exactly one trumped inventory of this
+     2,155-language sample." This conflates genuine rarity with sampling
+     and trumping artifacts and is NOT a linguistic uniqueness claim.
+   - Mark-complexity correlates with rarity (avg combining/modifier
+     marks per symbol: T1 0.00, T2 0.10, T3 0.33, T4 0.61, T5+ ~1.07)
+     but does not explain it entirely: 440 of the sub-1% symbols carry
+     no diacritics (clicks, uvulars, ejectives).
+   - d̠ʒ verified at 647/2155 = 30.02% (boundary-adjacent symbol,
+     archived for the record).
+
+   Open follow-ups (non-blocking, numbered)
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   - F-1: T6 subdivision semantics (if display ever needs finer
+     granularity than hapax/non-hapax).
+   - F-2: Admission policy for the 85 features-only unattested
+     symbols (potential "unattested" tier or exclusion). OPEN — the
+     ladder applies only to attested symbols; the 85 features-only
+     glyphs and user-custom symbols are out of scope by design
+     (dc_ipa_reference Implementation Bindings, Rarity tiers)
+   - F-3: Diacritic composition for the 83 attested-but-unlisted
+     symbols (independent work project, per ADR-028-normalization seam).
 
 .. _q37-word-context-parameter:
 .. _q37:
@@ -2403,37 +2406,36 @@ Q42: [PHONO] Harmony Constraint Parameterization
 Q43: Do Nasals Form a Single Natural Class for Sonority?
 --------------------------------------------------------
 
-**Status:** Deferred — Post-MVP Exploration
+   **Status:** Deferred — Post-MVP Exploration
 
-**Motivation:** Krämer & Zec (2020) present phonotactic evidence that
-nasal consonants don't behave as a unified sonority class — their
-behavior splits by place, with higher-place nasals (velar, pharyngeal)
-pattern as more sonorant than lower-place ones (bilabial, alveolar).
-This contradicts LatticeLang's current assumption of a fixed sonority
-scale where nasals occupy a single contiguous rank.
+   **Motivation:** Krämer & Zec (2020) present phonotactic evidence that
+   nasal consonants don't behave as a unified sonority class — their
+   behavior splits by place, with higher-place nasals (velar, pharyngeal)
+   pattern as more sonorant than lower-place ones (bilabial, alveolar).
+   This contradicts LatticeLang's current assumption of a fixed sonority
+   scale where nasals occupy a single contiguous rank.
 
-**Current Assumption:** The ``sonority_rank`` field (uc01 step 4) assigns
-a single integer to all nasal segments, and the
-``sonority_sequencing`` constraint enforces the SSP using that fixed
-ranking (Clements 1990).
+   **Current Assumption:** The ``sonority_rank`` field (uc01 step 4) assigns
+   a single integer to all nasal segments, and the
+   ``sonority_sequencing`` constraint enforces the SSP using that fixed
+   ranking (Clements 1990).
 
-**Challenge:** If Krämer & Zec's hypothesis is correct, a single
-``sonority_rank`` per phoneme is insufficient. Possible remedies:
+   **Challenge:** If Krämer & Zec's hypothesis is correct, a single
+   ``sonority_rank`` per phoneme is insufficient. Possible remedies:
 
-1. Place-dependent ranking: nasals inherit rank based on place feature
-2. Context-sensitive rank: nasal sonority varies by following segment
-3. Dual nasal hypothesis implementation: split nasals into two
-   natural classes in the SSP logic
+   1. Place-dependent ranking: nasals inherit rank based on place feature
+   2. Context-sensitive rank: nasal sonority varies by following segment
+   3. Dual nasal hypothesis implementation: split nasals into two natural classes in the SSP logic
 
-**Dependencies:** Q4 (SSP implementation), ADR-029 (IPA data source)
+   **Dependencies:** Q4 (SSP implementation), ADR-029 (IPA data source)
 
-**Sources:**
+   **Sources:**
 
-- :cite:p:`kramer2020` — primary source
-- Levick et al. (follow-up work on phonetic/phonotactic alignment)
+   - :cite:p:`kramer2020` — primary source
+   - Levick et al. (follow-up work on phonetic/phonotactic alignment)
 
-**See Also:** :ref:`ADR-038`, glossary entry ``sonority``,
-:ref:`constraint-types-overview` (sonority_sequencing constraint)
+   **See Also:** :ref:`ADR-038`, glossary entry ``sonority``,
+   :ref:`constraint-types-overview` (sonority_sequencing constraint)
 
 .. _q44-maxent-phonotactic-learning:
 .. _q44:
@@ -2441,67 +2443,66 @@ ranking (Clements 1990).
 Q44: Could LatticeLang Learn Constraint Weights from User Choices?
 ------------------------------------------------------------------
 
-**Status:** Deferred — Post-MVP Exploration
+   **Status:** Deferred — Post-MVP Exploration
 
-**Motivation:** :cite:p:`hayes2011` demonstrates that experimental evidence
-for an "innate" Sonority Sequencing Principle can largely be explained
-by learners extracting patterns from ambient phonotactics rather than
-assuming Universal Grammar constraints. This suggests LatticeLang
-might infer constraint strength/weights from user-generated languages
-instead of hardcoding default weights.
+   **Motivation:** :cite:p:`hayes2011` demonstrates that experimental evidence
+   for an "innate" Sonority Sequencing Principle can largely be explained
+   by learners extracting patterns from ambient phonotactics rather than
+   assuming Universal Grammar constraints. This suggests LatticeLang
+   might infer constraint strength/weights from user-generated languages
+   instead of hardcoding default weights.
 
-**Related Tools:**
+   **Related Tools:**
 
-- :cite:p:`hayeswilson2008` — maxent phonotactic learner
-  (*Linguistic Inquiry* 39:379–440)
-- george-steel/maxent-learner — open-source reimplementation
-- Hayes Phonotactics Manual & EnglishFeatures.txt — data/examples
+   - :cite:p:`hayeswilson2008` — maxent phonotactic learner (*Linguistic Inquiry* 39:379–440)
+   - george-steel/maxent-learner — open-source reimplementation
+   - Hayes Phonotactics Manual & EnglishFeatures.txt — data/examples
 
-**Potential Application:** Users could supply example words, and
-LatticeLang would infer which constraints are active and how strongly
-they weight them. This mirrors Tesar & Smolensky's learnability
-framework for OT ranking induction.
+   **Potential Application:** Users could supply example words, and
+   LatticeLang would infer which constraints are active and how strongly
+   they weight them. This mirrors Tesar & Smolensky's learnability
+   framework for OT ranking induction.
 
-**Technical Scope:** Significant — requires statistical learning
-infrastructure, not MVP.
+   **Technical Scope:** Significant — requires statistical learning
+   infrastructure, not MVP.
 
-**Sources:**
+   **Sources:**
 
-- :cite:p:`hayes2011` — theoretical motivation
-- :cite:p:`hayeswilson2008` — algorithmic foundation
-- :cite:p:`tesar2000` — learnability framework
-- george-steel/maxent-learner — reference implementation
+   - :cite:p:`hayes2011` — theoretical motivation
+   - :cite:p:`hayeswilson2008` — algorithmic foundation
+   - :cite:p:`tesar2000` — learnability framework
+   - george-steel/maxent-learner — reference implementation
 
-**See Also:** :ref:`q23-universal-override-model`,
-:ref:`constraint-types-overview` (gradient_probabilistic), glossary
-entries ``optimality theory``, ``faithfulness constraint``
+   **See Also:** :ref:`q23-universal-override-model`,
+   :ref:`constraint-types-overview` (gradient_probabilistic), glossary
+   entries ``optimality theory``, ``faithfulness constraint``
 
 
-.. _q45-ot-learnability-framework:
-.. _q45:
+   .. _q45-ot-learnability-framework:
+   .. _q45:
 
 Q45: Does OT Learnability Theory Inform Our Constraint Design?
 --------------------------------------------------------------
 
-**Status:** Deferred — Post-MVP Research
+   **Status:** Deferred — Post-MVP Research
 
-**Motivation:** Tesar & Smolensky's work on learnability in Optimality
-Theory addresses how a grammar learner induces constraint rankings
-from exposure to data. If LatticeLang eventually supports user-driven
-constraint tuning (see Q44), this framework might inform how we
-represent and expose constraint weights to users.
+   **Motivation:** Tesar & Smolensky's work on learnability in Optimality
+   Theory addresses how a grammar learner induces constraint rankings
+   from exposure to data. If LatticeLang eventually supports user-driven
+   constraint tuning (see Q44), this framework might inform how we
+   represent and expose constraint weights to users.
 
-**Relation to MVP:** None — current MVP uses designer-fixed,
-hand-weighted constraints (per ADR-044, ADR-042).
+   **Relation to MVP:** None — current MVP uses designer-fixed,
+   hand-weighted constraints (per ADR-044, ADR-042).
 
-**Potential Future Use:** If users request "this conlang learned
-constraints from X example corpus," the learnability framework
-provides the theoretical backing for that feature.
+   **Potential Future Use:** If users request "this conlang learned
+   constraints from X example corpus," the learnability framework
+   provides the theoretical backing for that feature.
 
-**Sources:**
+   **Sources:**
 
-- Tesar & Smolensky (1998/2000) — learnability algorithms
-- Prince & Smolensky (2004) ``prince2004`` — foundational OT text
+   - Tesar & Smolensky (1998/2000) — learnability algorithms
+   - Prince & Smolensky (2004) ``prince2004`` — foundational OT text
 
-**See Also:** :ref:`q44-maxent-phonotactic-learning`,
-:ref:`theoretical_framework`, glossary entry ``optimality theory``
+   **See Also:** :ref:`q44-maxent-phonotactic-learning`,
+   :ref:`theoretical_framework`, glossary entry ``optimality theory``
