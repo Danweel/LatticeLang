@@ -10,12 +10,14 @@ IPA Reference Data Contract
 :consumed by: UC-01 (inventory pre-fill), UC-07 (export /
    rendering), UC-012 (segmentation lookup), dc_phoneme (known
    vs. custom determination)
-:status: Draft — schema complete; build script not yet written
-  (Q38); this contract is its input specification
+:status: Draft — schema complete; implementation bindings
+   finalized (Q38); derive script being implemented test-first
 
 .. note::
    This contract was reviewed during the 2026-09-16 use-case
    and spec-completeness audit.
+   Content reviewed again 2026-10-01 after PHOIBLE import and
+   evaluating actual content structure.
 
 Overview
 --------
@@ -65,7 +67,7 @@ IPA Reference Data Fields
    * - Field
      - Description
    * - ``symbol``
-     - Canonical IPA form (tie bar for affricates: ``t͡s``); unique across the whole table
+     - Vendored PHOIBLE spelling, stored verbatim per ADR-052 (affricates as plain sequences: ``ts``, ``t̠ʃ``; tie bar is display-layer); unique across the whole table
    * - ``description``
      - Human-readable description, for tooltips and help text
    * - ``place`` / ``manner`` / ``voicing``
@@ -75,19 +77,19 @@ IPA Reference Data Fields
    * - ``features``
      - Major-class feature bundle; keys from the pinned PHOIBLE 2.0 vocabulary (:ref:`ADR-033`)
    * - ``sonority_rank``
-     - Integer 0–9, or explicit null (UC-01 treats null as a prompt)
+     - Integer 0–9, or explicit null (:ref:`uc01` treats null as a prompt)
    * - ``unicode_points``
      - Array of ``U+XXXX`` strings; concatenates to the symbol
    * - ``canonical_forms``
-     - Alternate representations (e.g., ``"ts"`` for ``"t͡s"``); includes the ``symbol`` itself
+     - Alternate spellings resolving to this entry (e.g., the tie-barred ``"t͡s"`` for canonical ``"ts"``); includes the ``symbol`` itself. Tie-barred variants are supplied by the curated overrides file or by runtime input normalization — the derive pipeline never synthesizes spellings (:ref:`ADR-052`)
    * - ``aliases``
      - Non-canonical typed forms (e.g., ``"ch"``, ``"tsh"``); normalize to ``symbol`` on hit
    * - ``tipa``
-     - TIPA macro string, or null where none exists; consumed by UC-07's exporter
+     - TIPA macro string, or null where none exists; consumed by :ref:`uc07`'s exporter
    * - ``phoible_frequency``
-     - Decimal 0–1; fraction of PHOIBLE 2.0 inventories containing the segment (computed by the derive script, Q38)
+     - Decimal 0–1; fraction of PHOIBLE 2.0 inventories containing the segment (computed by the derive script, :ref:`Q38`)
    * - ``rarity_tier``
-     - Integer 1–5 (universal → rare); tier 6 (unattested) pending :ref:`q36-rarity-tier-finalization`
+     - Integer 1–5 per the Q36 ladder (≥80/≥50/≥25/≥5/≥1%), or 6a (remaining sub-1%) / 6b (hapax isolate); advisory display only
    * - ``combination_type``
      - ``special_combinations`` only: ``tie_bar | length | syllabic_mark`` parsing-rule discriminator
    * - ``constituents``
@@ -118,10 +120,9 @@ table above plus three classification fields:
 ``voicing``
    ``"voiceless"`` or ``"voiced"``.
 
-All other fields are as in the field summary above. The ``p``
-entry in the included fixture is a complete example; its
-``symbol`` is already in normalized tie-bar form (:ref:`ADR-028`),
-trivially so for a single-codepoint segment.
+The ``p`` entry in the included fixture is a complete example;
+its ``symbol`` is already in the PHOIBLE-verbatim form mandated
+by :ref:`ADR-052`, trivially so for a single-codepoint segment.
 
 Entry Schema — Vowels
 ---------------------
@@ -175,8 +176,16 @@ parent class (consonant or vowel) plus two fields:
    plus the combining mark (``["n", "̩"]``). Constituents
    identify the inventory-level phonemes a combination derives
    from — raw codepoints encode characters but say nothing
-   about inventory membership, which UC-012 needs for
+   about inventory membership, which :ref:`uc012` needs for
    un-tie-barred input.
+
+.. note::
+   Tie-barred combinations (``t͡s``, ``k͡p``) are never synthesized
+   by the derive pipeline — they are supplied by the curated
+   overrides file or by runtime input normalization. The data
+   layer stores PHOIBLE verbatim spellings only (i.e.: PHOIBLE does
+   not use tie-bars in this manner); tie-bar rendering
+   is a display-layer concern (:ref:`ADR-052`).
 
 Field Checks
 ------------
@@ -193,16 +202,18 @@ sanity check):
 #. Every ``features`` key is in the pinned PHOIBLE 2.0 vocabulary.
 #. Sonority rank ties at boundary ranks are permitted (glide
    and close vowel both may rank 8 — expected, not anomalous;
-   see :ref:`dc_phoneme`'s rank table note).
+   see :ref:`dc_phoneme`'s rank table note). THIS NEEDS REVISION AFTER SONORITY DECISIONS
 #. Every ``special_combinations`` entry carries a
    ``combination_type`` from ``tie_bar | length |
    syllabic_mark`` and a ``constituents`` array of at least
    two non-empty strings.
 #. Every ``canonical_forms`` array includes the entry's
    ``symbol``.
-#. Every entry has a ``rarity_tier`` in 1–5 and a
-   ``phoible_frequency`` in [0, 1] (or explicit null, tier 6
-   only). Threshold bucketing feeds :ref:`q36-rarity-tier-finalization`.
+#. Every entry has a ``rarity_tier`` in 1–5 or 6a/6b (per the
+   :ref:`Q36` ladder) and a ``phoible_frequency`` in [0, 1] (or
+   explicit null only with tier 6a/6b). The continuous
+   frequency is machine-facing; tiers are advisory display
+   labels only.
 
 Build Pipeline (Q38)
 --------------------
@@ -247,9 +258,104 @@ Relations
 ---------
 
 - Superset of: the user's phoneme inventory (:ref:`dc_phoneme` membership test for the ``custom`` flag)
-- Feeds: UC-01 (pre-fill features, rank, frequency), UC-07 (tipa for export), UC-012 (segmentation lookup, aliases)
-- Governed by: :ref:`ADR-033` (pinned PHOIBLE 2.0 feature vocabulary), :ref:`ADR-028` (tie-bar normalization), :ref:`ADR-041` (near-miss exclusions)
+- Feeds: :ref:`uc01` (pre-fill features, rank, frequency), :ref:`uc07` (tipa for export), :ref:`uc012` (segmentation lookup, aliases)
+- Governed by: :ref:`ADR-033` (pinned PHOIBLE 2.0 feature vocabulary), :ref:`ADR-052` (ver PHOIBLE spelling stored verbatim; tie bar display-layer only), :ref:`ADR-041` (near-miss exclusions)
 - Is NOT: a phoneme inventory (it has no user data), nor a preset (presets are :ref:`dc_language_definition` instances)
+
+Implementation Bindings
+-----------------------
+
+Bindings recording how the Q38 build implements this contract.
+They bind ``scripts/derive_ipa_reference.py``; they add no
+schema fields.
+
+Trumped denominator
+~~~~~~~~~~~~~~~~~~~
+
+``phoible_frequency`` is computed over the **trumped
+denominator**: the number of distinct ``InventoryID`` values
+(field 1) in ``gold-standard/phoible-phonemes.tsv`` of the
+vendored release — counted at build time from the pinned data,
+never hardcoded. Per-symbol counts deduplicate
+``(InventoryID, Phoneme)`` pairs before division, so repeated
+rows within one inventory cannot inflate a count. Trumping
+semantics and the verified counting recipe live in
+:ref:`dc_phoible_source`.
+
+Vendored-canonical spelling
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``symbol`` values are PHOIBLE's spellings, stored verbatim
+(:ref:`ADR-052`): affricates and double articurations are plain
+sequences (``ts``, ``t̠ʃ``, ``kp``), each one segment by data
+structure — one features row. No tie-bar normalization occurs
+in the data layer; tie-bar rendering is a display-layer rule.
+``t̠ʃ`` is in the fixture roster specifically to prove
+affricates flow as ordinary rows.
+
+Shared-symbol restriction
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The build emits only symbols having both a phonemes-file
+attestation and a features-file row (2,077 of 2,160 attested
+symbols, counted 2026-10-01). The 83 attested-but-featureless
+symbols are dropped from the output and **logged with their
+attestation counts** (mostly diacritic compositions: ``ã̰``,
+``bʰ``, ``ç``). The 85 features-only unattested symbols are
+excluded; their admission policy is follow-up F-2.
+
+Tonemes
+~~~~~~~
+
+The five tone letters (˥ ˦ ˧ ˨ ˩) enter as a top-level
+``tonemes`` array carrying the common field set, with
+``sonority_rank: null``. Their features are PHOIBLE's verbatim:
+``tone "+"``, every other feature ``0`` or ``-``. Category
+derivation gains a ``tone +`` branch routing to ``tone``. Tone
+data is carried now per :ref:`ADR-048`'s flexibility provision;
+nothing consumes it until the tone stage exists.
+
+Rarity tiers
+~~~~~~~~~~~~
+
+The provisional 90/50/10/1 thresholds are replaced by the Q36
+ladder (resolved 2026-10-01): ≥80% / ≥50% / ≥25% / ≥5% / ≥1%,
+then a hapax split — tier 6b for symbols attested in exactly
+one inventory of the sample, tier 6a for the remaining
+sub-1%. Thresholds were placed at observed cliffs in the
+trumped distribution, not at round numbers. Tiers are advisory
+display labels; the continuous frequency is the machine-facing
+weight and never gates generation. Tier 6a is a dataset-hapax
+claim, not a linguistic verdict.
+
+Scope: the ladder describes the 2,160 attested symbols
+only. The 85 features-only unattested symbols carry no tier
+under any label — they are excluded from the build pending
+follow-up **Q36 F-2**. User-created symbols outside the reference
+table never receive a tier: they are the ``custom`` path in
+:ref:`dc_phoneme`, which has no PHOIBLE attestation to
+annotate. The tier system annotates PHOIBLE data; it does
+not classify user choices.
+
+Specimen roster (fixture regeneration)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``tests/fixtures/phoible_mini.tsv`` is generated, not authored:
+rows are sliced verbatim from the features TSV and joined to
+real attestation counts from the phonemes listing for the
+roster ``p b t i a t̠ʃ aː m̩`` plus the five tone letters, using
+the true 38-column header. Zero invented values appear in the
+fixture.
+
+Normalization seam
+~~~~~~~~~~~~~~~~~~
+
+Input-spelling normalization (accepting tie-barred ``t͡s`` for
+canonical ``ts``) is a runtime input concern, not part of the
+derive pipeline. The derive script's drop-log implementation
+carries a comment marking where the future diacritic
+composition work for the 83 dropped symbols would attach
+(follow-up F-3, an independent work project).
 
 References
 ----------
