@@ -210,3 +210,4 @@ docker-compose.override.yml
 
 live_preview.sh
 build-docs.sh
+vendor/phoible-2.0/dev-v2.0.zip

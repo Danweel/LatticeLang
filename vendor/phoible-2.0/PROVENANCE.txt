@@ -1,0 +1,24 @@
+LatticeLang vendored PHOIBLE data — provenance record
+======================================================
+Source:        PHOIBLE 2.0 development repository snapshot
+Release:       v2.0 (2019-03-16)
+DOI:           10.5281/zenodo.2626687
+Downloaded:    2026-10-01, from Zenodo record 2626687
+Archive:       dev-v2.0.zip
+MD5:           ebadb1d91ddaa0ab499154fd44782346  (verified on download)
+Contents:       phoible-dev-862bec9/ (upstream commit
+               862bec9af5db42e3c9ceedeaa378bf4c6fa0ec8b)
+License:       CC-BY 4.0 (data/LICENSE inside the archive)
+
+Files consumed by the LatticeLang build:
+  gold-standard/phoible-phonemes.tsv          (frequency counts)
+  raw-data/FEATURES/phoible-segments-features.tsv (feature matrix)
+
+Feature system lineage: HayesPrime (Hayes 2009 base + Moisik &
+Esling 2011 laryngeal extensions), maintained upstream at
+https://github.com/bambooforest/features (Steven Moran).
+LatticeLang uses the feature set AS VENDORED at commit 862bec9;
+later upstream feature-system changes are not adopted (see
+dc_phoible_source.rst upgrade policy).
+
+Version policy: docs/source/data_contracts/dc_phoible_source.rst

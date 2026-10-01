@@ -345,6 +345,18 @@ ADR Index
      - Accepted
      - 2026-09-16
      - Lumo
+   * - :ref:`ADR-051`
+     - [PHONO]
+     - Merge Field-Class Duplicates
+     - Accepted
+     - 2026-09-23
+     - Danweel, Lumo
+   * - :ref:`ADR-052`
+     - [PHONO]
+     - Segment Spelling
+     - Accepted
+     - 2026-09-30
+     - Danweel
 
 ---
 
@@ -1303,7 +1315,7 @@ ADR-028: [PHONO] Tie-Bar Policy for Affricates
 ----------------------------------------------
 
 :Date: 2026-08-29
-:Status: Accepted
+:Status: Superseded by :ref:`ADR-052` (storage/display policy); pedagogical goals affirmed and preserved
 :Scope: Phonology Tool
 :Deciders: Danweel
 
@@ -1331,6 +1343,14 @@ internally ensures consistency in data and output.
 
 Tie bars indicate unit phonemes in the IPA's official
 conventions :cite:p:`ipa1999`.
+
+.. note::
+
+   2026-10-01: The **Internal** clause ("normalize to tie-bar form") is
+   superseded by :ref:`ADR-052` after vendoring PHOIBLE 2.0 revealed the
+   source data's spelling convention (no tie bars; ``ts``, ``t̠ʃ``,
+   ``kp``). The **Display**, **Input**, and **Pedagogy** clauses stand,
+   reaffirmed by :ref:`ADR-052`.
 
 ---
 

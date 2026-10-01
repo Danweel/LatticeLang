@@ -117,6 +117,37 @@ Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond withi
 - Shell quoting: single-quote grep/sed patterns containing backticks.
 - Save before run: check the VSCodium tab-dot / Ctrl+S before any py_compile or pytest — py_compile reads from DISK, not editor memory, so an unsaved buffer passes in the editor while the stale file runs (assistant reminds; USER checks).
 - Paste complete command output, never a trimmed summary — truncated pytest output hides vacuous-pass and wrong-test failures.
+- **No remembered numbers.** Exact figures (counts, totals, thresholds)
+are counted from the pinned data at the moment of use — never recalled
+from memory, from code comments, or from earlier conversation summaries.
+Lineage that motivated this: an invented "4,000" mini-world total that
+sat in a code comment beside a half-remembered "3,020" release number,
+when the real, correct denominator (trumped inventories, 2,155) had to
+be counted from the data anyway.
+
+## PHOIBLE-related Discipline
+
+## Terminal Data Checks (learned 2026-10-01, PHOIBLE recon)
+
+**Pasted commands mangle whitespace.** Tabs frequently arrive as spaces
+after a round-trip through chat/clipboard. Any pattern that anchors on a
+literal tab may silently match nothing — the failure mode looks like
+"the data doesn't contain it" when actually the pattern is broken.
+Rule: for terminal data checks, prefer awk field equality over
+tab-anchored grep:
+    awk -F'\t' -v s="p" '$8 == s' file.tsv    # paste-safe
+    grep -P "^p\t" file.tsv                    # NOT paste-safe
+If using grep anyway, write the tab as $'\t' at evaluation time.
+
+**Verify column indices against the real header before cutting.**
+Columns shift between files of the same dataset (phoible-phonemes.tsv:
+field 7 is GlyphID, field 8 is Phoneme). Running `head -1` and counting
+fields, by hand, before any `cut`/`awk` against an unverified column is
+mandatory. A wrong-field count returns plausible-looking garbage that
+can cost an hour to notice (the 0-overlap "normalization crisis" that
+was actually a field-7-vs-8 bug).
+
+
 
 # Session Integrity (Re-Injection & Checkpoints)
 

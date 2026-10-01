@@ -1752,6 +1752,57 @@ How a fraction maps to a weight at UC-01 pre-fill time is undefined.
    - [ ] Update :ref:`dc_ipa_reference`
    - [ ] Add UI warning when user selects tier 5–6 phonemes
 
+Resolved 2026-10-01. Ladder chosen at observed cliffs in the trumped
+distribution (2,155 denominator): >=80% / >=50% / >=25% / >=5% / >=1% /
+hapax split. Member counts 9 / 10 / 15 / 70 / 164 / 1065 / 827; see
+:rarity-tier-note: for the full analysis and caveats (T6a is a
+dataset-hapax claim, not a linguistic uniqueness claim).
+
+Rarity Tier Ladder — Analysis (Q36, resolved 2026-10-01)
+
+Denominator: 2,155 trumped inventories (counted at build time from
+``phoible-phonemes.tsv`` distinct ``InventoryID``; not hardcoded).
+Continuous frequency remains the machine-facing weight; tiers are
+advisory display labels only and never gate generation.
+
+Thresholds were chosen at observed discontinuities in the ranked
+frequency list (cliff-based cuts, not round-number impositions):
+
+====== ========== ======= ==============================
+Tier   Threshold  Members Boundary evidence
+====== ========== ======= ==============================
+T1     >= 80%         9   n->s cliff (80.8 -> 77.2)
+T2     >= 50%         10   coincides with g/NG cliff
+T3     >= 25%         15   u:-long cliff (26.1 -> 24.7)
+T4     >= 5%          70
+T5     >= 1%         164
+T6a    hapax (=1)  1065   "isolates" (display label)
+T6b    otherwise    827
+====== ========== ======= ==============================
+
+Member counts sum to 2,160 distinct attested symbols.
+
+Caveats
+~~~~~~~
+- Tier 6a means "attested in exactly one trumped inventory of this
+  2,155-language sample." This conflates genuine rarity with sampling
+  and trumping artifacts and is not a linguistic uniqueness claim.
+- Mark-complexity correlates with rarity (avg combining/modifier
+  marks per symbol: T1 0.00, T2 0.10, T3 0.33, T4 0.61, T5+ ~1.07)
+  but does not explain it entirely: 440 of the sub-1% symbols carry
+  no diacritics (clicks, uvulars, ejectives).
+- d̠ʒ verified at 647/2155 = 30.02% (boundary-adjacent symbol,
+  archived for the record).
+
+Open follow-ups (non-blocking, numbered)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- F-1: T6 subdivision semantics (if display ever needs finer
+  granularity than hapax/non-hapax).
+- F-2: Admission policy for the 85 features-only unattested
+  symbols (potential "unattested" tier or exclusion).
+- F-3: Diacritic composition for the 83 attested-but-unlisted
+  symbols (independent work project, per ADR-028-normalization seam).
+
 .. _q37-word-context-parameter:
 .. _q37:
 
@@ -1953,6 +2004,13 @@ Q38: [PHONO] IPA Reference Data Sourcing Strategy
 
    **License:** CC-BY 4.0, attribution in JSON metadata and
    bibliography (:ref:`adr-029`, :ref:`q20-license-compatibility`)
+
+   **Progress 2026-10-01**: Source analysis complete. Denominator ruling
+   (trumped, 2,155, counted at build), feature schema confirmed (real
+   38-column header), specimen roster fixed (p b t i a t̠ʃ aː m̩ +
+   five tone letters), shared-symbol restriction 2,077 with 83 logged
+   drops. Implementation pending;
+   see :ref:`ADR-052` and :ref:`dc_ipa_reference` | Implementation Bindings.
 
 .. _q39-merge-semantics:
 .. _q39:
