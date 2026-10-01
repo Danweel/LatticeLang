@@ -11,10 +11,11 @@ Syllable Template Data Contract
 .. note::
    This contract was reviewed during the 2026-09-16 use-case
    and spec-completeness audit. Key design decisions:
-   :ref:`adr-047` (logical schema vs. adapters),
-   :ref:`adr-048` (tone as separate stage),
-   :ref:`adr-049` (coordinate-addressed random streams),
-   :ref:`adr-050` (qualitative ambiguity tiers).
+   :ref:`ADR-047` (logical schema vs. adapters),
+   :ref:`ADR-048` (tone as separate stage),
+   :ref:`ADR-049` (coordinate-addressed random streams),
+   :ref:`ADR-050` (qualitative ambiguity tiers).
+   :ref:`ADR-051`
 
 Overview
 --------

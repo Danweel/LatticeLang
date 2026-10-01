@@ -133,24 +133,27 @@ The Phoneme Unit
 Every sound in your inventory is a ``Phoneme``. Here's what each field
 means in plain English:
 
-+------------------+------------------------------------------------------+
-| Field            | What It Means                                        |
-+==================+======================================================+
-| Symbol           | The IPA character (e.g., ``p``, ``ɑ``, ``k͡p``)          |
-+------------------+------------------------------------------------------+
-| Features         | A bundle of attributes (consonantal+, syllabic-,     |
-|                  | voiceless, bilabial, etc.) — think of these as the   |
-|                  | "DNA" that determines behavior                       |
-+------------------+------------------------------------------------------+
-| Category         | Automatically derived: consonant, vowel, glide,      |
-|                  | or diphthong. The tool figures this out from features|
-+------------------+------------------------------------------------------+
-| Sonority Rank    | A number (0–5 typically) indicating where this sound |
-|                  | falls on the sonority scale. Vowels are highest.     |
-+------------------+------------------------------------------------------+
-| Frequency Weight | How often this sound appears in world languages      |
-|                  | (from PHOIBLE data). Rare sounds get lower weights.  |
-+------------------+------------------------------------------------------+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Field
+     - What It Means
+   * - Symbol
+     - The IPA character (e.g., ``p``, ``ɑ``, ``k͡p``)
+   * - Features
+     - A bundle of attributes (consonantal+, syllabic-,
+       voiceless, bilabial, etc.) — think of these as the "DNA"
+       that determines behavior
+   * - Category
+     - Automatically derived: consonant, vowel, glide, or
+       diphthong. The tool figures this out from features
+   * - Sonority Rank
+     - A number (0–9) indicating where this sound falls on the
+       sonority scale. Vowels are highest.
+   * - Frequency Weight
+     - How often this sound appears in world languages (from
+       PHOIBLE data). Rare sounds get lower weights.
 
 Categories Are Derived, Not Assigned
 ------------------------------------
@@ -213,22 +216,28 @@ during segmentation. When we complicate things at a later stage, they'll have mo
 Frequency and Rarity Tiers
 --------------------------
 
-PHOIBLE provides raw inventory counts (e.g., ``p`` appears in 3,800
-inventories). LatticeLang converts this to a frequency weight
-(divided by total PHOIBLE inventories = 3,020), then buckets it
-into rarity tiers (which are basically arbitrary and decided by me):
+PHOIBLE provides raw inventory counts (e.g., ``p`` appears in 1,873 of
+the 2,155 inventories in PHOIBLE 2.0's gold-standard set). LatticeLang
+converts this to a frequency weight (count divided by the total number
+of inventories, calculated at build time from the pinned data), then
+labels it with a rarity tier. The tiers are display labels for humans;
+the continuous frequency is what the tool actually uses as a weight, so
+tiers never gate anything.
 
-- **Tier 1**: Extremely common (>90% of languages have this sound)
-- **Tier 2**: Common (>50%)
-- **Tier 3**: Moderate (>10%)
-- **Tier 4**: Rare (>1%)
-- **Tier 5**: Very rare (<1%)
-- **Tier 6**: Unattested (not in PHOIBLE at all)
+- **Tier 1**: Extremely common (at least 80% of languages have this sound)
+- **Tier 2**: Common (at least 50%)
+- **Tier 3**: Moderately common (at least 25%)
+- **Tier 4**: Uncommon (at least 5%)
+- **Tier 5**: Rare (at least 1%)
+- **Tier 6a**: Isolate — attested in exactly one inventory of the sample
+- **Tier 6b**: Attested, but below 1% and not an isolate
 
-Tier 6 sounds aren't forbidden — they're marked as "novel" rather
-than "world-attested." I want to allow for speculative conlangs, but
-for now it's more of a fail-safe than something that can be really
-chosen within the program as it's set up right now.
+A caveat on 6a: "isolate" means "appears in exactly one inventory of
+this 2,155-inventory sample," not "rare in a linguistic sense" —
+sampling gaps and source quirks can strand a sound in tier 6a that
+isn't actually unusual. Sounds that aren't in the reference table at
+all aren't forbidden — they're custom symbols, usable freely for
+speculative conlangs.
 
 What Happens Next?
 ------------------
@@ -266,8 +275,7 @@ Further Reading
 
 - :ref:`dc_phoneme` — Technical phoneme contract (developers)
 - :ref:`dc_inventory` — Validation rules in detail
-- :ref:`how-the-program-processes-things` — (placeholder: expand with
-  flow diagrams when available)
+- :ref:`how_the_program_processes_things` — (placeholder: expand with flow diagrams when available)
 - :ref:`glossary` — Technical terminology explained
 
 Feedback Welcome

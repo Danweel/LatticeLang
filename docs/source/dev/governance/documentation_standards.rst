@@ -1,7 +1,7 @@
 .. _documentation_standards:
 
 Documentation Standards
-========================
+=======================
 
 :date: 2026-08-24 (updated 2026-09-30)
 :type: Static (Append-only without an ADR)

@@ -1795,7 +1795,7 @@ Caveats
   archived for the record).
 
 Open follow-ups (non-blocking, numbered)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - F-1: T6 subdivision semantics (if display ever needs finer
   granularity than hapax/non-hapax).
 - F-2: Admission policy for the 85 features-only unattested

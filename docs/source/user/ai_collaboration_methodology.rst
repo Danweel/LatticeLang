@@ -1,7 +1,7 @@
 .. _ai-collaboration-methodology:
 
 AI Collaboration Methodology: An Experiment in Specification-Led Development
-===========================================================================
+============================================================================
 
 :date: 2026-10-01
 :type: Essay
@@ -189,7 +189,8 @@ at all, you could probably "pushback" on an LLM all day, getting it to
 double back on itself and agree to whatever you seem to want - the idea
 here was to ground the LLM to a "souce of truth" as it likes to call it -
 that being the docs, ADRs and the documentation_standards (and previous
-files in general). That way, when I do a 'pushback', the LLM 
+files in general). That way, when I 'pushback' on something, the LLM is
+triggered to re-verify.
 
 AI's Role (and Limits)
 ----------------------
