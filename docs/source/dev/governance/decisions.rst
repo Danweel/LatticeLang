@@ -210,7 +210,7 @@ ADR Index
    * - :ref:`ADR-028`
      - [PHONO]
      - Tie-Bar Policy for Affricates
-     - Accepted
+     - Superceded (ADR-052)
      - 2026-08-29
      - Danweel
    * - :ref:`ADR-029`
@@ -3156,3 +3156,63 @@ behavior; re-importing is an intentional act.
 Follow-through: ``dc_phoneme`` carries these rules as its Merge
 Semantics section; ``tests/test_phoneme_merge.py`` (future)
 asserts each row of the table.
+
+.. _ADR-052:
+
+ADR-052: [PHONO] Segment Spelling: Vendored-Canonical, Tie-Bar Display
+----------------------------------------------------------------------
+
+:Date: 2026-10-01
+:Status: Accepted
+:Scope: Phonology Tool, Data Layer
+:Deciders: Danweel
+:Supersedes: :ref:`ADR-028` (internal normalization clause only)
+
+Context
+~~~~~~~
+
+Vendored PHOIBLE 2.0 (commit 862bec9) stores affricates and double
+articulations as plain glyph sequences (``ts``, ``t̠ʃ``, ``kp``,
+``ɡb``) with no tie bar; each such sequence is one row — one segment —
+in the features table. ADR-028, written 2026-08-29 before vendoring,
+mandated internal tie-bar normalization, which would require a
+translation layer between LatticeLang and its pinned, checksummed
+data source for every stored glyph, plus a policy deciding which
+multi-glyph sequences deserve the bar.
+
+Decision
+~~~~~~~~
+
+- **Internal/canonical:** Store vendored PHOIBLE spelling verbatim.
+  Translation of segment spellings is forbidden in the data layer.
+  The derive pipeline passes glyphs through unchanged.
+- **Display:** Render multi-glyph single segments with a tie bar
+  (``t͡s``, ``k͡p``) in user-facing output, per IPA convention
+  :cite:p:`ipa1999`. This is a rendering rule in the display/
+  orthography layer (Gamma phase), not a data transformation.
+- **Unit-ness is structural:** a Phoneme object IS a single sound.
+  Whether ``ts`` is one phoneme or two is represented by data
+  structure (one feature row in the reference; one Phoneme object),
+  never by spelling. The tie bar decorates this fact for readers; it
+  does not create it.
+- **Input:** Accept both tie-barred and plain spellings (unchanged
+  from ADR-028).
+- **Assignment:** Users must never be required to type exotic
+  Unicode. Assignment flows through candidate selection from the
+  reference table or a compose-from-parts affordance in the UI;
+  the tool owns tie-bar display. (Gamma-phase commitment.)
+
+Rationale
+~~~~~~~~~
+
+The conflict motivating ADR-028's internal normalization disappears
+once unit-ness is recognized as structural rather than glyph-based.
+Storing the vendored spelling verbatim eliminates a perpetual
+translation seam and keeps every stored glyph byte-for-byte
+traceable to the pinned source. The pedagogical goal — a casual
+observer seeing ``k͡p`` and reading "one sound," avoiding English
+spelling intuitions (ng, sh) — is fully served by the display rule,
+while linguists familiar with the IPA tie bar lose nothing.
+Normalizing input spellings inward to canonical form remains a
+future normalization concern (see the ADR-028 note; the 83 unlisted
+composition project is unaffected).
