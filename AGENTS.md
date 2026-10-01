@@ -147,7 +147,62 @@ mandatory. A wrong-field count returns plausible-looking garbage that
 can cost an hour to notice (the 0-overlap "normalization crisis" that
 was actually a field-7-vs-8 bug).
 
+A wrong-field count returns plausible-looking garbage that
+can cost an hour to notice (the 0-overlap "normalization crisis"
+that was actually a field-7-vs-8 bug).
 
+## Trumped-Denominator Recipe (learned 2026-10-01)
+
+The 2,155 denominator is DISTINCT InventoryID (field 1) of the
+gold-standard phonemes listing — the gold-standard directory
+already contains only the trumped set. No filtering needed.
+
+Do NOT reach for any of these neighbors:
+- field 7 GlyphID (2,172 distinct) or field 8 Phoneme — symbol
+  columns, not inventory identity
+- the Trump column, field 5 (rank values 1–6; its priority
+  semantics are not needed for the denominator — do not guess
+  them; the gold-standard directory is pre-filtered)
+- distinct LanguageCode (1,673 — languages, not inventories)
+- the 3,020 raw-release inventory count (raw data, not gold std)
+
+Verified recipe (vendor/phoible-2.0/phoible-dev-862bec9):
+
+    awk -F'\t' 'NR>1 {print $1}' \
+      vendor/phoible-2.0/phoible-dev-862bec9/gold-standard/phoible-phonemes.tsv \
+      | sort -u | wc -l
+    # -> 2155  [verified: output, 2026-10-01]
+
+In code: count distinct InventoryID at build time (never hardcode);
+when aggregating per-symbol counts, deduplicate (InventoryID,
+Phoneme) pairs before dividing. Cross-check: phoible-aggregated.tsv
+holds one row per trumped inventory (2,156 lines incl. header).
+
+## Trumped-Denominator Recipe (learned 2026-10-01)
+
+The 2,155 denominator is DISTINCT InventoryID (field 1) of the
+gold-standard phonemes listing — the gold-standard directory
+already contains only the trumped set. No filtering needed.
+
+Do NOT reach for any of these neighbors:
+- field 7 GlyphID (2,172 distinct) or field 8 Phoneme — symbol
+  columns, not inventory identity
+- the Trump column, field 5 (ranks 1-6; semantics not needed for
+  the denominator — do not guess them)
+- distinct LanguageCode (1,673 — languages, not inventories)
+- the 3,020 raw-release inventory count (raw data, not gold std)
+
+Verified recipe (vendor/phoible-2.0/phoible-dev-862bec9):
+
+    awk -F'\t' 'NR>1 {print $1}' \
+      vendor/phoible-2.0/phoible-dev-862bec9/gold-standard/phoible-phonemes.tsv \
+      | sort -u | wc -l
+    # -> 2155  [verified: output, 2026-10-01]
+
+In code: count distinct InventoryID at build time (never hardcode);
+when aggregating per-symbol counts, deduplicate (InventoryID,
+Phoneme) pairs before dividing. Cross-check available: one row
+per inventory in phoible-aggregated.tsv (wc -l minus header).
 
 # Session Integrity (Re-Injection & Checkpoints)
 

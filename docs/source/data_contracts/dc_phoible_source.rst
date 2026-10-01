@@ -1,4 +1,4 @@
-.. _dc-phoible-source:
+.. _dc_phoible_source:
 
 Data Contract: PHOIBLE Source Pinning (DC-PHOIBLE-01)
 =====================================================
@@ -25,6 +25,34 @@ Canonical Source
   Jena: Max Planck Institute for the Science of Human History.
 - Availability: Zenodo (archival) + phoible.org (browse/live)
 
+Gold-Standard Trumping Semantics (added 2026-10-01)
+---------------------------------------------------
+
+PHOIBLE 2.0 resolves overlapping source inventories (multiple
+databases describing the same language) through *trumping*: each
+language contributes one winning "trumped" inventory, and the
+vendored ``gold-standard/`` directory contains only those winners.
+
+- The trumped denominator — distinct ``InventoryID`` (field 1)
+  of ``gold-standard/phoible-phonemes.tsv`` — is **2,155**
+  (counted 2026-10-01; cross-checked against the row count of
+  ``phoible-aggregated.tsv``, which lists one row per trumped
+  inventory). The derive script counts it at build time; it is
+  never hardcoded.
+- The ``Trump`` column (field 5) carries rank values 1–6; its
+  exact priority semantics are not established here and are not
+  needed for the denominator (the gold-standard directory is
+  pre-filtered). Do not filter on it.
+- The raw-data directories retain the unfiltered universe
+  (~3,020 inventories per the 2.0 release notes); frequency
+  derivations that consume raw-data files would compute a
+  different denominator and are not supported.
+
+Per-symbol frequency is computed over the trumped denominator
+with ``(InventoryID, Phoneme)`` pairs deduplicated before
+division, so repeated rows within one inventory cannot inflate
+a symbol's count.
+
 Implementation Bindings
 -----------------------
 
@@ -40,7 +68,7 @@ The derived output file ``data/ipa_reference.json`` must include:
       }
     }
 
-The ``build_step_1`` function in the derive pipeline validates that the vendored
+The ``parse_phoible_tsv`` function in the derive pipeline validates that the vendored
 TSV matches the expected column set from the canonical release. Mismatched
 headers cause immediate build failure.
 
@@ -55,7 +83,7 @@ An upgrade requires:
 2. Compare inventory totals (row count, segment count, language count)
 3. Run ``scripts/derive_ipa_reference.py`` with the new TSV
 4. Execute full test suite (expect 71+ tests passing)
-5. Document deltas in ``CHANGES.md`` under the relevant release
+5. Document deltas in ``CHANGELOG.md`` under the relevant release
 6. Update ``pinned_sources.phoible_release`` in the emitted JSON
 7. Commit with semantic version bump (minor version increment)
 
