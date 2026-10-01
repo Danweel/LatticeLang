@@ -102,6 +102,7 @@ Technical requirements:
 - PySide6 installation
 - Font bundling (IPA-capable fonts)
 - Event-driven architecture (live preview debouncing)
+- Wordlist/lexicon sources, do research, see https://github.com/lexibank/pylexibank
 
 .. _phase_delta:
 
@@ -138,6 +139,8 @@ Prosody:
 - Tone assignment module
 - Stress assignment module (requires moraic weight)
 - Syllable weight (moraic counting)
+- There is much debate over prosodic theory more research is necessary before committing to a theory. See https://linguistlist.org/issues/34/743/, etc.
+- bambooforest (Moran) has an additional DB about tonogenesis: https://github.com/bambooforest/tono_db/blob/main/README.md , https://github.com/cldf-datasets/tonodb see: https://www.uni-heidelberg.de/md/slav/forschung/tagungen/ichl26/ichl26_w11.6.pdf
 
 .. _phase_epsilon:
 
