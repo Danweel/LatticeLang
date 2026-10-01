@@ -7,18 +7,19 @@ lines, grep-able headings, explicit paths. Normative content lives in
 
 ## Cold-Start Kit (ASK for these at session start)
 1. This file
-2. Status Overview table — top of `docs/source/research/questions.rst`
-3. ADR Index — top of `docs/source/dev/governance/decisions.rst`
+2. Status Overview table — top of docs/source/research/questions.rst
+3. ADR Index — top of docs/source/dev/governance/decisions.rst
 
 Everything else is retrieved on demand. Past-session memory is never
 a source of current state; the repo is.
 
 ## Retrieve on Demand (task triggers)
-- Documentation edit or pasteable block → `docs/source/dev/governance/documentation_standards.rst`
-- Touching a data contract or its code → that `docs/source/data_contracts/dc_*.rst`
+- Documentation edit or pasteable block → docs/source/dev/governance/documentation_standards.rst
+- Touching a data contract or its code → that docs/source/data_contracts/dc_*.rst
 - Implementing behavior → the governing use case file + its tests
-- Committing a user-visible change → `CHANGELOG.md` (per documentation_standards.rst § Changelog Standards)
+- Committing a user-visible change → CHANGELOG.md (per documentation_standards.rst § Changelog Standards)
 - Claiming anything exists in the repo → grep first (Verification Discipline)
+- Adding or changing to existing Qs or ADRs → determine if cross referencing applies
 
 ## Tech Stack
 - Python ≥3.11; Poetry (in-project venvs); pytest
@@ -41,8 +42,16 @@ poetry run sphinx-build -E -b html docs/source docs/_build/html \
   2>&1 | grep -iE 'warning|error' | head -40
 ```
 
+# Broken-role sweep
+A :ref: missing its backticks renders as plain text with NO warning (silent dead reference). Runs with the pre-commit verification:
+
+```
+grep -rnE ':ref:[A-Za-z]' docs/source/
+grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
+```
+
 - RTD auto-builds on push. No build on readthedocs.org → check GitHub webhook deliveries + RTD integrations before anything else.
-- `git status` / `git log --stat` whenever unsure; terminal pager exits with `q`.
+- `git status` / `git log --stat` whenever unsure; terminal pager exits with "q".
 - Assistant always gives full git commands with explanations.
 - Epoch line: at cold-start (after the kit), run `git log -1 --oneline && poetry` run `pytest -q | tail -1` — ground-truth commit + test count, catching drift in the cold-start documents themselves.
 
@@ -50,6 +59,7 @@ poetry run sphinx-build -E -b html docs/source docs/_build/html \
 
 - Change alters user-visible behavior, output, or data → update CHANGELOG.md in the SAME commit, never retroactively (documentation_standards.rst § Changelog Standards).
 - Binding decision made → Status Overview + ADR Index updated in the same commit as the decision; update this file too (AGENTS.md) when a lesson belongs here.
+- Verify BEFORE committing, commit LAST: run the full sphinx audit build and pytest; only when both are clean does a commit happen.
 
 # Documentation Map
 
@@ -62,31 +72,32 @@ poetry run sphinx-build -E -b html docs/source docs/_build/html \
 - `docs/source/dev/planning/` — blueprint, phases, suite vision
 - `docs/source/dev/design/` — architecture, theoretical framework, constraints (verified 2026-09-30)
 - `docs/source/user/` — user-facing docs and troubleshooting
-- `docs/source/glossary.rst` — terminology; referenced via `:term:`
+- `docs/source/glossary.rst` — terminology; referenced via :term:
 
 # Binding Conventions (summaries; canonical text in the docs named)
 
-- Use cases contain BEHAVIOR ONLY; fields and checks live in data contracts. Status fields on every use case (:Doc Status:, :Impl Status:, :Phase:). Long + short labels per use case (`.. _uc02:`, `.. _UC-02_TITLE`); references use :ref:`ADR-016`.
+- Use cases contain BEHAVIOR ONLY; fields and checks live in data contracts. Status fields on every use case (:Doc Status:, :Impl Status:, :Phase:). Long + short labels per use case (.. _uc02:, .. _UC-02_TITLE); references use :ref:`ADR-016`.
 - ADRs append-only; supersede, never edit published ones.
 - Questions: Status Overview row synced same-commit with any answer; :color: state success = ANSWERED, warning = OPEN.
 - Code: Google-style docstrings, type hints, functions <50 lines, zero-dependency core (stdlib JSON/csv), seeded PRNG.
-- `src/latticelang/` layout: core/, orthography/, ui/, utils/. Module↔use-case filename mapping finalized at implementation start.
+- src/latticelang/ layout: core/, orthography/, ui/, utils/. Module↔use-case filename mapping finalized at implementation start.
 - Technical suggestions state floor, connections, consequences, failure modes (documentation_standards.rst § Architecture Explanation); mermaid for diagrams, floor color conventions there.
+- In questions.rst and decisions.rst, always update the index at the top as well as the entry.
 
 # Key Decisions (Phoneme-module scope unless noted)
 
-- :ref:ADR-032: phoneme category DERIVED from features
-- :ref:ADR-033: PHOIBLE 2.0 feature system pinned; controlled-vocab strings; Q38 hybrid pipeline — TSV is build-time input only
-- :ref:ADR-034: slot eligibility — category match + syllabic=+ auto-nucleus; glides opt-in; diphthongs one nucleus slot
-- :ref:ADR-035: naturalistic defaults (suite-wide tie-break principle)
-- :ref:ADR-036: dedicated `dc_inventory` validation contract
-- :ref:ADR-031: PEP 621 optional-dependencies only, no Poetry groups (`Sphinx <9.0`, `myst-parser <6.0`; `poetry install --extras docs|dev`)
+- :ref:`ADR-032`: phoneme category DERIVED from features
+- :ref:`ADR-033`: PHOIBLE 2.0 feature system pinned; controlled-vocab strings; Q38 hybrid pipeline — TSV is build-time input only
+- :ref:`ADR-034`: slot eligibility — category match + syllabic=+ auto-nucleus; glides opt-in; diphthongs one nucleus slot
+- :ref:`ADR-035`: naturalistic defaults (suite-wide tie-break principle)
+- :ref:`ADR-036`: dedicated dc_inventory validation contract
+- :ref:`ADR-031`: PEP 621 optional-dependencies only, no Poetry groups (`Sphinx <9.0`, `myst-parser <6.0`; `poetry install --extras docs|dev`)
 
-Only :ref:ADR-035 (naturalistic defaults) claims suite-wide scope. This list is not exhaustive — see ADR Index.
+Only :ref:`ADR-035` (naturalistic defaults) claims suite-wide scope. This list is not exhaustive — see ADR Index.
 
 # Post-MVP (do NOT implement in Phase Beta)
 
-Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond within-syllable, all Epsilon modules (morphology, syntax, lexicon, sound change, writing system, pedagogy), allophonic rule engine, plugin API, schema migration logic. See `dev/planning/suite_vision`.
+Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond within-syllable, all Epsilon modules (morphology, syntax, lexicon, sound change, writing system, pedagogy), allophonic rule engine, plugin API, schema migration logic. See dev/planning/suite_vision.
 
 # Working Style (USER is learning Python/Sphinx)
 
@@ -113,7 +124,7 @@ Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond withi
 # Paste-Check Discipline
 
 - After pasting any code block, run `python -m py_compile <file>` before pytest — separates paste placement from logic in a second.
-- Never paste partial blocks with ... placeholders: full body or nothing.
+- Never paste partial blocks with `...` placeholders: full body or nothing.
 - Shell quoting: single-quote grep/sed patterns containing backticks.
 - Save before run: check the VSCodium tab-dot / Ctrl+S before any py_compile or pytest — py_compile reads from DISK, not editor memory, so an unsaved buffer passes in the editor while the stale file runs (assistant reminds; USER checks).
 - Paste complete command output, never a trimmed summary — truncated pytest output hides vacuous-pass and wrong-test failures.
@@ -135,8 +146,8 @@ literal tab may silently match nothing — the failure mode looks like
 "the data doesn't contain it" when actually the pattern is broken.
 Rule: for terminal data checks, prefer awk field equality over
 tab-anchored grep:
-    awk -F'\t' -v s="p" '$8 == s' file.tsv    # paste-safe
-    grep -P "^p\t" file.tsv                    # NOT paste-safe
+    `awk -F'\t' -v s="p" '$8 == s' file.tsv`    # paste-safe
+    `grep -P "^p\t" file.tsv`                    # NOT paste-safe
 If using grep anyway, write the tab as $'\t' at evaluation time.
 
 **Verify column indices against the real header before cutting.**
@@ -147,10 +158,6 @@ mandatory. A wrong-field count returns plausible-looking garbage that
 can cost an hour to notice (the 0-overlap "normalization crisis" that
 was actually a field-7-vs-8 bug).
 
-A wrong-field count returns plausible-looking garbage that
-can cost an hour to notice (the 0-overlap "normalization crisis"
-that was actually a field-7-vs-8 bug).
-
 ## Trumped-Denominator Recipe (learned 2026-10-01)
 
 The 2,155 denominator is DISTINCT InventoryID (field 1) of the
@@ -160,54 +167,30 @@ already contains only the trumped set. No filtering needed.
 Do NOT reach for any of these neighbors:
 - field 7 GlyphID (2,172 distinct) or field 8 Phoneme — symbol
   columns, not inventory identity
-- the Trump column, field 5 (rank values 1–6; its priority
+- the "Trump" column, field 5 (rank values 1–6; its priority
   semantics are not needed for the denominator — do not guess
   them; the gold-standard directory is pre-filtered)
 - distinct LanguageCode (1,673 — languages, not inventories)
-- the 3,020 raw-release inventory count (raw data, not gold std)
+- the 3,020 raw-release inventory count (it is raw data, not the Gold Standard file)
 
 Verified recipe (vendor/phoible-2.0/phoible-dev-862bec9):
 
+```
     awk -F'\t' 'NR>1 {print $1}' \
       vendor/phoible-2.0/phoible-dev-862bec9/gold-standard/phoible-phonemes.tsv \
       | sort -u | wc -l
     # -> 2155  [verified: output, 2026-10-01]
+```
 
 In code: count distinct InventoryID at build time (never hardcode);
 when aggregating per-symbol counts, deduplicate (InventoryID,
-Phoneme) pairs before dividing. Cross-check: phoible-aggregated.tsv
+Phoneme) pairs before dividing. Cross-check available: phoible-aggregated.tsv
 holds one row per trumped inventory (2,156 lines incl. header).
-
-## Trumped-Denominator Recipe (learned 2026-10-01)
-
-The 2,155 denominator is DISTINCT InventoryID (field 1) of the
-gold-standard phonemes listing — the gold-standard directory
-already contains only the trumped set. No filtering needed.
-
-Do NOT reach for any of these neighbors:
-- field 7 GlyphID (2,172 distinct) or field 8 Phoneme — symbol
-  columns, not inventory identity
-- the Trump column, field 5 (ranks 1-6; semantics not needed for
-  the denominator — do not guess them)
-- distinct LanguageCode (1,673 — languages, not inventories)
-- the 3,020 raw-release inventory count (raw data, not gold std)
-
-Verified recipe (vendor/phoible-2.0/phoible-dev-862bec9):
-
-    awk -F'\t' 'NR>1 {print $1}' \
-      vendor/phoible-2.0/phoible-dev-862bec9/gold-standard/phoible-phonemes.tsv \
-      | sort -u | wc -l
-    # -> 2155  [verified: output, 2026-10-01]
-
-In code: count distinct InventoryID at build time (never hardcode);
-when aggregating per-symbol counts, deduplicate (InventoryID,
-Phoneme) pairs before dividing. Cross-check available: one row
-per inventory in phoible-aggregated.tsv (wc -l minus header).
 
 # Session Integrity (Re-Injection & Checkpoints)
 
 - Before any binding decision (ADR, question resolution, contract edit): a 3–5 line state check naming exact files, question numbers, and prior decisions touched.
-- Assistant reconstructing state from memory ("I believe there's a table…") → STOP; request the cold-start kit again.
+- Assistant reconstructing state from memory ("I believe there's a table…") → STOP; request the cold-start kit again or specific file.
 - USER may invoke "RE-INJECT" as a command word: assistant re-requests the cold-start kit and acknowledges before continuing. Either party invokes it after compaction (visible as sudden vagueness).
 - Symptom-triggered, never schedule-based: drift correlates with reconstruction, not turn count.
 - Doc-contact rotation: at session end, spend five minutes checking ONE planning/design doc against reality (next up: constraints, theoretical_framework, blueprint, phases, suite_vision — none reviewed since Phoneme-module work began).
@@ -219,10 +202,10 @@ per inventory in phoible-aggregated.tsv (wc -l minus header).
 - Two-pass rule: re-read asking "could this refer to anything else?"
 - Session closers are contracts: written as if the only thing read next session — full paths and numbers, no shorthand.
 - Provenance tags on project facts: [record], [inference], [uncertain], [verified: output].
-- Edits are shown as before/after diffs, never described in prose.
+- Edits are shown as before/after diffs, never described as or in prose.
 - Double-bookkeeping: when status changes, list every place it's recorded and touch all in the same session.
-- Post-mortems: distilled into a rule here or a doc note, never left in conversation only.
+- Post-mortems: distilled into a rule in this file or a doc note, NEVER left in conversation only.
 
 # Provenance Warning
 
-Files dated before ~August 2026 may originate from an abandoned automated-AI build attempt that populated files without spec grounding. Known specimens: enum-based Phoneme scaffold (replaced), PhonemeInventory naming, data/ipa_reference_table.json and data/dipthong_reference.json (deleted), test_sonarity.py (deleted), empty sonority.py/inventory.py husks. Code contradicting contracts with no ADR behind it → suspect this origin; verify against the docs before treating it as intentional.
+Files dated before ~August 2026 may originate from an abandoned automated-AI build attempt (OMP - removed) that populated files without enough spec grounding. Known specimens: enum-based Phoneme scaffold (replaced), PhonemeInventory naming, data/ipa_reference_table.json and data/dipthong_reference.json (deleted), test_sonarity.py (deleted), empty sonority.py/inventory.py husks. Code contradicting contracts with no ADR behind it → suspect this origin if very old; verify against the docs before treating it as intentional. Delete or replace when encountered.

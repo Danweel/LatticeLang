@@ -99,6 +99,29 @@ Construction pitfalls (all produce build ERRORS, not warnings):
 - ``:widths:`` must declare exactly as many values as the table
   has columns, counting the header row.
 
+Nested directives in containers (dropdowns, admonitions)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A directive placed at column 0 inside a container (``..
+dropdown::``) TERMINATES the container body — but the
+container's remaining indented content does not return to
+prose. It is swallowed as the directive's own content, and
+everything downstream parses as directive body (table rows,
+admonition text, etc.).
+
+- Symptoms point the wrong way: docutils reports at the
+  directive's line and blames COLUMN COUNT, while the
+  offending "row" may be prose tens of lines later (any
+  comma-containing sentence becomes a multi-column cell).
+- Rule: directives nested in containers inherit the
+  container's indentation (directive at container indent,
+  options/rows one level deeper — e.g., dropdown body at 3,
+  directive at 3, rows at 6).
+- Diagnostic order when a container-nested table fails:
+  inspect the directive's indentation RELATIVE TO ITS
+  CONTAINER first (``sed -n 'X,Yp' file | cat -A``), not the
+  table's own rows. The reported row is rarely the culprit.
+
 Cross-Reference Conventions
 ---------------------------
 
