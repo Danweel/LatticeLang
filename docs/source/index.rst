@@ -60,7 +60,7 @@ teaching as it goes. Built on Python, Sphinx, and PySide6.
    research/index
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: API Reference
 
    api/index
@@ -72,7 +72,7 @@ teaching as it goes. Built on Python, Sphinx, and PySide6.
    community/index
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Project Tracking
 
    todo/index

@@ -52,14 +52,14 @@ All sub-types share the same interactions; the distinction affects
 interface design and documentation tone, not use case structure.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Summary Level
 
    summary_level/UC-00_design_a_phonology
    summary_level/UC-08_work_in_a_gui_with_live_preview
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: User Goal Level
 
    user_goal_level/UC-01_define_phoneme_inventory
@@ -71,7 +71,7 @@ interface design and documentation tone, not use case structure.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Subfunction Level
 
    subfunction_level/UC-005_serialize_deserialize_LanguageDefinition
@@ -84,7 +84,7 @@ interface design and documentation tone, not use case structure.
    subfunction_level/UC-017_select_a_phoneme_for_a_slot
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Possible Future Cases
 
    possible_future_cases/UC-06_snapshot_comparison_UX

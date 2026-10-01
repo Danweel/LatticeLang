@@ -12,19 +12,19 @@ Phoneme Data Contract
 
    This contract was reviewed during the 2026-09-16 use-case
    and spec-completeness audit. Key design decisions:
-   :ref:`adr-047` (logical schema vs. adapters),
-   :ref:`adr-048` (tone as separate stage),
-   :ref:`adr-049` (coordinate-addressed random streams),
-   :ref:`adr-050` (qualitative ambiguity tiers).
+   :ref:`ADR-047` (logical schema vs. adapters),
+   :ref:`ADR-048` (tone as separate stage),
+   :ref:`ADR-049` (coordinate-addressed random streams),
+   :ref:`ADR-050` (qualitative ambiguity tiers).
 
 Overview
 --------
 
-A ``Phoneme`` is the atomic unit of the phoneme inventory (UC-01).
+A ``Phoneme`` is the atomic unit of the phoneme inventory (:ref:`uc01`).
 Each phoneme has a canonical IPA symbol, a feature set drawn from
 a controlled vocabulary, a derived category, a sonority rank, and
 a generation frequency weight. Tone-related feature values are
-carried by the feature vector as data (ADR-048); nothing consumes
+carried by the feature vector as data (:ref:`ADR-048`); nothing consumes
 them until the tone stage exists.
 
 This contract implements ADR-032 (category derived from features)

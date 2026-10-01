@@ -47,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `test_phoneme_derivation`: 18
   - `test_inventory`: 14
 
+(Changelog/dc_phoible_source.rst changes landed across both 272cbf6 and 13e49f6. The other items committed are better-dogfooded.)
+
 ---
 
 ## [0.2.0] — September 2026
