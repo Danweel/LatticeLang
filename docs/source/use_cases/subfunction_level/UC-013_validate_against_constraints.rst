@@ -83,7 +83,7 @@ Extensions
     template, then survivors after each active constraint in evaluation order
     — and names the most-rejected constraint with one rejected candidate as a
     concrete example. "Most-rejected" is a heuristic ranking of where candidates
-    died, not a causal claim about unsatisfiability; see :ref:ADR-046.
+    died, not a causal claim about unsatisfiability; see :ref:`ADR-046`.
 
 **4a:** Two constraints in known conflict (per UC-03 extension 4a) both FAIL the sequence
   - 4a1: Both results are reported with their reasons

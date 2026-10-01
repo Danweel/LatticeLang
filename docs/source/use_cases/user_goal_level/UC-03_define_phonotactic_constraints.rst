@@ -54,8 +54,8 @@ Main Success Scenario
    - ``prohibited_clusters`` — bans specific segment sequences: system stores the constraint type as a string identifier on :class:`~latticelang.core.constraints.Constraint`
 
 In all cases the system stores the constraint as a catalog type identifier (one
-of the strings above) plus its type-specific parameter block (:ref:ADR-037). Parameters
-are validated against the type's schema at save time (:ref:dc_constraints); unknown or
+of the strings above) plus its type-specific parameter block (:ref:`ADR-037`). Parameters
+are validated against the type's schema at save time (:ref:`dc_constraints`); unknown or
 malformed parameters are rejected at definition time, not discovered at generation time.
 
 3. User configures constraint parameters (where applicable):
@@ -118,7 +118,7 @@ Extensions
     then survivors after each active constraint in evaluation order — and names the
     most-rejected constraint with one rejected candidate as a concrete example.
     "Most-rejected" is a heuristic ranking of where candidates died, not a causal
-    claim about unsatisfiability; see :ref:ADR-046.
+    claim about unsatisfiability; see :ref:`ADR-046`.
 **7a:** File I/O error during save
   - 7a1: System displays error with file path and permissions hint
   - 7a2: User retries or saves to alternate location
