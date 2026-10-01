@@ -229,15 +229,17 @@ tiers never gate anything.
 - **Tier 3**: Moderately common (at least 25%)
 - **Tier 4**: Uncommon (at least 5%)
 - **Tier 5**: Rare (at least 1%)
-- **Tier 6a**: Isolate — attested in exactly one inventory of the sample
-- **Tier 6b**: Attested, but below 1% and not an isolate
+- **Tier 6a**: Attested, but below 1% and not an isolate
+- **Tier 6b**: Isolate — attested in exactly one inventory of the sample
 
-A caveat on 6a: "isolate" means "appears in exactly one inventory of
+A caveat on 6b: "isolate" means "appears in exactly one inventory of
 this 2,155-inventory sample," not "rare in a linguistic sense" —
-sampling gaps and source quirks can strand a sound in tier 6a that
-isn't actually unusual. Sounds that aren't in the reference table at
+sampling gaps and source quirks can strand a sound in tier 6b that
+isn't actually "unique" (though, it can still be assumed to be a **little**
+unusual). Sounds that aren't in the reference table at
 all aren't forbidden — they're custom symbols, usable freely for
-speculative conlangs.
+speculative conlangs. While the PHOIBLE data is impressive, it shouldn't
+be mistaken for "complete".
 
 What Happens Next?
 ------------------
