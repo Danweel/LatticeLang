@@ -209,6 +209,4 @@ docker-compose.override.yml
 # =============================================================================
 
 live_preview.sh
-AGENTS.md
 build-docs.sh
-.omp

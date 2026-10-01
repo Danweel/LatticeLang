@@ -3,8 +3,8 @@
 Documentation Standards
 ========================
 
-:date: 2026-08-24
-:type: Static
+:date: 2026-08-24 (updated 2026-09-30)
+:type: Static (Append-only without an ADR)
 :audience: Developers and contributors
 :purpose: Consistency
 
@@ -21,21 +21,20 @@ docs/source/
 ├── index.rst
 ├── use_cases/                    # Use case specifications
 │   ├── index.rst                 # Use case index
-│   ├── user_goals/               # Level 1 goals, also may include broader Summaries.
-│   │   ├── uc01.rst
-│   │   ├── uc02.rst
-│   │   └── ...
-│   └── subfunctions/             # Level 2 subfunctions
-│       ├── uc005.rst
-│       └── ...
+│   ├── user_goal_level/           # User-goal level cases
+│   ├── subfunction_level/         # Subfunction cases
+│   ├── summary_level/             # Summary level cases
+│   └── possible_future_cases/     # Parked ideas
 ├── data_contracts/               # Data structure specifications
 │   ├── index.rst
 │   ├── dc_phoneme.rst
 │   ├── dc_syllable_template.rst
 │   ├── dc_language_definition.rst
-│   ├── dc_constraint.rst
+│   ├── dc_constraints.rst
 │   ├── dc_orthography_rules.rst
-│   └── dc_ipa_reference.rst
+│   ├── dc_inventory.rst
+│   ├── dc_ipa_reference.rst
+│   └── dc_phoible_source.rst
 ├── api/                          # Auto-generated API docs
 │   ├── index.rst                 # autodoc output
 │   ├── core.rst                  # blank, planned
@@ -133,8 +132,9 @@ Same-commit hygiene:
 - Every term must have a matching entry in
   ``glossary.rst`` committed in the same change. Write the term
   first, the referencing prose second.
-
 - Backticks in titles are a Markdown-ism leaking into bibtex; the title should use straight quotes: The {'Whole Larynx'}
+- Heading underline length must be the same number of characters as the heading itself.
+- There is only an underline to headings, no overline.
 
 BibTeX Entry Hygiene
 ~~~~~~~~~~~~~~~~~~~~
@@ -280,7 +280,7 @@ Full-build audits
 
    .. code-block:: bash
 
-      poetry run sphinx-build -E -b html docs/source docs/build/html \
+      poetry run sphinx-build -E -b html docs/source docs/_build/html \
         2>&1 | grep -iE 'warning|error' | head -40
 
    (``-E`` discards the cached environment. The "Line block ends
@@ -289,6 +289,10 @@ Full-build audits
 
    Audit with grep -rn 'pattern' use_cases/ (directory, not glob)
    or the traversal silently skips the level subdirectories.
+
+   Build output lives in ``docs/_build/`` (Sphinx convention,
+   gitignored). ``AGENTS.md`` is a tracked file — it is the
+   session-start bootstrap index.
 
 RST indentation in nested lists
 -------------------------------
@@ -469,6 +473,35 @@ Rules
 6. Cross-references must resolve; the build is zero-warning
    (see RTD covenant).
 
+Edit-Location Conventions
+-------------------------
+
+:Applies to: all documentation edits (humans and assistants)
+
+When suggesting or making edits, state **where** they go using these anchors:
+
+- **Replace [section name]** — the entire section (heading and
+  body) is deleted and replaced with the provided block.
+- **In [section name], after the [X] paragraph/block** — insert
+  the new text at that specific point; existing text stays.
+- **Delete [section name]** — remove entirely.
+- **Renumber** — a numbered list's items shift when items are
+  added; verify numbering references elsewhere (e.g., "Field
+  Checks 1–4") still match.
+
+Always include the filename including file suffix.
+If switching folders or subjects, include the file path if known.
+
+Standard section order for data contracts (Posture B):
+Overview → Information Nicknames → Field List → Field Details →
+Validation Rules/Field Checks → Relations/Test Cases →
+Implementation Bindings → Open Work → References.
+
+When receiving an edit without a location anchor, ask:
+"Which section, and replace or insert?"
+
+When making an edit yourself, note in the commit/changelog which
+sections changed.
 
 Glossary Formatting
 -------------------
@@ -482,3 +515,75 @@ warning says a term is missing while an anchor with its name
 exists in the rendered HTML. Case-variant stacked terms may
 raise duplicate-term warnings (matching is case-insensitive,
 Sphinx ≥ 3.0).
+
+Changelog Standards
+===================
+
+:Applies to: CHANGELOG.md (repo root)
+
+Audience and Purpose
+--------------------
+
+The CHANGELOG.md is written for **users of LatticeLang** — writers and
+linguists who run the tool — plus future contributors (including future
+you) reconstructing why outputs changed. It answers the question git
+history can't: *"What changed in the tool's behavior, and what should
+I do about it?"*
+
+It is NOT a commit log. Commit messages serve developers; the changelog
+serves consumers. A commit describes *what was touched*; a changelog
+entry describes *what it means for someone using the output*.
+
+When to Update
+--------------
+
+Update CHANGELOG.md **as part of the same commit** that makes the
+change — never retroactively, never batched for later. Specifically,
+add an entry when a change is:
+
+- **User-visible**: alters output (e.g., ipa_reference.json contents,
+  rank assignments, validation warnings), behavior, or data vendored
+  from external sources
+- **Milestone-scale**: completes a use case or major pipeline stage
+  (tag a release for these)
+- **Breaking**: changes schema_version, file names, or expected input
+  formats (flag prominently — users must see this first)
+
+Do NOT add entries for internal-only work: pure refactors, test
+hardening with no behavioral change, typo fixes in docs. Those live
+(and die) in commit history.
+
+What to Include
+---------------
+
+Follow Keep a Changelog (https://keepachangelog.com/en/1.0.0/)
+section headings, in this order:
+
+- **Added** — new features, files, data contracts
+- **Changed** — modified behavior; state old → new where applicable
+- **Fixed** — corrected defects; describe the symptom a user saw
+- **Removed** — deleted features, files, deprecated data
+- **Dependencies** — external data or library pins (e.g., PHOIBLE DOI)
+- **Tests** — suite size at this version (running total, brief)
+
+Style Rules
+-----------
+
+- Imperative mood ("Add", not "Added... by us" or "Adding")
+- One bullet per discrete change; group related micro-changes under
+  one parent bullet
+- Numbers are exact (71 tests, not "~70"); pin versions and DOIs
+- Every release section ends with the test count — the reader's
+  regression sanity check
+- Link each release heading to its GitHub tag (footnote-style link
+  refs at file bottom)
+- Keep an ``[Unreleased]`` section at top collecting pending work;
+  promote it to a dated version at release time
+
+When Not Yet Final
+------------------
+
+Known-but-open items (assumptions pending a question, naive
+implementations pending an ADR) go under ``[Unreleased]`` as
+"to be" bullets — e.g., rarity thresholds pending Q36. This keeps
+honest visibility without claiming shipped behavior.
