@@ -83,6 +83,7 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 - src/latticelang/ layout: core/, orthography/, ui/, utils/. Module↔use-case filename mapping finalized at implementation start.
 - Technical suggestions state floor, connections, consequences, failure modes (documentation_standards.rst § Architecture Explanation); mermaid for diagrams, floor color conventions there.
 - In questions.rst and decisions.rst, always update the index at the top as well as the entry.
+- Fail loud, never plausible-silent: functions validate inputs and raise on mismatch; a plausible-but-wrong return is a defect even when tests pass around it.
 
 # Key Decisions (Phoneme-module scope unless noted)
 
@@ -124,6 +125,12 @@ Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond withi
 # Paste-Check Discipline
 
 - After pasting any code block, run `python -m py_compile <file>` before pytest — separates paste placement from logic in a second.
+- After pasting a code block on a file getting touched a lot, check for DUPLICATED definitions:
+  re-pasted blocks stack silently in Python — later defs win
+  with no error, so py_compile cannot catch this class. Scan
+  `grep -n '^def \|^class ' <file>` and eyeball for repeats
+  before running tests. (Lineage: derive_ipa_reference.py
+  carried 3x-duplicated helper blocks through green tests.) The LLM should help remind the USER to check for this, since they are inexperienced.
 - Never paste partial blocks with `...` placeholders: full body or nothing.
 - Shell quoting: single-quote grep/sed patterns containing backticks.
 - Save before run: check the VSCodium tab-dot / Ctrl+S before any py_compile or pytest — py_compile reads from DISK, not editor memory, so an unsaved buffer passes in the editor while the stale file runs (assistant reminds; USER checks).
@@ -186,6 +193,35 @@ In code: count distinct InventoryID at build time (never hardcode);
 when aggregating per-symbol counts, deduplicate (InventoryID,
 Phoneme) pairs before dividing. Cross-check available: phoible-aggregated.tsv
 holds one row per trumped inventory (2,156 lines incl. header).
+
+## Fixture Doctrine (adopted 2026-10-01)
+
+Fixtures are EXPORTS of real data, never invented worlds:
+
+- Never hand-author fixture values. A fixture is generated from
+  the pinned real source by a regeneration script, and the
+  regeneration is verified by vendor-gated tests (verbatim-row
+  equality) whenever the source is present.
+- Prefer real data in tests whenever it is fast and pinned. At
+  our scale (tens of thousands of rows) full-data integration
+  tests cost <1s — the speed justification for miniature
+  fixtures does not exist here. Fixtures earn their keep ONLY
+  for portability: the vendor directory is local-only, so
+  committed fixtures are what let a fresh clone exercise
+  vendor-dependent logic.
+- Layered authority: vendor-gated tests against full real data
+  are the authority; committed fixtures are the portable layer,
+  and their truth is delegated, not asserted. When a count
+  appears in a fixture, it was computed from real rows or it
+  doesn't exist.
+- Golden numbers pinned in tests (e.g., denominator 2155)
+  carry a provenance comment and a "data changed" failure
+  message — a tripped pin means re-run the PROVENANCE checks,
+  never edit the number.
+- Fresh-clone principle: `git clone && poetry install --extras
+  dev && poetry run pytest` must be green on any machine; vendor-
+  gated tests skip VISIBLY (named reasons), never fail silently,
+  never vanish.
 
 # Session Integrity (Re-Injection & Checkpoints)
 

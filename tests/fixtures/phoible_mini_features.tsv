@@ -1,0 +1,14 @@
+segment	tone	stress	syllabic	short	long	consonantal	sonorant	continuant	delayedRelease	approximant	tap	trill	nasal	lateral	labial	round	labiodental	coronal	anterior	distributed	strident	dorsal	high	low	front	back	tense	retractedTongueRoot	advancedTongueRoot	periodicGlottalSource	epilaryngealSource	spreadGlottis	constrictedGlottis	fortis	raisedLarynxEjective	loweredLarynxImplosive	click
+p	0	-	-	-	-	+	-	-	-	-	-	-	-	-	+	-	-	-	0	0	0	-	0	0	0	0	0	0	0	-	-	-	-	-	-	-	-
+b	0	-	-	-	-	+	-	-	-	-	-	-	-	-	+	-	-	-	0	0	0	-	0	0	0	0	0	0	0	+	-	-	-	-	-	-	-
+t	0	-	-	-	-	+	-	-	-	-	-	-	-	-	-	0	0	+	+	-	-	-	0	0	0	0	0	0	0	-	-	-	-	-	-	-	-
+i	0	-	+	-	-	-	+	+	0	+	-	-	-	-	-	0	0	-	0	0	0	+	+	-	+	-	+	-	-	+	-	-	-	0	-	-	0
+a	0	-	+	-	-	-	+	+	0	+	-	-	-	-	-	0	0	-	0	0	0	+	-	+	-	-	0	-	-	+	-	-	-	0	-	-	0
+t̠ʃ	0	-	-	-	-	+	-	-	+	-	-	-	-	-	-	0	0	+	-	+	+	-	0	0	0	0	0	0	0	-	-	-	-	-	-	-	-
+aː	0	-	+	-	+	-	+	+	0	+	-	-	-	-	-	0	0	-	0	0	0	+	-	+	-	-	0	-	-	+	-	-	-	0	-	-	0
+m̩	0	-	+	-	-	+	+	-	0	-	-	-	+	-	+	-	-	-	0	0	0	-	0	0	0	0	0	0	0	+	-	-	-	-	-	-	-
+˥	+	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+˦	+	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+˧	+	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+˨	+	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+˩	+	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
