@@ -22,3 +22,7 @@ later upstream feature-system changes are not adopted (see
 dc_phoible_source.rst upgrade policy).
 
 Version policy: docs/source/data_contracts/dc_phoible_source.rst
+
+Distribution: vendored in-repo for developer and test use; included
+in source distributions via MANIFEST.in, excluded from end-user
+packages. Decided 2026-10-04.

@@ -13,7 +13,18 @@ def expected_rank_range(features: dict[str, str]) -> tuple[int, int] | None:
     propose_sonority_rank returns this band's floor (with vowel
     height promotion), and Phoneme's rank validation warns when
     a stored rank falls outside it (UC-01 extension 4a).
+
+    Feature names are the pinned PHOIBLE 2.0 columns (ADR-033;
+    camelCase where PHOIBLE spells them so, e.g. delayedRelease).
     """
+    # Tonemes: tone + carries null rank by contract (dc_ipa_
+    # reference Implementation Bindings, Tonemes; ADR-048).
+    # Explicit guard so future table rows cannot accidentally
+    # admit tone letters — their all-'0'/'-' profile matches
+    # no row only by luck without this.
+    if features.get("tone") == "+":
+        return None
+
     syllabic = features.get("syllabic")
     consonantal = features.get("consonantal")
     sonorant = features.get("sonorant")
@@ -23,7 +34,7 @@ def expected_rank_range(features: dict[str, str]) -> tuple[int, int] | None:
         return (8, 9)   # vowel
     if sonorant == "-":
         if continuant == "-":
-            return (1, 3) if features.get("delayed_release") == "+" else (0, 1)
+            return (1, 3) if features.get("delayedRelease") == "+" else (0, 1)
         if continuant == "+":
             return (2, 3)  # fricative
     elif sonorant == "+" and consonantal == "+":
@@ -60,12 +71,14 @@ def propose_sonority_rank(features: dict[str, str]) -> int | None:
     if rng is None:
         return None
 
-    # Vowel band: check height for the 8-9 distinction
+    # Vowel band: open-ness promotes to 9 (2026-09-29 ruling).
+    # Open-ness is signaled by the real binary features:
+    # low + (high -) per the pinned vocabulary — there is no
+    # scalar 'height' atom in PHOIBLE 2.0.
     syllabic = features.get("syllabic")
     consonantal = features.get("consonantal")
     if syllabic == "+" and consonantal == "-":
-        height = features.get("height")
-        if height in ("open", "near-open", "open-mid"):
+        if features.get("low") == "+" and features.get("high") == "-":
             return 9
         return 8
 

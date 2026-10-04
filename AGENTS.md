@@ -142,6 +142,50 @@ Lineage that motivated this: an invented "4,000" mini-world total that
 sat in a code comment beside a half-remembered "3,020" release number,
 when the real, correct denominator (trumped inventories, 2,155) had to
 be counted from the data anyway.
+- When pasting code that depends on indentation (decorators, class bodies, nested functions):
+  1. Include a comment block showing the target column level for each code block type
+  2. Mark the start/end of sections that should be at module level
+  3. Use VSCodium's "Format Document" command after pasting, then inspect visually
+For example:
+```
+# PASTE START — MODULE LEVEL (column 0)
+@decorator
+class ClassName:
+    # METHOD LEVEL (column 4)
+    def method(self):
+        # BODY LEVEL (column 8)
+        pass
+# PASTE END
+```
+- Save-and-sentinel after pasting: an edit in an unsaved editor
+  buffer does not exist. After pasting, SAVE, then confirm the
+  disk has a distinctive token from the paste (grep -n for a
+  constant or function name). Terminal line numbers that refuse
+  to change between runs mean the disk file never changed —
+  buffer/disk divergence, not a code bug. (Lineage: the
+  phantom EXPECTED_LISTING_HEADER NameError, diagnosed by
+  identical traceback line numbers across differing pastes.)
+  Remind the user if you aren't in touch with the code directly.
+
+## Fix Response Protocol (adopted 2026-10-03)
+
+Every fix proposal follows the same four-part shape, so the
+human can verify each step without expert knowledge:
+
+1. Diagnosis with evidence — name the exact cause and point at
+   the lines/output that prove it (never "something is wrong
+   with X"; always "line 213's @dataclass sits at four spaces,
+   nesting it inside the function").
+2. The fix as before/after — smallest visible units, with the
+   paste location stated, and indentation level marked for any
+   code whose meaning depends on it.
+3. A verification command WITH its expected output — so success
+   and failure are distinguishable without the assistant.
+4. What's next — where the fix sits in the work order.
+
+Rationale: the USER won't necessarily verify by expertise; verification
+MUST be procedural. A fix that cannot state its expected
+outcome is not yet understood by either party well enough to apply.
 
 ## PHOIBLE-related Discipline
 
@@ -223,6 +267,27 @@ Fixtures are EXPORTS of real data, never invented worlds:
   gated tests skip VISIBLY (named reasons), never fail silently,
   never vanish.
 
+# Development vs. Runtime Artifacts
+
+The repository contains all data and tools required to regenerate
+derived artifacts from first principles (the pinned PHOIBLE 2.0
+release). The published package (PyPI, wheel) excludes vendor data
+and build tools, distributing only the runtime library plus
+pre-computed reference data (``ipa_reference.json``).
+
+Rationale: reproducibility + transparency (developers can verify
+derived artifacts from source) versus deploy size (users receive
+only what the runtime needs).
+
+Boundaries:
+- ``vendor/phoible-2.0/`` — vendored raw data; excluded from
+  distributions (``MANIFEST.in``); read only by derivation
+  scripts
+- ``tests/`` and ``scripts/`` — development-only; excluded from
+  distributions
+- ``src/latticelang/`` — the library package; distributed as-is
+- ``ipa_reference.json`` (committed, regenerated) — runtime data;
+  included in distributions
 # Session Integrity (Re-Injection & Checkpoints)
 
 - Before any binding decision (ADR, question resolution, contract edit): a 3–5 line state check naming exact files, question numbers, and prior decisions touched.

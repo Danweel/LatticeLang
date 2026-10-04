@@ -10,10 +10,10 @@ TSV + phonemes listing) and joins them, so a pre-joined single
 fixture would hide the join, the pair-dedup, and the
 denominator count from testing.
 
-Vendor note: vendor/phoible-2.0/ is local-only (PROVENANCE.txt
-is the tracked file), so vendor-dependent tests SKIP when the
-data is absent — CI machines see only the vendor-independent
-half validating the committed artifacts.
+Vendor note: vendor/phoible-2.0/ ships with the repo (bundling
+decision; MANIFEST.in grafts it for sdists, end-user packages
+exclude it). The requires_vendor skip now fires only for
+incomplete checkouts — a defensive guard, not the norm.
 
 Sources of truth:
 - Roster: dc_ipa_reference.rst, Specimen roster binding
@@ -59,7 +59,9 @@ ROSTER = [
 
 VENDORED = FEATURES_SRC.is_file() and LISTING_SRC.is_file()
 requires_vendor = pytest.mark.skipif(
-    not VENDORED, reason="vendored PHOIBLE data absent (local-only)")
+    not VENDORED, reason= f"(vendor/ ships with the repo per the bundling "
+                          f"decision — see MANIFEST.in; custody record in "
+                          f"vendor/phoible-2.0/PROVENANCE.txt)")
 
 
 def read_tsv(path: Path) -> tuple[list[str], list[dict]]:

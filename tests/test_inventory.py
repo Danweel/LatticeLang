@@ -42,9 +42,19 @@ def stop(symbol="p", **kw):
 
 
 def vowel(symbol="a", height="open", **kw):
-    kw.setdefault("features", {
-        "syllabic": "+", "consonantal": "-", "height": height,
-    })
+    """Helper for tests — translates 'open'/'close' to real
+    PHOIBLE binary features (low+/high- or high+/low-)."""
+    features = {"syllabic": "+", "consonantal": "-"}
+    if height == "open":
+        features["low"] = "+"
+        features["high"] = "-"
+    elif height == "close":
+        features["high"] = "+"
+        features["low"] = "-"
+    else:
+        features["high"] = "-"
+        features["low"] = "-"
+    kw.setdefault("features", features)
     return Phoneme(symbol=symbol, **kw)
 
 
@@ -138,10 +148,11 @@ def test_syllabic_consonant_nucleus_template_is_silent():
 
 def test_identical_feature_sets_warn():
     inv = Inventory()
+    # Note: "place" is a ghost key — remove it to use real vocab
     inv.add(stop("p", features={
-        "syllabic": "-", "consonantal": "+", "place": "bilabial"}))
+        "syllabic": "-", "consonantal": "+", "labial": "+"}))
     inv.add(stop("b", features={
-        "syllabic": "-", "consonantal": "+", "place": "bilabial"}))
+        "syllabic": "-", "consonantal": "+", "labial": "+"}))
     assert any("identical" in w.lower()
                for w in inv.check().warnings)
 
@@ -158,7 +169,7 @@ def test_minimal_pair_alone_is_silent():
     inv.add(stop("t"))
     inv.add(stop("d", features={
         "syllabic": "-", "consonantal": "+", "sonorant": "-",
-        "continuant": "-", "voice": "+"}))
+        "continuant": "-", "strident": "+"}))  # voice is ghost — use strident
     report = inv.check()
     assert not report.warnings
     assert not report.notes  # until ADR-041 pairing exists
@@ -189,7 +200,7 @@ def test_complete_diphthong_components_do_not_warn():
                    for w in report.warnings)
 
 
-# --- Load-time enforcement: checks re-run on mutation -----------------
+# --- Load-time enforcement: checks re-run on mutation ----------------
 
 def test_checks_rerun_after_add():
     """The contract: checks run at load and on every mutation

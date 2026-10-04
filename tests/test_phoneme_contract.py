@@ -9,9 +9,11 @@ Sources of truth:
 - Merge semantics: ADR-051 (field-class rules, superseding
   ADR-040's undifferentiated merge)
 - Feature representation: ADR-033 (controlled-vocab strings,
-  never booleans, never enums)
+  never booleans, never enums; PHOIBLE 2.0 vocabulary)
 - Frequency semantics: Q7 (positive relative weight, ratios only)
 """
+
+from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -26,21 +28,25 @@ from latticelang.core.phonology import (
 
 FIXTURE = Path(__file__).parent / "fixtures" / "ipa_reference.example.json"
 
+# Real PHOIBLE 2.0 feature atoms (ADR-033; binary '+'/'-'/'0',
+# camelCase where PHOIBLE spells them). No ghost atoms: no
+# 'place', no 'manner', no 'voice', no 'height'.
 P = {  # 'p': known symbol, voiceless bilabial stop
     "symbol": "p",
     "features": {"syllabic": "-", "consonantal": "+", "sonorant": "-",
-                  "continuant": "-", "place": "bilabial"},
+                 "continuant": "-", "labial": "+"},  # place = labial via 'labial'+'-'/'round'
 }
+# Open vowel uses real high/low binary pair instead of 'height'
 A = {"symbol": "a", "features": {"syllabic": "+", "consonantal": "-",
-                                  "height": "open"}}
+                                  "high": "-", "low": "+"}}
 
 
 # --- Construction (field list) -------------------------------------
 
 def test_features_are_strings_not_booleans():
-    """ADR-033: '+'/'-' strings; boolean feature values rejected."""
+    """ADR-033: '+'/'-'/'0' strings; boolean feature values rejected."""
     with pytest.raises((TypeError, ValueError)):
-        Phoneme(symbol="p", features={"syllabic": False})
+        Phoneme(symbol="p", features={"labial": False, "strident": "-"})
 
 def test_empty_symbol_rejected():
     """Validation rule: symbol non-empty."""
@@ -103,11 +109,11 @@ def test_divergent_stored_category_warns_and_retains():
 # --- ADR-051 merge semantics (pure functions) ------------------------
 
 def test_merge_features_union_existing_wins_conflicts():
-    new = Phoneme(symbol="p", features={"place": "velar", "voice": "-"})
-    old = Phoneme(symbol="p", features={"place": "bilabial"})
+    new = Phoneme(symbol="p", features={"labial": "-", "strident": "-"})
+    old = Phoneme(symbol="p", features={"labial": "+"})
     merged = merge_phonemes(old, new)
-    assert merged.features["place"] == "bilabial"  # existing wins
-    assert merged.features["voice"] == "-"          # union: new key added
+    assert merged.features["labial"] == "+"  # existing wins
+    assert merged.features["strident"] == "-"   # union: new key added
 
 def test_merge_sonority_rank_existing_wins_always():
     old = Phoneme(symbol="p", features=P["features"], sonority_rank=0)

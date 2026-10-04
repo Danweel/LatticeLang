@@ -19,17 +19,17 @@ resolution: a diphthong determination happens where components
 already live, arguably in the Phoneme constructor, not in
 `derive_category`. Want a ruling from you, or defer to implementation time?
 
-2. The manner detection from features is my inference, not a pinned
-decision — e.g., I inferred affricate = −continuant, +delayed_release
-from the PHOIBLE vocabulary (delayed_release appears in your fixture
-test's KNOWN_FEATURE_KEYS). If the pinned PHOIBLE 2.0 vocabulary
-(Q38/ADR-033) names manners differently, the input bundles adjust — the
-bands under test don't.
+2. The manner detection from features is written against the PINNED
+PHOIBLE 2.0 vocabulary (ADR-033; real columns include delayedRelease,
+high/low binary atoms). The bands under test don't change — only the
+feature atoms that fill them.
 
 3. OPEN_VOWEL at 8–9 flattens the close→open gradient the table mentions;
 testing the gradient properly needs the height-by-height mapping, which
 is exactly the kind of refinement the range approach is meant to survive.
 """
+
+from __future__ import annotations
 
 import pytest
 
@@ -41,12 +41,14 @@ from latticelang.core.sonority import propose_sonority_rank
 
 
 # --- Feature bundles used as test inputs ----------------------------
-# Values follow ADR-033: +/- strings and atom strings, never booleans.
+# Values follow PHOIBLE 2.0 vocabulary (ADR-033): '+'/'-'/'0' strings,
+# camelCase where PHOIBLE spells them (delayedRelease, etc.).
+# No ghost atoms: no 'height', no 'place', no 'manner'.
 
 STOP = {"syllabic": "-", "consonantal": "+", "sonorant": "-",
-        "continuant": "-", "delayed_release": "-"}
+        "continuant": "-", "delayedRelease": "-"}
 AFFRICATE = {"syllabic": "-", "consonantal": "+", "sonorant": "-",
-             "continuant": "-", "delayed_release": "+"}
+             "continuant": "-", "delayedRelease": "+"}
 FRICATIVE = {"syllabic": "-", "consonantal": "+", "sonorant": "-",
              "continuant": "+"}
 NASAL = {"syllabic": "-", "consonantal": "+", "sonorant": "+",
@@ -54,8 +56,8 @@ NASAL = {"syllabic": "-", "consonantal": "+", "sonorant": "+",
 LIQUID = {"syllabic": "-", "consonantal": "+", "sonorant": "+",
           "continuant": "+"}
 GLIDE = {"syllabic": "-", "consonantal": "-", "sonorant": "+"}
-CLOSE_VOWEL = {"syllabic": "+", "consonantal": "-", "height": "close"}
-OPEN_VOWEL = {"syllabic": "+", "consonantal": "-", "height": "open"}
+CLOSE_VOWEL = {"syllabic": "+", "consonantal": "-", "high": "+", "low": "-"}
+OPEN_VOWEL = {"syllabic": "+", "consonantal": "-", "high": "-", "low": "+"}
 SYLLABIC_NASAL = {"syllabic": "+", "consonantal": "+", "sonorant": "+"}
 
 
@@ -124,3 +126,19 @@ def test_more_sonorant_than_obstruent():
     """The invariant the ranks exist for: sonorants outrank
     obstruents (dc_phoneme relations section)."""
     assert propose_sonority_rank(NASAL) > propose_sonority_rank(STOP)
+
+
+def test_open_vowel_promotes_to_nine_on_real_features():
+    """Verify promotion fires on real PHOIBLE features: open
+    vowels signal openness via 'low'='+'/'high'='-', not a
+    ghost 'height' atom (the audit discovery)."""
+    # Matches ROWS["a"] from phoible_mini_features.tsv
+    feats = {"syllabic": "+", "consonantal": "-", "high": "-", "low": "+"}
+    assert propose_sonority_rank(feats) == 9
+
+
+def test_close_vowel_stays_eight_on_real_features():
+    """Close vowel: 'high'='+'/'low'='-': no promotion, stays 8."""
+    # Matches ROWS["i"] from phoible_mini_features.tsv
+    feats = {"syllabic": "+", "consonantal": "-", "high": "+", "low": "-"}
+    assert propose_sonority_rank(feats) == 8

@@ -37,6 +37,13 @@ import argparse
 import csv
 from pathlib import Path
 
+# The true 38-column header, transcribed from
+# `head -1 .../phoible-segments-features.tsv` (verified by
+# count 2026-10-01; vendor-gated tests pin it to the live file).
+# 'segment' is the symbol key; the other 37 are feature columns
+# with controlled values '+'/'-'/'0' (ADR-033).
+from latticelang.core.feature_vocabulary import FEATURE_HEADER_ORDER
+
 # Repo root: scripts/ -> LatticeLang/
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -50,24 +57,13 @@ FIXTURES_DIR = REPO_ROOT / "tests" / "fixtures"
 FEATURES_FIXTURE = FIXTURES_DIR / "phoible_mini_features.tsv"
 ATTESTATION_FIXTURE = FIXTURES_DIR / "phoible_mini_attestation.tsv"
 
-# The true 38-column header, transcribed from
-# `head -1 .../phoible-segments-features.tsv` (verified by hand
-# count 2026-10-01; vendor-gated tests pin it to the live file).
-# 'segment' is the symbol key; the other 37 are feature columns
-# with controlled values '+'/'-'/'0' (ADR-033).
-EXPECTED_FEATURE_HEADER = [
-    "segment",
-    "tone", "stress", "syllabic", "short", "long",
-    "consonantal", "sonorant", "continuant", "delayedRelease",
-    "approximant", "tap", "trill", "nasal", "lateral",
-    "labial", "round", "labiodental", "coronal", "anterior",
-    "distributed", "strident", "dorsal", "high", "low",
-    "front", "back", "tense", "retractedTongueRoot",
-    "advancedTongueRoot", "periodicGlottalSource",
-    "epilaryngealSource", "spreadGlottis", "constrictedGlottis",
-    "fortis", "raisedLarynxEjective", "loweredLarynxImplosive",
-    "click",
-]
+# The true 38-column header — single source of truth is
+# feature_vocabulary.FEATURE_HEADER_ORDER (shared with
+# Phoneme validation). This list adapter exists for
+# list-vs-list equality with read_tsv output (a tuple never
+# equals a list in Python) and for csv.DictWriter, which wants
+# a mutable sequence.
+EXPECTED_FEATURE_HEADER = list(FEATURE_HEADER_ORDER)
 
 # The true 11-column listing header, likewise transcribed from
 # `head -1 .../phoible-phonemes.tsv`. Field 1 is InventoryID
@@ -105,7 +101,9 @@ def read_tsv(path: Path) -> tuple[list[str], list[dict]]:
     if not path.is_file():
         raise FileNotFoundError(
             f"vendored PHOIBLE data not found: {path}\n"
-            f"(vendor/ is local-only; see PROVENANCE.txt)")
+            f"(vendor/ ships with the repo per the bundling "
+            f"decision — see MANIFEST.in; custody record in "
+            f"vendor/phoible-2.0/PROVENANCE.txt)")
     with open(path, encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f, delimiter="\t")
         header = list(reader.fieldnames or [])

@@ -32,46 +32,55 @@ and ADR-033 (PHOIBLE 2.0-aligned feature system, pinned release,
 controlled-vocabulary strings).
 
 Fields
--------
+------
 
 .. csv-table::
    :header-rows: 1
    :widths: 20 15 15 50
 
    "Field","Type","Required","Description"
-   "symbol","string","yes","Canonical IPA symbol in normalized tie-bar form (ADR-028). Input accepts tie-bar and non-tie-bar forms; stored normalized. Unique within an inventory."
+   "symbol","string","yes","Vendored PHOIBLE spelling stored verbatim (:ref:`ADR-052`) — plain sequences, no tie bar. Input accepts tie-bar and non-tie-bar forms, normalized at the input seam (ADR-028's scope). Unique within an inventory."
    "features","object (string → string)","yes","Flat feature dictionary. Keys are feature names from the pinned vocabulary. Values are feature-appropriate strings (``+``, ``-``, or descriptive atoms like ``coronal``)."
    "custom_features","object (string → string)","no","User-defined feature names, validated for identifier syntax only. Kept separate from the built-in vocabulary."
    "category","string (derived)","yes","One of ``consonant | vowel | glide | diphthong | custom``. Derived from features per the derivation table; storable but recomputed on load with a divergence warning (see Validation Rules)."
-   "sonority_rank","integer 0–9","yes","Proposed from features (see rank table below); stored value is authoritative once confirmed. Validated against the expected range with override warning (UC-01 extension 4a)."
+   "sonority_rank","integer 0–9","yes","Proposed from features (see rank table below); stored value is authoritative once confirmed. Validated against the expected range with override warning (:ref:`uc01` extension 4a)."
    "frequency","float","yes","Relative weight for generation. Pre-filled from PHOIBLE attestation; default 1.0 for unattested/custom. Semantics: relative weight, normalized at generation time (not persisted normalized)."
    "components","array of strings","only if category = diphthong","The two component vowel symbols, e.g. ``[a, ɪ]``. Components should exist in the inventory; absence is a warning, not an error."
    "custom","boolean","yes","True if the symbol is not in the IPA reference table. Custom phonemes receive no automatic features, rank, or frequency until reviewed."
    "metadata","object","no","Optional pedagogy/display data: description, aliases, rarity_tier, phoible_frequency. Populated from ``ipa_reference.json`` for known symbols."
 
 Serialization Example
-----------------------
+---------------------
+
+.. code-block:: json
 
 .. code-block:: json
 
    {
      "schema_version": "0.1.0",
-     "symbol": "t͡ʃ",
+     "symbol": "t̠ʃ",
      "category": "consonant",
      "features": {
        "syllabic": "-",
        "consonantal": "+",
        "sonorant": "-",
-       "place": "coronal",
-       "manner": "affricate",
-       "voice": "-",
        "continuant": "-",
+       "delayedRelease": "+",
+       "coronal": "+",
+       "anterior": "-",
+       "distributed": "+",
        "strident": "+"
      },
      "sonority_rank": 2,
      "frequency": 1.93,
      "custom": false
    }
+
+Features above are a subset of the real ``t̠ʃ`` row from the
+PHOIBLE 2.0 vendored data (ADR-033; ``delayedRelease`` camelCase,
+binary ``+``/``-`` values). The stored ``symbol`` is the vendored
+PHOIBLE spelling (:ref:`ADR-052`) — plain sequences, no tie bar;
+tie-barred input is normalized at the input seam, not in storage.
 
 Diphthong example:
 
@@ -88,7 +97,7 @@ Diphthong example:
    }
 
 Category Derivation
---------------------
+-------------------
 
 Derived from the major-class features, per ADR-032 and ADR-033:
 
@@ -105,7 +114,7 @@ Derived from the major-class features, per ADR-032 and ADR-033:
 
 Overrides: a user-supplied category always wins, but is recorded
 as an override and warned about when slot implications follow
-(UC-01, extension 2a). Custom symbols (not in the IPA reference)
+(:ref:`uc01`, extension 2a). Custom symbols (not in the IPA reference)
 require manual feature entry and manual category.
 
 Sonority Rank Proposal
@@ -127,7 +136,7 @@ be finalized against the pinned feature vocabulary:
    "liquid","6–7", ""
    "glide","8", ""
    "vowel (close → open)","8–9","Open vowels most sonorous"
-   "diphthong","8–9","Same as high vowel per UC-01"
+   "diphthong","8–9","Same as high vowel per :ref:`uc01`"
 
 Ties with glides at 8 are expected, not anomalies. Consider 9 or
 a clearer mechanism for glide vs. close vowel.
@@ -140,7 +149,7 @@ liquid→6, glide→8, vowel→8 with open-ness promoting to 9). Band
 floors preserve the monotonic ordering the ranks exist for;
 within-band refinement is deferred to the Q38 pinned vocabulary
 (see the todo below). Segments matching no table row return
-null — UC-01 treats the null as a prompt, not an error.
+null — :ref:`uc01` treats the null as a prompt, not an error.
 
 .. todo::
    :class: warning
@@ -150,19 +159,18 @@ null — UC-01 treats the null as a prompt, not an error.
    hierarchy (cite: :cite:p:`hayes2009`). Before implementation,
    verify each range against the full pinned vocabulary and
    decide behaviour for mixed-feature segments (e.g., prenasalized
-   stops, which are phonetically complex). Feeds UC-01 extension 4a.
+   stops, which are phonetically complex). Feeds :ref:`uc01` extension 4a.
 
 Validation Rules
------------------
+----------------
 
-- ``symbol``: non-empty; unique in inventory; normalized to
-  tie-bar form where applicable (ADR-028); membership in
-  ``ipa_reference.json`` determines known vs custom
+- ``symbol``: stored in vendored PHOIBLE spelling (:ref:`ADR-052`); input
+  normalization applies tie-bar aliases at the input seam
 - ``features``: every key must be in the pinned vocabulary or the
   project's ``custom_features``; values validated per the
   vocabulary's value domains
 - ``category``: stored (denormalized cache for fast lookups) and
-  recomputed on load per the ADR-032 derivation table. On
+  recomputed on load per the :ref:`ADR-032` derivation table. On
   divergence: warning naming both values, **stored value
   retained** — the stored category is the author's ruling, the
   recompute is advisory (Q5, resolved 2026-09-16). Divergence
@@ -179,11 +187,11 @@ Validation Rules
 Merge Semantics (Duplicate Symbols)
 -----------------------------------
 
-Resolved per :ref:`adr-051` (accepted 2026-09-23). When a
+Resolved per :ref:`ADR-051` (accepted 2026-09-23). When a
 phoneme is added whose ``symbol`` already exists in the
 inventory:
 
-- **Interactive path** (UC-01 manual add): a dialog shows both
+- **Interactive path** (:ref:`uc01` manual add): a dialog shows both
   records side-by-side with per-field selection, prefilled with
   the deterministic outcomes below (confirm-don't-block, per
   ADR-035's pattern).
@@ -196,7 +204,7 @@ inventory:
 
    "Field","Rule on conflict","Rationale"
    "features","Union: new keys added; conflicting values retain existing","Corrections are deliberate acts; never-downgrade (ADR-040)"
-   "sonority_rank","Existing wins, always","Stored value is authoritative once confirmed (UC-01 ext 4a)"
+   "sonority_rank","Existing wins, always","Stored value is authoritative once confirmed (:ref:`uc01` ext 4a)"
    "frequency","Sum values; renormalize at selection time","Duplicates represent double-counted attestation (Q7)"
    "category","Recomputed from merged features","Derived, never merged (ADR-032)"
    "components, custom, metadata","New-only fill (empty adopts incoming; populated retains)","Least surprise"
@@ -210,7 +218,7 @@ Category recompute at merge is silent by design (ruled
 when a stored category disagrees with recomputation of the
 author's stored features. A merge recomputes from features that
 were either just chosen under the author's eye (interactive path,
-UC-01 extension 6a2–6a3) or resolved deterministically in batch
+:ref:`uc01` extension 6a2–6a3) or resolved deterministically in batch
 (UC-009); warning there would duplicate a surface the user has
 already seen or will see in the collision log. The collision-log
 entry for a merge that changed the category records the old and
@@ -235,11 +243,11 @@ by that ruling.
 Relations
 ---------
 
-- Resolved by: ADR-032 (derived category), ADR-033 (feature
+- Resolved by: :ref:`ADR-032` (derived category), ADR-033 (feature
   system + representation), ADR-040 (merge safety — field-class
   rules above), ADR-041 (near-miss), ADR-051 (field-class rules above)
-- Feeds: UC-01 (implementable — flags cleared), UC-005
-  (serialization), UC-009 (import merge path), UC-012
+- Feeds: :ref:`uc01` (implementable — flags cleared), UC-005
+  (serialization), UC-009 (import merge path), :ref:`uc012`
   (segmentation/normalization), Q38 (``ipa_reference.json``
   supplies feature vocabulary, frequency, rarity data)
 - Inventory-level structural checks (nucleus-capable minimum,
@@ -255,7 +263,7 @@ contract amendment — the semantic rules above are the stable
 part):
 
 - ``latticelang.core.phonology`` — ``Phoneme`` class, merge logic
-  (module home per :ref:`ADR-014` and UC-01's existing references;
+  (module home per :ref:`ADR-014` and :ref:`uc01`'s existing references;
   ruled 2026-09-29, superseding the provisional ``core.phonemes``
   spelling)
 - ``latticelang.core.sonority`` — ``propose_sonority_rank``
@@ -265,19 +273,25 @@ part):
   2026-09-29), ``tests/test_phoneme_contract.py`` (drafted),
   ``tests/test_phoneme_merge.py`` (field-class rules are pure
   functions), ``tests/test_near_miss.py``
-
 - Assumption ledger (2026-09-29 implementation pass): (a) the
   constructor surface is three entry paths — direct
-  construction, ``Phoneme.from_reference`` (UC-01 prefill), and
+  construction, ``Phoneme.from_reference`` (:ref:`uc01` prefill), and
   ``to_json``/``from_json`` round-trip — assumed, not yet
   specced; finalize wording when ``Phoneme`` lands. (b) ``__eq``
   is value equality over serialized fields (needed by the
-  round-trip test) — assumed. (c) Outlier segments with
-  stop-like features (e.g., clicks, continuant '-') currently
-  propose rank 0 rather than null; revisit during Q38 curation.
-  (d) ``KNOWN_FEATURE_KEYS`` in ``tests/test_ipa_reference.py``
-  overstates its fixture scope in its comment — cosmetic cleanup
-  pending. (e) The missing-diphthong-component warning (validation rules,
+  round-trip test) — assumed. (c) Outlier segments with stop-like features (e.g., clicks,
+  ``continuant '-'``) propose rank 0 — RESOLVED 2026-10-02: clicks
+  keep stop-band rank 0 ([-sonorant, -continuant]; obstruent
+  treatment matching standard sonority scales, :cite:p:`clements1990`).
+  No null exception. (d) ``KNOWN_FEATURE_KEYS`` in
+  ``tests/test_ipa_reference.py`` overstates its fixture scope
+  in its comment — cosmetic cleanup pending. (e) The
+  missing-diphthong-component warning (validation rules,
   "diphthong" entry) is evaluated at the Inventory boundary per
   ADR-036, not inside Phoneme — its test home is the future
-  ``tests/test_inventory*.py``, not this file.
+  ``tests/test_inventory*.py``, not this file. (f) NEW 2026-10-02:
+  the Phoneme constructor accepted ARBITRARY feature keys — a
+  ghost ``'voice'`` atom passed silently through the merge tests
+  before manual review caught it. FIXED 2026-10-03: unknown keys
+  now raise ValueError unless declared via ``custom_features``
+  (feature_vocabulary.py; tests/test_phoneme_validation.py).

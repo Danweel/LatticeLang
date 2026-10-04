@@ -1,8 +1,7 @@
 """Phonology module for LatticeLang.
 
 Phoneme representation, category derivation (ADR-032/033), and
-the merge surface (ADR-051). The Phoneme class is being rewritten
-against dc_phoneme.rst, replacing the Phase Alpha scaffold.
+the merge surface (ADR-051).
 """
 
 from __future__ import annotations
@@ -14,9 +13,8 @@ from typing import Any
 import warnings
 
 
-# Names kept for ADR-051's interactive-path future; merge_phonemes
-# arrives in the next chunk (tests already drafted, currently RED).
-# from latticelang.core.sonority import propose_sonority_rank  # see note below
+from latticelang.core.feature_vocabulary import FEATURE_COLUMNS
+from latticelang.core.sonority import propose_sonority_rank, expected_rank_range
 
 
 def derive_category(features: dict[str, str]) -> str | None:
@@ -79,6 +77,7 @@ class Phoneme:
 
     symbol: str
     features: dict[str, str]
+    custom_features: list[str] = field(default_factory=list)
     category: str | None = None
     sonority_rank: int | None = None
     frequency: float = 1.0
@@ -90,11 +89,22 @@ class Phoneme:
         """Validate basics; propose category and rank when unset."""
         if not self.symbol:
             raise ValueError("Phoneme symbol cannot be empty")
+
+        # Feature key validation (DC-PHONEME validation rules):
+        # every key must be in the pinned vocabulary or declared
+        # via custom_features. Fail loud, never plausible-silent.
         for key, value in self.features.items():
             if isinstance(value, bool):
                 raise TypeError(
                     f"feature {key!r} must be a string ('+'/'-'), "
                     f"got boolean {value!r} (ADR-033)"
+                )
+            if key not in FEATURE_COLUMNS and key not in self.custom_features:
+                raise ValueError(
+                    f"unknown feature key {key!r}; add it to "
+                    f"custom_features (declared custom features) or "
+                    f"use a key from the pinned PHOIBLE vocabulary "
+                    f"(see dc_phoneme.rst, Implementation Bindings)"
                 )
 
         # Q7 item 3: zero/negative weights are invalid
@@ -105,12 +115,11 @@ class Phoneme:
 
         # UC-01 ext 4a: warn if stored rank outside band for features
         if self.sonority_rank is not None:
-            from latticelang.core.sonority import expected_rank_range
             band = expected_rank_range(self.features)
             if band and not (band[0] <= self.sonority_rank <= band[1]):
                 warnings.warn(
                     f"Rank {self.sonority_rank} is unusual for "
-                    f"{self.category} with these features. "
+                    f"{self.category!r} with these features. "
                     f"Expected range: {band[0]}-{band[1]}",
                     UserWarning,
                 )
@@ -123,7 +132,6 @@ class Phoneme:
             else:
                 self.category = derive_category(self.features)
         if self.sonority_rank is None:
-            from latticelang.core.sonority import propose_sonority_rank
             self.sonority_rank = propose_sonority_rank(self.features)
 
     @classmethod
@@ -143,6 +151,7 @@ class Phoneme:
                 return cls(
                     symbol=symbol,
                     features=entry.get("features", {}),
+                    custom_features=entry.get("custom_features", []),
                     sonority_rank=entry.get("sonority_rank"),
                     frequency=entry.get("phoible_frequency") or 1.0,
                     custom=False,
@@ -153,9 +162,11 @@ class Phoneme:
     def to_json(self) -> str:
         """Serialize to a JSON string."""
         return json.dumps({
+            "schema_version": "0.1.0",
             "symbol": self.symbol,
             "category": self.category,
             "features": self.features,
+            "custom_features": self.custom_features,
             "sonority_rank": self.sonority_rank,
             "frequency": self.frequency,
             "components": self.components,
@@ -171,15 +182,20 @@ class Phoneme:
         phoneme = cls(
             symbol=data["symbol"],
             features=data.get("features", {}),
+            custom_features=data.get("custom_features", []),
             category=data.get("category"),
             frequency=data.get("frequency", 1.0),
             components=data.get("components", []),
+            sonority_rank=data.get("sonority_rank"),
             custom=data.get("custom", False),
             metadata=data.get("metadata", {}),
         )
+        # Note: phoneme.sonority_rank was already set above from
+        # the deserialized data — no re-proposal needed. The
+        # re-proposal that silently erased stored ranks has been
+        # removed (Defect B fix).
 
         # Q5 ruling: divergence warns on LOAD (not construction)
-        from latticelang.core.sonority import propose_sonority_rank
         recomputed = derive_category(phoneme.features)
         if (phoneme.category is not None and recomputed is not None
                 and phoneme.category != recomputed):
@@ -214,6 +230,11 @@ def merge_phonemes(existing: Phoneme, incoming: Phoneme) -> Phoneme:
     merged_features = dict(incoming.features)
     merged_features.update(existing.features)
 
+    # custom_features: union, no conflicts possible (keys don't overlap).
+    merged_custom = list(incoming.custom_features)
+    merged_custom.extend(k for k in existing.custom_features
+                         if k not in incoming.custom_features)
+
     # frequency: sum (double-counted attestation, Q7).
     # sonority_rank: existing wins, always.
     # components/custom/metadata: new-only fill (populated
@@ -221,6 +242,7 @@ def merge_phonemes(existing: Phoneme, incoming: Phoneme) -> Phoneme:
     return Phoneme(
         symbol=existing.symbol,
         features=merged_features,
+        custom_features=merged_custom,
         sonority_rank=existing.sonority_rank,
         frequency=existing.frequency + incoming.frequency,
         components=(existing.components or list(incoming.components)),
