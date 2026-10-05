@@ -11,3 +11,4 @@ for LatticeLang.
 
    questions
    bibliography
+   q36_featureless_audit

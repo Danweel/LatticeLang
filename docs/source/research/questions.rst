@@ -1798,13 +1798,25 @@ Open follow-ups (non-blocking, numbered)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    - F-1: T6 subdivision semantics (if display ever needs finer
      granularity than hapax/non-hapax).
-   - F-2: Admission policy for the 85 features-only unattested
+   - F-2: Admission policy for the 66 features-only unattested (corrected 2026-10-05, NFC join; was 85)
      symbols (potential "unattested" tier or exclusion). OPEN — the
-     ladder applies only to attested symbols; the 85 features-only
+     ladder applies only to attested symbols; the 66 features-only (corrected 2026-10-05, NFC join; was 85)
      glyphs and user-custom symbols are out of scope by design
      (dc_ipa_reference Implementation Bindings, Rarity tiers)
-   - F-3: Diacritic composition for the 83 attested-but-unlisted
+   - F-3: Diacritic composition for the 62 attested-but-unlisted (corrected 2026-10-05, NFC join; was 83)
      symbols (independent work project, per ADR-028-normalization seam).
+   - F-4: Ejective admission policy — letter+ʼ combinations are
+     productive, not charted; excluded from the curated pass-list
+     (2026-10-05 ruling). Revisit with UC-012 input composition.
+   - F-5: PHOIBLE listing/features Unicode encoding inconsistency
+     CONFIRMED byte-level 2026-10-05 (listing precomposed vs
+     features decomposed; see dc_ipa_reference correction).
+     Derive join normalizes NFC. Upstream notification pending —
+     verify against bambooforest/phoible current master first.
+   - F-6: Voiced-aspiration alias policy — listing ``bʰ``/``ɡʰ`` (U+02B0)
+     vs features ``bʱ``/``ɡʱ`` (U+02B1) accounts for most of
+     the 62; a curated alias rule at the join seam
+     could rescue ~50 symbols. OPEN 2026-10-05. evidence table: :ref:q36-featureless-audit
 
 .. _q37-word-context-parameter:
 .. _q37:

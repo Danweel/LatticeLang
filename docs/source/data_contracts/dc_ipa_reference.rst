@@ -283,8 +283,13 @@ emitted ``pinned_sources``. Membership is INTERSECTION, never
 heuristic approximation: symbols attested in PHOIBLE but absent
 from the chart are dropped to the drop-log with their
 attestation counts (same treatment as the shared-symbol
-restriction); symbols on the chart but absent from the shared
-set raise, since every chart segment has PHOIBLE features.
+restriction); chart-canonical symbols lacking a features row
+raise. (The ``ç`` specimen RESOLVED 2026-10-05: the features
+matrix spells it decomposed — ``c`` + U+0327 — while the
+listing spells it precomposed, U+00E7; the derive join
+normalizes both sides to NFC, per the Shared-symbol restriction
+correction. The chart file transcribes vendored forms, so the
+intersection holds.)
 
 Exempt routes: ``special_combinations`` (``aː``, ``m̩``, tone
 letters) enter via the curated overrides file and contract
@@ -360,12 +365,36 @@ Shared-symbol restriction
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The build emits only symbols having both a phonemes-file
-attestation and a features-file row (2,077 of 2,160 attested
-symbols, counted 2026-10-01). The 83 attested-but-featureless
-symbols are dropped from the output and **logged with their
-attestation counts** (mostly diacritic compositions: ``ã̰``,
-``bʰ``, ``ç``). The 85 features-only unattested symbols are
-excluded; their admission policy is follow-up F-2.
+attestation and a features-file row (2,098 of 2,160 attested
+symbols; corrected 2026-10-05 — the earlier 2,077 was the
+naive join's figure). The attested-but-featureless symbols
+(62 as corrected 2026-10-05; the naive join reported 83) are
+dropped from the output and **logged with their
+attestation counts** (mostly diacritic compositions:
+``ã̰``, ``ɡʰ``). The 66 features-only unattested symbols
+(corrected 2026-10-05; was 85) are excluded; their admission
+policy is follow-up F-2.
+
+**Correction** (2026-10-05, byte-level probe): the 83
+figure was a naive byte-equality join. The gold-standard
+listing encodes some diacritic-bearing symbols precomposed
+(e.g., ``ç`` as U+00E7) while the features matrix encodes
+them decomposed (``c`` + U+0327). An NFC-normalized join
+finds features for 21 of them — the corrected featureless
+count is 62, and the features-only unattested count
+corrects 85 → 66, since the 21 rescued symbols bring their
+attestation back with them. The derive script MUST normalize
+both sides to NFC for matching (NFC is join-fugitive only;
+emitted spellings follow ADR-052 vendored forms). Specimen:
+the palatal affricate — listing ``c`` + U+00E7, features
+``c c`` + U+0327, NFC-equal. Composition of the 62 (probe
+2026-10-05): a majority are voiced-aspiration spelling
+variants (listing ``ʰ`` U+02B0 vs features ``ʱ`` U+02B1 —
+a curated alias question, follow-up F-6); remainder:
+order-variant aspiration, partial breathy-voice nasals,
+click accompaniments, and one legacy artifact row (ASCII
+capital N, U+004E; provenance under investigation). Full
+table: :ref:`q36-featureless-audit`.
 
 Tonemes
 ~~~~~~~
@@ -392,7 +421,8 @@ weight and never gates generation. Tier 6a is a dataset-hapax
 claim, not a linguistic verdict.
 
 Scope: the ladder describes the 2,160 attested symbols
-only. The 85 features-only unattested symbols carry no tier
+only. The 66 features-only unattested symbols
+(corrected 2026-10-05, NFC join) carry no tier.
 under any label — they are excluded from the build pending
 follow-up **Q36 F-2**. User-created symbols outside the reference
 table never receive a tier: they are the ``custom`` path in
@@ -417,8 +447,8 @@ Input-spelling normalization (accepting tie-barred ``t͡s`` for
 canonical ``ts``) is a runtime input concern, not part of the
 derive pipeline. The derive script's drop-log implementation
 carries a comment marking where the future diacritic
-composition work for the 83 dropped symbols would attach
-(follow-up F-3, an independent work project).
+composition work for the 62 dropped symbols (corrected 2026-10-05 - naive join count was 83)
+would attach (follow-up F-3, an independent work project).
 
 References
 ----------

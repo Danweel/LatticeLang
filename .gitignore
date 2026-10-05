@@ -207,7 +207,3 @@ docker-compose.override.yml
 # =============================================================================
 # USER FILES (PERSONAL, NOT SHARED)
 # =============================================================================
-
-live_preview.sh
-build-docs.sh
-vendor/phoible-2.0/dev-v2.0.zip
