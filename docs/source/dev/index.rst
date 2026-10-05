@@ -28,3 +28,4 @@ LatticeLang contributors.
 
    governance/decisions
    governance/documentation_standards
+   governance/collaboration_protocol

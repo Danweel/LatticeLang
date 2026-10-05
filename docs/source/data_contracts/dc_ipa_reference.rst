@@ -202,7 +202,7 @@ sanity check):
 #. Every ``features`` key is in the pinned PHOIBLE 2.0 vocabulary.
 #. Sonority rank ties at boundary ranks are permitted (glide
    and close vowel both may rank 8 — expected, not anomalous;
-   see :ref:`dc_phoneme`'s rank table note). THIS NEEDS REVISION AFTER SONORITY DECISIONS
+   see :ref:`dc_phoneme`'s rank table note).
 #. Every ``special_combinations`` entry carries a
    ``combination_type`` from ``tie_bar | length |
    syllabic_mark`` and a ``constituents`` array of at least
@@ -262,12 +262,75 @@ Relations
 - Governed by: :ref:`ADR-033` (pinned PHOIBLE 2.0 feature vocabulary), :ref:`ADR-052` (ver PHOIBLE spelling stored verbatim; tie bar display-layer only), :ref:`ADR-041` (near-miss exclusions)
 - Is NOT: a phoneme inventory (it has no user data), nor a preset (presets are :ref:`dc_language_definition` instances)
 
+.. _implementation_bindings:
+
 Implementation Bindings
 -----------------------
 
 Bindings recording how the Q38 build implements this contract.
 They bind ``scripts/derive_ipa_reference.py``; they add no
 schema fields.
+
+Chart membership filter
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Pipeline step 2 filters the shared-symbol set to the IPA chart
+(:cite:p:`ipa1999`, 2015 rendering), via a CURATED pass-list —
+``data/ipa_chart.json``, a small hand-transcribed artifact of
+chart symbols in PHOIBLE-verbatim spelling, carrying a
+provenance block and the ``ipa_chart_year`` recorded in the
+emitted ``pinned_sources``. Membership is INTERSECTION, never
+heuristic approximation: symbols attested in PHOIBLE but absent
+from the chart are dropped to the drop-log with their
+attestation counts (same treatment as the shared-symbol
+restriction); symbols on the chart but absent from the shared
+set raise, since every chart segment has PHOIBLE features.
+
+Exempt routes: ``special_combinations`` (``aː``, ``m̩``, tone
+letters) enter via the curated overrides file and contract
+sections, not through this filter — the filter governs
+single-chart segments only.
+
+Rationale: a heuristic (e.g., single-glyph filtering) admits
+off-chart segments and mishandles multi-codepoint chart
+segments; the chart is a published human artifact, so
+transcription is curation, not invention (zero-invented-values
+doctrine).
+
+Classification derivation scope
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The classification fields (``place`` / ``manner`` / ``voicing``
+for consonants; ``height`` / ``backness`` / ``roundedness`` for
+vowels) are DERIVED from each entry's feature bundle by a
+build-time vocabulary owned by the derive script. Scope limits:
+
+- Spellings are fixed once at build time and emitted; consumers
+  compare against emitted values only.
+- The vocabulary maps FROM pinned PHOIBLE features TO labels;
+  it contains no feature values of its own — feature truth
+  flows from PHOIBLE, labels are nomenclature.
+- Entries mapping to no label emit the field as null rather
+  than forcing a nearest-fit (fail-loud, no plausible-silent
+  classification).
+- Consumption surface is UC-01 tooltips and filtering UI, plus
+  UC-07 export — nothing downstream depends on completeness.
+
+Overrides minimal scope
+~~~~~~~~~~~~~~~~~~~~~~~
+
+``data/overrides.json`` (hand-maintained) carries four duties:
+descriptions, aliases, tipa macros, feature corrections — plus
+tie-barred ``canonical_forms`` per ADR-052 (the pipeline never
+synthesizes spellings). Initial content is MINIMAL: only what
+the Field Checks require plus the specimen roster
+(``t̠ʃ``, ``aː``, ``m̩``, tone letters, and the ``ch``/``tsh``
+alias pair for UC-012). Growth is per-use-case need, not bulk
+authoring; null ``tipa`` is legal throughout.
+
+Curated-wins merge order: override values REPLACE derived ones
+key-for-key; no merging of partial structures, so a bad curation
+is visible as a whole-value difference, not a silent blend.
 
 Trumped denominator
 ~~~~~~~~~~~~~~~~~~~

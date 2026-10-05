@@ -1782,8 +1782,8 @@ Q36: [PHONO] Rarity Tier System — Finalization
 
    Member counts sum to 2,160 distinct attested symbols.
 
-   Caveats
-   ~~~~~~~
+Caveats
+~~~~~~~
    - Tier 6b means "attested in exactly one trumped inventory of this
      2,155-language sample." This conflates genuine rarity with sampling
      and trumping artifacts and is NOT a linguistic uniqueness claim.
@@ -1794,8 +1794,8 @@ Q36: [PHONO] Rarity Tier System — Finalization
    - d̠ʒ verified at 647/2155 = 30.02% (boundary-adjacent symbol,
      archived for the record).
 
-   Open follow-ups (non-blocking, numbered)
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Open follow-ups (non-blocking, numbered)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    - F-1: T6 subdivision semantics (if display ever needs finer
      granularity than hapax/non-hapax).
    - F-2: Admission policy for the 85 features-only unattested

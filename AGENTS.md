@@ -4,6 +4,9 @@ Machine-readable bootstrap index and operating rules for AI assistants
 in this repository. Written assistants-first, humans-second: short
 lines, grep-able headings, explicit paths. Normative content lives in
 `docs/source/`; this file points to it and adds session mechanics.
+Collaboration process detail lives in
+docs/source/dev/governance/collaboration_protocol.rst — this file
+keeps summaries and pointers only.
 
 ## Cold-Start Kit (ASK for these at session start)
 1. This file
@@ -20,6 +23,7 @@ a source of current state; the repo is.
 - Committing a user-visible change → CHANGELOG.md (per documentation_standards.rst § Changelog Standards)
 - Claiming anything exists in the repo → grep first (Verification Discipline)
 - Adding or changing to existing Qs or ADRs → determine if cross referencing applies
+- Process/paste/verification rules in doubt → docs/source/dev/governance/collaboration_protocol.rst
 
 ## Tech Stack
 - Python ≥3.11; Poetry (in-project venvs); pytest
@@ -27,22 +31,20 @@ a source of current state; the repo is.
 - VSCodium on GNU/Linux
 
 ## Commands (always preceded by cd to repo root)
-
-```
+```bash
 cd /home/danweel/Documents/VSCodiumFiles/LatticeLang/
 
-poetry run pytest                                              # full suite
+poetry run pytest                              # full suite
 poetry run sphinx-build -b html docs/source docs/_build/html   # docs
 ```
-
-# Full audit build — incremental builds hide warnings:
-
+## Full audit build — incremental builds hide warnings:
 ```
 poetry run sphinx-build -E -b html docs/source docs/_build/html \
-  2>&1 | grep -iE 'warning|error' | head -40
+  2>&1 | grep -iE 'warning|error|critical' | head -40
 ```
 
-# Broken-role sweep
+## Broken-role sweep
+
 A :ref: missing its backticks renders as plain text with NO warning (silent dead reference). Runs with the pre-commit verification:
 
 ```
@@ -53,7 +55,7 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 - RTD auto-builds on push. No build on readthedocs.org → check GitHub webhook deliveries + RTD integrations before anything else.
 - `git status` / `git log --stat` whenever unsure; terminal pager exits with "q".
 - Assistant always gives full git commands with explanations.
-- Epoch line: at cold-start (after the kit), run `git log -1 --oneline && poetry` run `pytest -q | tail -1` — ground-truth commit + test count, catching drift in the cold-start documents themselves.
+- Epoch line: at cold-start (after the kit), run `git log -1 --oneline && poetry run pytest -q | tail -1` — ground-truth commit + test count, catching drift in the cold-start documents themselves.
 
 # At Commit Time
 
@@ -64,11 +66,12 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 # Documentation Map
 
 - `docs/source/index.rst` — entry point
-- `docs/source/use_cases/` — Cockburn-style use cases; level subdirectories: user_goal_level/, subfunction_level/, summary_level/, possible_future_cases/ (verified by ls, 2026-09-30)
+- `docs/source/use_cases/` — Cockburn-style use cases; level subdirectories: user_goal_level/, subfunction_level/, summary_level/,   possible_future_cases/ (verified by ls, 2026-09-30)
 - `docs/source/data_contracts/` — JSON schema contracts: dc_phoneme, dc_syllable_template, dc_constraints, dc_inventory, dc_language_definition, dc_orthography_rules, dc_ipa_reference, dc_phoible_source
 - `docs/source/research/questions.rst` — questions registry, Status Overview at top; Q-numbers and ADR refs are the lingua franca
 - `docs/source/dev/governance/decisions.rst` — ADRs, append-only
-- `docs/source/dev/governance/documentation_standards.rst` — format rules for all docs (tables, labels, bib hygiene, edit-location anchors, changelog, data-contract section order)
+- `docs/source/dev/governance/documentation_standards.rst` — format rules for all docs (tables, labels, bib hygiene, edit-location anchors, changelog, data-contract section order, fixture doctrine)
+- `docs/source/dev/governance/collaboration_protocol.rst` — verification, paste-check, and fix-response process rules (moved here 2026-10-05)
 - `docs/source/dev/planning/` — blueprint, phases, suite vision
 - `docs/source/dev/design/` — architecture, theoretical framework, constraints (verified 2026-09-30)
 - `docs/source/user/` — user-facing docs and troubleshooting
@@ -85,209 +88,75 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 - In questions.rst and decisions.rst, always update the index at the top as well as the entry.
 - Fail loud, never plausible-silent: functions validate inputs and raise on mismatch; a plausible-but-wrong return is a defect even when tests pass around it.
 
-# Key Decisions (Phoneme-module scope unless noted)
+# Key Decisions (summaries; ADR Index is canonical and complete)
 
-- :ref:`ADR-032`: phoneme category DERIVED from features
+Cross-cutting:
+- :ref:`ADR-035` — naturalistic defaults (the only SUITE-wide design principle)
+
+Load-bearing for the Phoneme/Q38 phase (derive script, reference table):
 - :ref:`ADR-033`: PHOIBLE 2.0 feature system pinned; controlled-vocab strings; Q38 hybrid pipeline — TSV is build-time input only
-- :ref:`ADR-034`: slot eligibility — category match + syllabic=+ auto-nucleus; glides opt-in; diphthongs one nucleus slot
-- :ref:`ADR-035`: naturalistic defaults (suite-wide tie-break principle)
 - :ref:`ADR-036`: dedicated dc_inventory validation contract
-- :ref:`ADR-031`: PEP 621 optional-dependencies only, no Poetry groups (`Sphinx <9.0`, `myst-parser <6.0`; `poetry install --extras docs|dev`)
+- :ref:`ADR-041`: near-miss symbol similarity (tie-bar forms excluded)
+- :ref:`ADR-048`: tone not a slot category; tonemes carried with null rank
+- :ref:`ADR-051`: merge field-class duplicates (supersedes ADR-040 field merge rules in part)
+- :ref:`ADR-052`: segment spelling — PHOIBLE-verbatim storage; tie bar display-layer only (supersedes ADR-028)
 
-Only :ref:`ADR-035` (naturalistic defaults) claims suite-wide scope. This list is not exhaustive — see ADR Index.
+This list is a phase view, not the record; see the ADR Index.
 
-# Post-MVP (do NOT implement in Phase Beta)
+# Post-MVP (do NOT implement in Phase Beta, but design in anticipation of)
 
 Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond within-syllable, all Epsilon modules (morphology, syntax, lexicon, sound change, writing system, pedagogy), allophonic rule engine, plugin API, schema migration logic. See dev/planning/suite_vision.
 
 # Working Style (USER is learning Python/Sphinx)
 
-- Explain WHY before HOW; beginner language; define linguistic terms.
+- Explain WHY before HOW; beginner language; define linguistic terms (glossary.rst is the accumulator: new terms become :term: entries).
 - Heavy inline comments; small steps.
 - Test-first: propose a test before proposing code.
 - No large refactors without approval — show before/after diffs.
 - Ask before acting when unsure; never guess (drift is expensive — project state lives in docs for this reason).
-- Avoid subjective qualification; judge by plausibility and rigor; admit uncertainty explicitly rather than papering over gaps.
 - Cross-reference sources; cite only what was actually retrieved this session.
 - Never reconstruct project state from memory or summaries — verify against the documents (Status Overview, ADR Index). If unsure whether a thing exists, ASK instead of assuming.
 - Treat tool results as the only evidence for time-sensitive or verifiable claims. A verified wrong answer beats a plausible guess; when a count or fact matters, search before asserting.
-- Calibrated uncertainty over reassurance words; flag discourse markers that assert rather than demonstrate reliability.
 - Record decisions in files at the moment they're made — working memory does not survive compaction; documents do.
 - Re-inject when hazy: invoke "RE-INJECT" to force the cold-start kit.
 
-# Verification Discipline (ASSISTANT MUST ENFORCE)
+# Process Rules (summaries; full text: collaboration_protocol.rst)
 
-- Never assert what a one-line command can check. Propose the grep, USER runs it and pastes output; output beats both parties' memory.
-- `grep -r recursive`, `-n` line numbers, quote search terms, `-i` for case-insensitive; explain regex when first used.
-- If a grep contradicts the assistant's claim, the grep wins — say so.
-- PASTE FRESHNESS: uploaded pastes older than ~3 days are historical snapshots; repo state always defers to fresh grep output.
+- Verification Discipline: never assert what a one-line command can check; USER runs the grep and pastes output; output beats both parties' memory; if a grep contradicts the assistant, the grep wins; literal patterns need grep -F (backslash-escapes invoke regex anchors).
+- Paste-Check Discipline: py_compile after paste; scan for duplicated defs; never paste partial blocks; save-and-sentinel (unsaved buffer edits do not exist; grep the disk for a paste token); no remembered numbers; RST targets get markdown-remnant sentinels (grep -c '^## '; fences via grep -F) — legal-parse garbage never warns.
+- Fix Response Protocol: every fix = diagnosis with evidence, before/after with file path, verification command with expected output, what's next.
 
-# Paste-Check Discipline
+# PHOIBLE Terminal Checks (paste-safe data access)
 
-- After pasting any code block, run `python -m py_compile <file>` before pytest — separates paste placement from logic in a second.
-- After pasting a code block on a file getting touched a lot, check for DUPLICATED definitions:
-  re-pasted blocks stack silently in Python — later defs win
-  with no error, so py_compile cannot catch this class. Scan
-  `grep -n '^def \|^class ' <file>` and eyeball for repeats
-  before running tests. (Lineage: derive_ipa_reference.py
-  carried 3x-duplicated helper blocks through green tests.) The LLM should help remind the USER to check for this, since they are inexperienced.
-- Never paste partial blocks with `...` placeholders: full body or nothing.
-- Shell quoting: single-quote grep/sed patterns containing backticks.
-- Save before run: check the VSCodium tab-dot / Ctrl+S before any py_compile or pytest — py_compile reads from DISK, not editor memory, so an unsaved buffer passes in the editor while the stale file runs (assistant reminds; USER checks).
-- Paste complete command output, never a trimmed summary — truncated pytest output hides vacuous-pass and wrong-test failures.
-- **No remembered numbers.** Exact figures (counts, totals, thresholds)
-are counted from the pinned data at the moment of use — never recalled
-from memory, from code comments, or from earlier conversation summaries.
-Lineage that motivated this: an invented "4,000" mini-world total that
-sat in a code comment beside a half-remembered "3,020" release number,
-when the real, correct denominator (trumped inventories, 2,155) had to
-be counted from the data anyway.
-- When pasting code that depends on indentation (decorators, class bodies, nested functions):
-  1. Include a comment block showing the target column level for each code block type
-  2. Mark the start/end of sections that should be at module level
-  3. Use VSCodium's "Format Document" command after pasting, then inspect visually
-For example:
-```
-# PASTE START — MODULE LEVEL (column 0)
-@decorator
-class ClassName:
-    # METHOD LEVEL (column 4)
-    def method(self):
-        # BODY LEVEL (column 8)
-        pass
-# PASTE END
-```
-- Save-and-sentinel after pasting: an edit in an unsaved editor
-  buffer does not exist. After pasting, SAVE, then confirm the
-  disk has a distinctive token from the paste (grep -n for a
-  constant or function name). Terminal line numbers that refuse
-  to change between runs mean the disk file never changed —
-  buffer/disk divergence, not a code bug. (Lineage: the
-  phantom EXPECTED_LISTING_HEADER NameError, diagnosed by
-  identical traceback line numbers across differing pastes.)
-  Remind the user if you aren't in touch with the code directly.
-
-## Fix Response Protocol (adopted 2026-10-03)
-
-Every fix proposal follows the same four-part shape, so the
-human can verify each step without expert knowledge:
-
-1. Diagnosis with evidence — name the exact cause and point at
-   the lines/output that prove it (never "something is wrong
-   with X"; always "line 213's @dataclass sits at four spaces,
-   nesting it inside the function").
-2. The fix as before/after — smallest visible units, with the
-   paste location stated, and indentation level marked for any
-   code whose meaning depends on it.
-3. A verification command WITH its expected output — so success
-   and failure are distinguishable without the assistant.
-4. What's next — where the fix sits in the work order.
-
-Rationale: the USER won't necessarily verify by expertise; verification
-MUST be procedural. A fix that cannot state its expected
-outcome is not yet understood by either party well enough to apply.
-
-## PHOIBLE-related Discipline
-
-## Terminal Data Checks (learned 2026-10-01, PHOIBLE recon)
-
-**Pasted commands mangle whitespace.** Tabs frequently arrive as spaces
-after a round-trip through chat/clipboard. Any pattern that anchors on a
-literal tab may silently match nothing — the failure mode looks like
-"the data doesn't contain it" when actually the pattern is broken.
-Rule: for terminal data checks, prefer awk field equality over
-tab-anchored grep:
+Tabs mangle through clipboards — use awk field equality, never tab-anchored grep:
     `awk -F'\t' -v s="p" '$8 == s' file.tsv`    # paste-safe
     `grep -P "^p\t" file.tsv`                    # NOT paste-safe
-If using grep anyway, write the tab as $'\t' at evaluation time.
-
-**Verify column indices against the real header before cutting.**
-Columns shift between files of the same dataset (phoible-phonemes.tsv:
-field 7 is GlyphID, field 8 is Phoneme). Running `head -1` and counting
-fields, by hand, before any `cut`/`awk` against an unverified column is
-mandatory. A wrong-field count returns plausible-looking garbage that
-can cost an hour to notice (the 0-overlap "normalization crisis" that
-was actually a field-7-vs-8 bug).
-
-## Trumped-Denominator Recipe (learned 2026-10-01)
-
-The 2,155 denominator is DISTINCT InventoryID (field 1) of the
-gold-standard phonemes listing — the gold-standard directory
-already contains only the trumped set. No filtering needed.
-
-Do NOT reach for any of these neighbors:
-- field 7 GlyphID (2,172 distinct) or field 8 Phoneme — symbol
-  columns, not inventory identity
-- the "Trump" column, field 5 (rank values 1–6; its priority
-  semantics are not needed for the denominator — do not guess
-  them; the gold-standard directory is pre-filtered)
-- distinct LanguageCode (1,673 — languages, not inventories)
-- the 3,020 raw-release inventory count (it is raw data, not the Gold Standard file)
-
-Verified recipe (vendor/phoible-2.0/phoible-dev-862bec9):
-
-```
-    awk -F'\t' 'NR>1 {print $1}' \
-      vendor/phoible-2.0/phoible-dev-862bec9/gold-standard/phoible-phonemes.tsv \
-      | sort -u | wc -l
-    # -> 2155  [verified: output, 2026-10-01]
-```
-
-In code: count distinct InventoryID at build time (never hardcode);
-when aggregating per-symbol counts, deduplicate (InventoryID,
-Phoneme) pairs before dividing. Cross-check available: phoible-aggregated.tsv
-holds one row per trumped inventory (2,156 lines incl. header).
-
-## Fixture Doctrine (adopted 2026-10-01)
-
-Fixtures are EXPORTS of real data, never invented worlds:
-
-- Never hand-author fixture values. A fixture is generated from
-  the pinned real source by a regeneration script, and the
-  regeneration is verified by vendor-gated tests (verbatim-row
-  equality) whenever the source is present.
-- Prefer real data in tests whenever it is fast and pinned. At
-  our scale (tens of thousands of rows) full-data integration
-  tests cost <1s — the speed justification for miniature
-  fixtures does not exist here. Fixtures earn their keep ONLY
-  for portability: the vendor directory is local-only, so
-  committed fixtures are what let a fresh clone exercise
-  vendor-dependent logic.
-- Layered authority: vendor-gated tests against full real data
-  are the authority; committed fixtures are the portable layer,
-  and their truth is delegated, not asserted. When a count
-  appears in a fixture, it was computed from real rows or it
-  doesn't exist.
-- Golden numbers pinned in tests (e.g., denominator 2155)
-  carry a provenance comment and a "data changed" failure
-  message — a tripped pin means re-run the PROVENANCE checks,
-  never edit the number.
-- Fresh-clone principle: `git clone && poetry install --extras
-  dev && poetry run pytest` must be green on any machine; vendor-
-  gated tests skip VISIBLY (named reasons), never fail silently,
-  never vanish.
+Verify column indices against `head -1` by hand before any cut/awk.
+Trumped-denominator recipe and counting verification: see
+dc_phoible_source.rst Implementation Bindings (the canonical home).
+Fixture doctrine: see documentation_standards.rst § Fixture Doctrine.
 
 # Development vs. Runtime Artifacts
 
 The repository contains all data and tools required to regenerate
 derived artifacts from first principles (the pinned PHOIBLE 2.0
-release). The published package (PyPI, wheel) excludes vendor data
-and build tools, distributing only the runtime library plus
-pre-computed reference data (``ipa_reference.json``).
+release), INCLUDING the vendored data — committed to the repo per
+the 2026-10-04 bundling decision. Distribution policy:
 
-Rationale: reproducibility + transparency (developers can verify
-derived artifacts from source) versus deploy size (users receive
-only what the runtime needs).
+- Repository/sdist (via ``MANIFEST.in`` graft): everything — vendor/
+  data, tests, scripts, docs. Developers and CI can verify derived
+  artifacts from source.
+- Wheel (end users): runtime library + pre-computed
+  ``ipa_reference.json`` only; vendor data excluded.
 
 Boundaries:
-- ``vendor/phoible-2.0/`` — vendored raw data; excluded from
-  distributions (``MANIFEST.in``); read only by derivation
-  scripts
-- ``tests/`` and ``scripts/`` — development-only; excluded from
-  distributions
+- ``vendor/phoible-2.0/`` — vendored raw data; IN the repo and sdist,
+  excluded from wheels; read only by derivation scripts
+- ``tests/`` and ``scripts/`` — development-only; excluded from wheels
 - ``src/latticelang/`` — the library package; distributed as-is
 - ``ipa_reference.json`` (committed, regenerated) — runtime data;
   included in distributions
+
 # Session Integrity (Re-Injection & Checkpoints)
 
 - Before any binding decision (ADR, question resolution, contract edit): a 3–5 line state check naming exact files, question numbers, and prior decisions touched.
@@ -305,8 +174,39 @@ Boundaries:
 - Provenance tags on project facts: [record], [inference], [uncertain], [verified: output].
 - Edits are shown as before/after diffs, never described as or in prose.
 - Double-bookkeeping: when status changes, list every place it's recorded and touch all in the same session.
-- Post-mortems: distilled into a rule in this file or a doc note, NEVER left in conversation only.
+- Post-mortems: distilled into a rule in a governance doc or this file, NEVER left in conversation only.
 
 # Provenance Warning
 
 Files dated before ~August 2026 may originate from an abandoned automated-AI build attempt (OMP - removed) that populated files without enough spec grounding. Known specimens: enum-based Phoneme scaffold (replaced), PhonemeInventory naming, data/ipa_reference_table.json and data/dipthong_reference.json (deleted), test_sonarity.py (deleted), empty sonority.py/inventory.py husks. Code contradicting contracts with no ADR behind it → suspect this origin if very old; verify against the docs before treating it as intentional. Delete or replace when encountered.
+
+## Phase: derive-script rewrite (Q38) — planned 2026-10-04
+
+Foundation (done): chart-membership binding (curated
+data/ipa_chart.json, intersection semantics), classification
+derivation scope, overrides minimal scope, glossary.rst,
+stale field-check-6 note struck.
+
+Task order (each test-first, one-story commits):
+1. Author data/ipa_chart.json — curated chart transcription,
+   provenance block, ~100 entries, PHOIBLE-verbatim spellings.
+2. Parsing layer — reuse read_tsv/require_header (shared or
+   imported from regenerate_mini_fixture.py; do not fork the
+   validators). Full-scale two-source join, pair-dedup,
+   drop-log for: featureless-attested, off-chart (counts
+   computed, never asserted; documented 2,077/83/85 are dated
+   comments, not assertions).
+3. Category + classification derivation — toneme routing
+   (tone '+' branch), consonant/vowel sort, classification
+   vocabulary per the Classification derivation scope binding.
+   Null, never nearest-fit.
+4. Overrides merge + Field Checks — curated-wins merge, then
+   the nine Field Checks as acceptance tests (grow
+   tests/test_ipa_reference.py into its contracted role).
+5. Emission — data/ipa_reference.json, load-time sanity
+   check, RTD green.
+
+Deferred (recorded, not scheduled): KNOWN_FEATURE_KEYS comment
+cleanup (ledger (d)); reverse-IPA corpus philosophy note
+("tens deep, art not science, suggestions with confidence"
+— becomes a constraint clause when the UC is specified).

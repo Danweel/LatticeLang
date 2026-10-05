@@ -610,3 +610,36 @@ Known-but-open items (assumptions pending a question, naive
 implementations pending an ADR) go under ``[Unreleased]`` as
 "to be" bullets — e.g., rarity thresholds pending Q36. This keeps
 honest visibility without claiming shipped behavior.
+
+.. _fixture-doctrine:
+
+Fixture Doctrine (adopted 2026-10-01)
+-------------------------------------
+
+Fixtures are EXPORTS of real data, never invented worlds:
+
+- Never hand-author fixture values. A fixture is generated from
+  the pinned real source by a regeneration script, and the
+  regeneration is verified by vendor-gated tests (verbatim-row
+  equality) whenever the source is present.
+- Prefer real data in tests whenever it is fast and pinned. At
+  our scale (tens of thousands of rows) full-data integration
+  tests cost <1s — the speed justification for miniature
+  fixtures does not exist here. Fixtures earn their keep ONLY
+  for portability: the vendor data now ships in the repo
+  (2026-10-04 bundling decision), so vendor-gated tests run
+  everywhere; committed fixtures persist for portability and
+  as the delegated, regenerable layer.
+- Layered authority: vendor-gated tests against full real data
+  are the authority; committed fixtures are the portable layer,
+  and their truth is delegated, not asserted. When a count
+  appears in a fixture, it was computed from real rows or it
+  doesn't exist.
+- Golden numbers pinned in tests (e.g., denominator 2155)
+  carry a provenance comment and a "data changed" failure
+  message — a tripped pin means re-run the PROVENANCE checks,
+  never edit the number.
+- Fresh-clone principle: `git clone && poetry install --extras
+  dev && poetry run pytest` must be green on any machine; vendor-
+  gated tests skip VISIBLY (named reasons), never fail silently,
+  never vanish.
