@@ -39,6 +39,9 @@ Verification Discipline
   grep. Use `-F` (fixed-string) for fence checks. Lineage:
   my own grep pattern matched the start-of-buffer anchor on
   every line, giving a false-positive dump (2026-10-05).
+- terminal rendering of combining marks is not evidence —
+  identical glyphs can differ in bytes; codepoint dumps
+  (U+XXXX) adjudicate spelling questions.
 
 
 .. _paste-check-discipline:
@@ -53,6 +56,7 @@ Paste-Check Discipline
   `grep -n '^def \|^class ' <file>` and eyeball for repeats
   before running tests. (Lineage: derive_ipa_reference.py
   carried 3x-duplicated helper blocks through green tests.) The LLM should help remind the USER to check for this, since they are inexperienced.
+- generation scripts end with a completion print; a silent run means a truncated paste.
 - Never paste partial blocks with `...` placeholders: full body or nothing.
 - Shell quoting: single-quote grep/sed patterns containing backticks.
 - Save before run: check the VSCodium tab-dot / Ctrl+S before any py_compile or pytest — py_compile reads from DISK, not editor memory, so an unsaved buffer passes in the editor while the stale file runs (assistant reminds; USER checks).
@@ -68,18 +72,21 @@ Paste-Check Discipline
   1. Include a comment block showing the target column level for each code block type
   2. Mark the start/end of sections that should be at module level
   3. Use VSCodium's "Format Document" command after pasting, then inspect visually
+- JSON pastes/edits validated first (python -m json.tool — the JSON py_compile);
+  no Unicode symbols through the clipboard (construct via chr()/escapes — combining
+  marks and lookalikes corrupt through chat round-trips).
 
-For example:
-```
-# PASTE START — MODULE LEVEL (column 0)
-@decorator
-class ClassName:
-    # METHOD LEVEL (column 4)
-    def method(self):
-        # BODY LEVEL (column 8)
-        pass
-# PASTE END
-```
+For example::
+
+  # PASTE START — MODULE LEVEL (column 0)
+  @decorator
+  class ClassName:
+      # METHOD LEVEL (column 4)
+      def method(self):
+          # BODY LEVEL (column 8)
+          pass
+  # PASTE END
+
 
 - Save-and-sentinel after pasting: an edit in an unsaved editor
   buffer does not exist. After pasting, SAVE, then confirm the

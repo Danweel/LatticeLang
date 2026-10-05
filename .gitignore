@@ -12,6 +12,8 @@
 docs/_build/
 docs/build/
 docs/generated/
+docs/source/_build
+
 
 # General build directories
 _build/
@@ -207,3 +209,4 @@ docker-compose.override.yml
 # =============================================================================
 # USER FILES (PERSONAL, NOT SHARED)
 # =============================================================================
+docs/doctrees/

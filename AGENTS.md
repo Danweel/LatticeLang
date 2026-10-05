@@ -24,6 +24,7 @@ a source of current state; the repo is.
 - Claiming anything exists in the repo → grep first (Verification Discipline)
 - Adding or changing to existing Qs or ADRs → determine if cross referencing applies
 - Process/paste/verification rules in doubt → docs/source/dev/governance/collaboration_protocol.rst
+- Resuming a session → docs/operational/session_log.rst (newest entry first; operational, not published)
 
 ## Tech Stack
 - Python ≥3.11; Poetry (in-project venvs); pytest
@@ -122,9 +123,22 @@ Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond withi
 
 # Process Rules (summaries; full text: collaboration_protocol.rst)
 
-- Verification Discipline: never assert what a one-line command can check; USER runs the grep and pastes output; output beats both parties' memory; if a grep contradicts the assistant, the grep wins; literal patterns need grep -F (backslash-escapes invoke regex anchors).
-- Paste-Check Discipline: py_compile after paste; scan for duplicated defs; never paste partial blocks; save-and-sentinel (unsaved buffer edits do not exist; grep the disk for a paste token); no remembered numbers; RST targets get markdown-remnant sentinels (grep -c '^## '; fences via grep -F) — legal-parse garbage never warns.
-- Fix Response Protocol: every fix = diagnosis with evidence, before/after with file path, verification command with expected output, what's next.
+- Verification Discipline: never assert what a one-line command can check;
+  USER runs the grep and pastes output; output beats both parties' memory;
+  if a grep contradicts the assistant, the grep wins;
+  literal patterns need grep -F (backslash-escapes invoke regex anchors);
+  combining-mark renderings are not evidence — codepoint dumps adjudicate.
+- Paste-Check Discipline: py_compile after paste;
+  scan for duplicated defs; never paste partial blocks;
+  save-and-sentinel (unsaved buffer edits do not exist;
+  grep the disk for a paste token);
+  no remembered numbers;
+  RST targets get markdown-remnant sentinels (grep -c '^## '; fences via grep -F) — legal-parse garbage never warns;
+  JSON edits validated (json.tool);
+  no Unicode via clipboard (use chr()/escapes).
+- Fix Response Protocol: every fix = diagnosis with evidence, before/after with file path, verification command with expected output, what's next;
+  all diagnoses cite exact lines;
+  all fixes include sentinels.
 
 # PHOIBLE Terminal Checks (paste-safe data access)
 
