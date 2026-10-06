@@ -244,6 +244,11 @@ Status Overview (changes)
      - OPEN
      - Deferred — Post-MVP Research
      - :ref:`q44-maxent-phonotactic-learning`, :ref:`theoretical_framework`, :term:`optimality theory`
+   * - Q46
+     - ASCII/homoglyph spelling variants in source data
+     - ANSWERED (2026-10-06, :ref:`dc_ipa_reference` Implementation Bindings)
+     - Resolved
+     - :ref:`ADR-052`, :ref:`ADR-041`
 
 Gap Analysis: MVP Impact
 ------------------------
@@ -1810,13 +1815,13 @@ Open follow-ups (non-blocking, numbered)
      (2026-10-05 ruling). Revisit with UC-012 input composition.
    - F-5: PHOIBLE listing/features Unicode encoding inconsistency
      CONFIRMED byte-level 2026-10-05 (listing precomposed vs
-     features decomposed; see dc_ipa_reference correction).
+     features decomposed; see :ref:`dc_ipa_reference` correction).
      Derive join normalizes NFC. Upstream notification pending —
      verify against bambooforest/phoible current master first.
    - F-6: Voiced-aspiration alias policy — listing ``bʰ``/``ɡʰ`` (U+02B0)
      vs features ``bʱ``/``ɡʱ`` (U+02B1) accounts for most of
      the 62; a curated alias rule at the join seam
-     could rescue ~50 symbols. OPEN 2026-10-05. evidence table: :ref:q36-featureless-audit
+     could rescue ~50 symbols. OPEN 2026-10-05. evidence table: :ref:`q36-featureless-audit`
 
 .. _q37-word-context-parameter:
 .. _q37:
@@ -2490,8 +2495,8 @@ Q44: Could LatticeLang Learn Constraint Weights from User Choices?
    entries ``optimality theory``, ``faithfulness constraint``
 
 
-   .. _q45-ot-learnability-framework:
-   .. _q45:
+.. _q45-ot-learnability-framework:
+.. _q45:
 
 Q45: Does OT Learnability Theory Inform Our Constraint Design?
 --------------------------------------------------------------
@@ -2518,3 +2523,45 @@ Q45: Does OT Learnability Theory Inform Our Constraint Design?
 
    **See Also:** :ref:`q44-maxent-phonotactic-learning`,
    :ref:`theoretical_framework`, glossary entry ``optimality theory``
+
+.. _Q46:
+.. _q46-ascii-spelling-variants:
+
+Q46: ASCII and homoglyph spelling variants in source data
+==========================================================
+
+:Status: ANSWERED (2026-10-06, dc_ipa_reference Implementation
+   Bindings, "Spelling variants")
+:Scope: [PHONO] — chart membership / derive pipeline
+
+**Question.** Several IPA glyphs have ASCII lookalikes
+(capital N for the uvular nasal, ASCII apostrophe for
+ejectives, ASCII bar/exclamation for clicks). Which spellings
+do the chart pass-list and ipa_reference.json carry, and how
+are ASCII-variant rows handled?
+
+**Answer.** One Unicode spelling per glyph, PHOIBLE-verbatim
+(the ADR-052 principle extended); the chart never authors
+ASCII stand-ins. ASCII variant rows are distinct symbols —
+off-chart, dropped via intersection with drop-log counting, no
+normalization map. Typed-lookalike tolerance is a runtime
+concern, delegated to the near-miss layer (ADR-041).
+
+**Evidence.** [verified: output] The vendored FEATURES table
+carries 88 ASCII-only symbol rows beyond the single lowercase
+letters that legitimately coincide with IPA (probe, 2026-10-06)::
+
+   LC_ALL=C awk -F'\t' 'NR>1 && $1 ~ /^[[:print:]]+$/ {print $1}' \
+     vendor/phoible-2.0/phoible-dev-862bec9/raw-data/FEATURES/phoible-segments-features.tsv \
+     | grep -vE '^[a-z]$'
+
+These are romanization-style spellings (``kp``, ``nts``,
+``uei``, ``*R``) attributable to source-database orthography
+conventions [inference — source attribution unverified; F-5
+prep narrows to identifying the contributing database]. The
+locale lesson: ``[[:print:]]`` is Unicode-aware in a UTF-8
+locale; byte-ASCII filtering requires ``LC_ALL=C``.
+
+- [x] Sweep 2026-10-06: UC-012 extension 3a2 cites Q46;
+  UC-01 6b1 and UC-009's ADR-041 citations are NFD-orthogonal
+  and left unchanged.

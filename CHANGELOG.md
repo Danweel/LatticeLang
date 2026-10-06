@@ -5,6 +5,50 @@ All notable changes to LatticeLang will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Add the curated IPA chart pass-list (`data/ipa_chart.json`):
+  pulmonic consonants and affricates in vendored PHOIBLE-verbatim
+  spellings (ADR-052), with a provenance block and vendor-gated
+  curation tests. IPA-reference chart membership is intersection
+  with this list — never heuristics.
+- Add the four attested non-pulmonic implosives (U+0253, U+0257,
+  U+0284, U+0260) to the chart pass-list, with an exact-group
+  membership test.
+
+### Changed
+- Institute the `deferred` map in `data/ipa_chart.json` for
+  chart-canonical symbols lacking a PHOIBLE features row; park
+  the voiced uvular implosive (U+029B) — only the voiceless
+  variant (U+029B U+0325) is attested. Vendor-gated tests flag
+  promotion if PHOIBLE gains a row.
+- Correct the derive-pipeline join figures after fixing the NFC
+  normalization seam: shared emitted symbols 2,077 → 2,098;
+  attested-but-featureless 83 → 62; features-only unattested
+  85 → 66. The join normalizes both sides to NFC for matching;
+  emitted spellings stay PHOIBLE-verbatim (ADR-052).
+- Record the ASCII/homoglyph spelling-variant ruling (Q46) in
+  the dc_ipa_reference Implementation Bindings: one Unicode
+  spelling per glyph, ASCII variant rows drop via intersection
+  with drop-log counting, typed-lookalike input tolerance
+  delegated to the near-miss layer (ADR-041).
+
+### Dependencies
+- Vendor the pinned PHOIBLE 2.0 release into the repository
+  (dev-862bec9, hash pinned in PROVENANCE.txt; bundling
+  decision 2026-10-04): repository and sdist carry all data,
+  tests, scripts, and docs; the wheel distributes the runtime
+  library plus the precomputed ipa_reference.json only.
+
+### Tests
+- 109 passing
+
+### Removed
+- Remove the empty placeholder `data/ipa_reference.json`: it is
+  the derive script's OUTPUT, emitted fresh; the curated chart
+  file is the INPUT.
+
 ## [0.3.0] — 2026-09-30
 
 ### Added

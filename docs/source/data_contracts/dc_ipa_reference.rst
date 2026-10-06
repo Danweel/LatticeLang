@@ -271,6 +271,20 @@ Bindings recording how the Q38 build implements this contract.
 They bind ``scripts/derive_ipa_reference.py``; they add no
 schema fields.
 
+Spelling Variants
+~~~~~~~~~~~~~~~~~
+
+The derive script mirrors PHOIBLE-verbatim spellings from the
+vendored data; chart membership uses intersection semantics.
+Rows whose symbols consist solely of ASCII characters (88 in
+the FEATURES table, excluding single lowercase letters that
+coincide with IPA symbols; probe 2026-10-06) are
+romanization-style spellings from source databases — off-chart,
+dropped with counting, no ASCII-to-Unicode normalization map.
+User-input tolerance for typed lookalikes is delegated to the
+near-miss similarity layer (:ref:`ADR-041`) at runtime.
+Evidence and probes: :ref:`Q46`.
+
 Chart membership filter
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -282,14 +296,16 @@ provenance block and the ``ipa_chart_year`` recorded in the
 emitted ``pinned_sources``. Membership is INTERSECTION, never
 heuristic approximation: symbols attested in PHOIBLE but absent
 from the chart are dropped to the drop-log with their
-attestation counts (same treatment as the shared-symbol
-restriction); chart-canonical symbols lacking a features row
-raise. (The ``ç`` specimen RESOLVED 2026-10-05: the features
-matrix spells it decomposed — ``c`` + U+0327 — while the
-listing spells it precomposed, U+00E7; the derive join
-normalizes both sides to NFC, per the Shared-symbol restriction
-correction. The chart file transcribes vendored forms, so the
-intersection holds.)
+attestation counts (same treatment as the shared-symbol restriction);
+chart-canonical symbols lacking a features row raise — UNLESS
+parked in the chart file's ``deferred`` map, where each symbol
+records a reason string (fail-loud with stated pending, never
+silent omission). Deferred symbols sit outside the emission
+groups; vendor-gated tests re-verify their genuine
+featurelessness and fail if PHOIBLE gains a row (the promotion
+trigger). Current roster: the voiced uvular implosive
+(U+029B) — only the voiceless variant (U+029B U+0325) is
+attested (substring probe, 2026-10-06).
 
 Exempt routes: ``special_combinations`` (``aː``, ``m̩``, tone
 letters) enter via the curated overrides file and contract
@@ -393,8 +409,10 @@ variants (listing ``ʰ`` U+02B0 vs features ``ʱ`` U+02B1 —
 a curated alias question, follow-up F-6); remainder:
 order-variant aspiration, partial breathy-voice nasals,
 click accompaniments, and one legacy artifact row (ASCII
-capital N, U+004E; provenance under investigation). Full
-table: :ref:`q36-featureless-audit`.
+capital N, U+004E; provenance under investigation). The
+ASCII N row is kin to a broader family of 88
+ASCII-orthography rows in the features data (ruling and
+probes: :ref:`Q46`). Full table: :ref:`q36-featureless-audit`.
 
 Tonemes
 ~~~~~~~
@@ -422,8 +440,7 @@ claim, not a linguistic verdict.
 
 Scope: the ladder describes the 2,160 attested symbols
 only. The 66 features-only unattested symbols
-(corrected 2026-10-05, NFC join) carry no tier.
-under any label — they are excluded from the build pending
+(corrected 2026-10-05, NFC join) carry no tier under any label — they are excluded from the build pending
 follow-up **Q36 F-2**. User-created symbols outside the reference
 table never receive a tier: they are the ``custom`` path in
 :ref:`dc_phoneme`, which has no PHOIBLE attestation to

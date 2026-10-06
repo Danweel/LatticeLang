@@ -218,8 +218,8 @@ keep both registries synchronized in the same commit:
    new documentation, test-suggestion, or implementation items
    (mark implementation items explicitly as later-phase).
 
-Bonus: Ctrl-F workflow — noted; from now on, whenever I draft an
-ADR or answer a question, I'll prompt you explicitly: "Remember
+Bonus: Ctrl-F workflow — noted; from now on, whenever LLM drafta an
+ADR or answer a question, it prompts USER explicitly: "Remember
 the question-side sync: status line + Status Overview row."
 Same in reverse for new questions. This adds a user manual check as well.
 
@@ -256,6 +256,101 @@ Question Lifecycle
 1. **OPEN** — New question identified
 2. **ANSWERED** — Decision made, documented in ``questions.rst``
 3. **IMPLEMENTED** — Coded and tested; update status
+
+Question Entry Format
+---------------------
+
+:Applies to: ``docs/source/research/questions.rst``
+
+Every question has TWO homes that must stay synchronized:
+(1) a Status Overview table row, and (2) a detailed entry body.
+Both change in the same commit.
+
+Structure
+~~~~~~~~~
+
+Each entry follows this exact order:
+
+.. code-block:: rst
+
+   .. _QNN:
+   .. _qNN-label-text:
+
+   QNN: [SCOPE] Question Title
+   ===========================
+
+   :Status: OPEN | ANSWERED (date, :ref:`ADR-XXX`) | IMPLEMENTED
+   :Scope: [PHONO] | [SUITE] | [ORTHO] | [MORPH] | [DOCS-WIDE]
+
+   **Question.** One paragraph stating the problem or decision
+   needed. Use imperative phrasing ("Which...?", "How should
+   the pipeline handle...?").
+
+   **Answer.** For ANSWERED questions only. One paragraph
+   stating the ruling, citing the binding location
+   (e.g., ":ref:`dc_ipa_reference` Implementation Bindings").
+   Include the date and any key rationale.
+
+   **Evidence.** For ANSWERED questions where empirical
+   verification occurred. Include probe commands with
+   ``[verified: output]`` tags, counts, and provenance notes.
+   Commands should be paste-safe (no clipboard Unicode,
+   ``LC_ALL=C`` where applicable).
+
+   **Dependencies.** Bulleted list of related questions,
+   ADRs, use cases, or data contracts using ``:ref:`` roles.
+
+   **Action items.** Bulleted checkboxes (``- [ ]``) for
+   follow-up work. If deferred, mark as parked/post-MVP.
+
+Label convention
+~~~~~~~~~~~~~~~~
+
+Stack two labels above the heading:
+- Short form (``.. _QNN:``) for internal references
+- Long form (``.. _qNN-label-text:``) for semantic links
+
+The short label matches the Status Overview table's Related
+column (e.g., ``:ref:`Q46```). The long label allows
+descriptive prose references (e.g., ``:ref:`q46-ascii-spelling-variants```).
+
+Status Overview row
+~~~~~~~~~~~~~~~~~~~
+
+The Status Overview list-table row mirrors the entry's
+metadata:
+
+.. code-block:: rst
+
+   * - QNN
+     - Short topic description
+     - STATUS (date, :ref:`ADR-XXX`)
+     - Blocks / Resolved / Non-blocking
+     - :ref:`ADR-YYY`, :ref:`QMM`
+
+Rules:
+- **Same-commit sync:** Changing the entry's Status requires updating the table row in the same commit.
+- **Blocks field:** State whether this blocks MVP or another question. Use "Non-blocking" if open but not urgent.
+- **Related column:** List ADRs and questions that are dependencies or consequences.
+
+Example — see Q41 (pastes you shared) for a full
+illustration of the dropdown-admonition style used for
+OPEN/PARKED questions. The Q46 draft I provided uses the
+simple prose style (better for ANSWERED rulings; dropdowns
+clutter answered entries).
+
+When to create a question
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a Q entry when:
+- A binding decision is needed (not covered by an existing ADR)
+- An empirical finding needs documented evidence (probe output, counts, locale lessons)
+- A follow-up follow-up (F-1, F-2...) is scoped as a separate investigation
+
+Do NOT create a Q entry for:
+- TODO items that lack a decision/question shape
+- Glossary terms (use glossary.rst)
+- Minor clarifications that fit in a docstring or comment
 
 Sphinx Extensions in Use
 ------------------------
@@ -539,42 +634,233 @@ exists in the rendered HTML. Case-variant stacked terms may
 raise duplicate-term warnings (matching is case-insensitive,
 Sphinx ≥ 3.0).
 
+Sentinel greps for glossary edits: glossary term lines are
+INDENTED (definition-list syntax nested in the glossary tree),
+so a column-0 anchor like ``grep -n '^romanization'`` never
+matches — an empty result can mean "not landed" OR "landed at
+indent." Match at the actual indentation instead, allowing any
+leading whitespace::
+
+   grep -nE '^[[:space:]]*romanization$' glossary.rst
+
+(Lineage 2026-10-06: a landed glossary entry read as "not
+landed" because the sentinel assumed column 0.)
+
+Glossary Entry Format
+~~~~~~~~~~~~~~~~~~~~~
+
+:Applies to: ``docs/source/glossary.rst``
+
+Structure
+~~~~~~~~~
+
+Multi-term entries use **stacked definition-list lines** (RST
+native). Each term line is a single synonym/alias — do NOT use
+commas to separate terms, as this registers as a single term
+with commas in its name (broken ``:term:`` references).
+
+.. code-block:: rst
+
+   term name
+      Definition sentence ending with a period. Further
+      explanation on continuation lines aligned with the first
+      word of the definition. Synonyms or aliases that render
+      identically go on stacked term lines.
+
+   alternate spelling
+      (same definition block, indented continuation of the
+      parent term's definition)
+
+Example
+~~~~~~~
+
+romanization
+   Writing a language in the Latin alphabet (or another
+   adopted script) rather than its native script, or
+   transcribing speech in practical letter-spellings rather
+   than IPA. Romanized spellings differ from IPA transcriptions
+   and can resemble multi-glyph IPA sequences (e.g., ``ts`` vs
+   t͡s); PHOIBLE carries some source data in romanized form.
+
+   Also called: practical orthography, transcription (context-dependent).
+
+Rules
+~~~~~
+
+- **Definition first:** Write the term entry before referencing it elsewhere. Same-commit requirement per documentation standards.
+- **One-period sentences:** Definitions should read as clean prose, not run-on chains.
+- **Aliases:** Stacked term lines for common synonyms. Case variants may raise duplicate warnings (Sphinx ≥ 3.0 matching is case-insensitive).
+- **Cross-links:** Use ``:term:`` roles liberally in definitions for linked glossaries. Avoid circular chains.
+- **Prose-friendly:** The definition should make sense out of context when read in isolation (user-facing docs may render the glossary as a standalone page).
+
+Diagnostic
+~~~~~~~~~~
+
+A broken reference warning says a term is missing while an
+anchor with its slug exists in the HTML. Cause: the term line
+contained commas or unexpected whitespace. Fix: verify the
+term line has no internal commas; if the term naturally has
+one, use a parenthetical instead (e.g., ``romanization (practical orthography)``).
+
 Changelog Standards
 ===================
 
-:Applies to: CHANGELOG.md (repo root)
+:Applies to: ``CHANGELOG.md`` (repo root)
 
 Audience and Purpose
 --------------------
 
-The CHANGELOG.md is written for **users of LatticeLang** — writers and
-linguists who run the tool — plus future contributors (including future
-you) reconstructing why outputs changed. It answers the question git
-history can't: *"What changed in the tool's behavior, and what should
-I do about it?"*
+The ``CHANGELOG.md`` is written for **users of LatticeLang** —
+writers and linguists who run the tool — plus future
+contributors (including future you) reconstructing why outputs
+changed. It answers the question git history can't: *"What
+changed in the tool's behavior, and what should I do about
+it?"*
 
-It is NOT a commit log. Commit messages serve developers; the changelog
-serves consumers. A commit describes *what was touched*; a changelog
-entry describes *what it means for someone using the output*.
+It is NOT a commit log. Commit messages serve developers; the
+changelog serves consumers. A commit describes *what was
+touched*; a changelog entry describes *what it means for
+someone using the output*.
 
-When to Update
---------------
+When to Update (Trigger Conditions)
+-----------------------------------
 
-Update CHANGELOG.md **as part of the same commit** that makes the
-change — never retroactively, never batched for later. Specifically,
-add an entry when a change is:
+Update ``CHANGELOG.md`` in the **same commit** that makes the
+change — never retroactively, never batched for later.
+Specifically, add an entry when a change meets ONE OR MORE of
+these criteria:
 
-- **User-visible**: alters output (e.g., ipa_reference.json contents,
-  rank assignments, validation warnings), behavior, or data vendored
-  from external sources
-- **Milestone-scale**: completes a use case or major pipeline stage
-  (tag a release for these)
-- **Breaking**: changes schema_version, file names, or expected input
-  formats (flag prominently — users must see this first)
+1. **User-visible output change:** alters emitted data
+   (e.g., ``ipa_reference.json`` contents, rank assignments,
+   chart pass-list membership), validation warnings, or
+   rendered text. Example: adding implosives to the chart
+   (this affects downstream inventory pre-fill and export).
 
-Do NOT add entries for internal-only work: pure refactors, test
-hardening with no behavioral change, typo fixes in docs. Those live
-(and die) in commit history.
+2. **Binding decision recorded:** a ruling that changes
+   downstream behavior, even if the code hasn't changed yet.
+   Example: Q46 spelling-variant ruling recorded in
+   ``dc_ipa_reference.rst``.
+
+3. **Data contract evolution:** modifying schema, field
+   semantics, or vendor-pinning rules (e.g., introducing the
+   ``deferred`` map in the chart file).
+
+4. **Test count milestone:** suite size crosses a round number
+   or completes a major batch (e.g., 109 tests after implosives
+   batch).
+
+Do NOT add entries for:
+- Pure refactors with no behavioral change
+- Typo fixes in documentation (unless they affect user understanding)
+- Internal-only test hardening (new tests that don't alter behavior)
+- Editor configuration, CI tweaks, .gitignore polish
+
+Granularity
+~~~~~~~~~~~
+
+Accumulate under ``[Unreleased]`` until release time:
+- **Individual story commits** (e.g., "add implosives test", "add implosives data") — keep separate bullets
+- **Milestone-scale completions** (e.g., "implosives batch complete, 4/5 symbols added") — group under a parent bullet
+- **Release tags** — promote ``[Unreleased]`` to a dated version heading (e.g., ``## [0.2.0] — 2026-10-06``), link to GitHub tag
+
+Rule of thumb: if the commit message contains a colon and
+three short phrases (e.g., "Add implosives: test-first,
+data-entry, deferred ʛ"), that's a grouping candidate.
+
+What to Include
+---------------
+
+Follow Keep a Changelog (https://keepachangelog.com/en/1.0.0/)
+section headings, in this order:
+
+- **Added** — new features, files, data contract elements
+- **Changed** — modified behavior; state old → new where
+  applicable
+- **Fixed** — corrected defects; describe the symptom a user
+  saw
+- **Removed** — deleted features, files, deprecated data
+- **Deprecated** — soon-to-be-removed items
+- **Dependencies** — external data or library pins (e.g.,
+  PHOIBLE DOI, version hashes)
+- **Tests** — suite size at this version (running total,
+  brief — the reader's regression sanity check)
+
+Style Rules
+-----------
+
+- **Imperative mood** ("Add implosives", not "Added
+  implosives..." or "Adding implosives...")
+- **One bullet per discrete change**; group related
+  micro-changes under one parent bullet with sub-bullets
+- **Numbers are exact** (109 tests, not "~100"; 88 ASCII
+  rows, not "about 90")
+- **Pin versions and DOIs** where applicable (PHOIBLE hash,
+  schema version)
+- **Every release section ends with the test count**
+- **Link each release heading to its GitHub tag** (footnote-style
+  link refs at file bottom)
+- **Keep an ``[Unreleased]`` section at top** collecting
+  pending work; promote it to a dated version at release time
+
+Entry Template (Unreleased)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: markdown
+
+   ## [Unreleased]
+
+   ### Added
+   - Add the four attested non-pulmonic implosives (U+0253, U+0257,
+     U+0284, U+0260) to the curated chart pass-list
+     (data/ipa_chart.json), with an exact-group membership test.
+
+   ### Changed
+   - Institute the `deferred` map in data/ipa_chart.json; park
+     the voiced uvular implosive (U+029B) — unattested voiced
+     in PHOIBLE 2.0, only the voiceless variant (U+029B U+0325)
+     has a features row. Promotion occurs if PHOIBLE gains a
+     row (vendor-gated test guards it).
+   - Record the ASCII/homoglyph spelling-variant ruling (Q46)
+     in the dc_ipa_reference Implementation Bindings.
+
+   ### Tests
+   - 109 passing
+
+Example Entry (Full Release Tag)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: markdown
+
+   ## [0.2.0] — 2026-10-06
+
+   ### Added
+   - Non-pulmonic consonant batch: implosives (ɓ ɗ ʄ ɠ) to
+     chart pass-list and membership tests.
+
+   ### Changed
+   - Chart file schema extended with `deferred` map for
+     chart-canonical but PHOIBLE-unattested symbols.
+   - ASCII/homoglyph spelling-variant ruling documented in
+     IPA Reference contract.
+
+   ### Tests
+   - 109 passing
+
+   [Full diff](https://github.com/Danweel/LatticeLang/compare/v0.1.0...v0.2.0)
+
+Backfill Policy
+~~~~~~~~~~~~~~~
+
+If a milestone completes without a CHANGELOG entry:
+- Create the entry **now**, not at the next milestone
+- Date the release heading to the actual completion date
+- Use the commit history to reconstruct the summary (do not invent numbers; count tests, verify hashes)
+- Add a note in the commit message: "CHANGELOG backfill for v0.2.0"
+
+This keeps the record honest without allowing indefinite
+drift. Last backfill threshold: **two weeks** from commit
+date — if more than 14 days pass, add a preamble warning
+("Backfilled entry, completed 2026-10-06").
 
 What to Include
 ---------------

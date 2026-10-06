@@ -741,6 +741,15 @@ Glossary
       or /ai̯/ in *aire* in careful speech. Rare in English.
       Contrast :term:`falling`.
 
+   romanization
+      Writing a language in the Latin alphabet (or another adopted
+      script) rather than its native script, or transcribing speech
+      in practical letter-spellings rather than IPA. Romanized
+      spellings can collide with multi-glyph IPA sequences (the
+      letters "ts" are also a PHOIBLE-verbatim affricate spelling),
+      and PHOIBLE carries some source data in romanized form (88
+      ASCII-only symbol rows; Q46 evidence).
+
    rounding
    rounded
       A vowel feature: lips form a circular shape. Contrasts with

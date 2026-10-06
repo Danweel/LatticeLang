@@ -4,7 +4,7 @@ Contract: dc_ipa_reference.rst Implementation Bindings,
 "Chart membership filter" — membership is INTERSECTION with the
 vendored PHOIBLE shared-symbol set, never heuristic approximation.
 
-The chart file (data/ipa_chart.json) is CURATED: hand-transcribed
+The chart file (data/ipa_chart.json) is CURATED: hand-transcribed (though programmatically sourced from PHOIBLE to avoid copy-paste ASCII errors)
 from the IPA chart (1999 Handbook; 2015 rendering). Curation is
 checked, not trusted: every symbol must exist as a features row
 in the vendored PHOIBLE data. A typo'd or hallucinated spelling
@@ -122,3 +122,19 @@ def test_deferred_symbols_are_genuinely_featureless():
         "deferred but features exist (move to emission group): "
         + ", ".join(misplaced)
     )
+
+# --- Non-pulmonic batch 1: implosives --------------------------------
+
+IMPLOSIVES = ["\u0253", "\u0257", "\u0284", "\u0260"]
+# ɓ U+0253, ɗ U+0257, ʄ U+0284, ɠ U+0260
+# ʛ U+029B (uvular) is chart-canonical but PHOIBLE-featureless: F-3
+# deferred, reason recorded in the chart file's deferred map.
+
+def test_implosives_group_exact():
+    """Non-pulmonic batch 1: the four PHOIBLE-attested implosives,
+    exactly, plus the fifth chart symbol parked in deferred. List
+    equality pins membership, order, and absence of ASCII variant
+    spellings (homoglyph ruling, dc_ipa_reference IB)."""
+    chart = load_chart()
+    assert chart["non_pulmonic_consonants"] == IMPLOSIVES
+    assert "\u029B" in chart["deferred"]

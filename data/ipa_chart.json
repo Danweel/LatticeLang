@@ -5,7 +5,7 @@
     "ipa_handbook": "1999"
   },
   "attribution": "Symbol list transcribed from the IPA chart (International Phonetic Association, Handbook of the International Phonetic Association, 1999; 2015 chart rendering). IPA chart reproduced with permission per IPA usage terms. Spellings follow the vendored PHOIBLE 2.0 data (ADR-052).",
-  "notes": "Curated pass-list for the dc_ipa_reference chart-membership filter. Fixed-cell chart symbols only; affricates and ejectives are governed by separate decisions (dc_ipa_reference Implementation Bindings). Pending verification against the chart artifact for parenthesized cells (e.g. uvular nasal).",
+  "notes": "Curated pass-list for the dc_ipa_reference chart-membership filter. Fixed-cell chart symbols only; affricates and ejectives are governed by separate decisions (dc_ipa_reference Implementation Bindings). Pending verification against the chart artifact for parenthesized cells (e.g. uvular nasal). Uvular implosive is chart-canonical but PHOIBLE-unattested voiced (see deferred).",
   "pulmonic_consonants": [
     "p",
     "b",
@@ -67,7 +67,14 @@
     "ʎ",
     "ʟ"
   ],
-  "non_pulmonic_consonants": [],
+  "non_pulmonic_consonants": [
+    "\u0253",
+    "\u0257",
+    "\u0284",
+    "\u0260"
+  ],
+  "deferred": {
+    "\u029B": "Voiced uvular implosive: on the 2015 IPA chart but no PHOIBLE 2.0 features row — only the voiceless variant \\u029B\\u0325 is attested (substring probe, 2026-10-06). Diacritic stripping to manufacture a match would violate PHOIBLE-verbatim storage (ADR-052); promote to non_pulmonic_consonants if PHOIBLE gains a plain voiced row."  },
   "vowels": [],
   "other_symbols": [],
   "affricates": [

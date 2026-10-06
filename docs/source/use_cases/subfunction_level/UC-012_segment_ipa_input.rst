@@ -61,7 +61,9 @@ Extensions
   - 3a1: The character is flagged invalid; segmentation
   continues from the next position
   - 3a2: Nearest-match suggestions come from the reference
-  table (:ref:`dc_ipa_reference`)
+  table (:ref:`dc_ipa_reference`); typed ASCII lookalikes
+  resolve here at the input layer, never in storage
+  (:ref:`Q46`)
   - → See :ref:`uc009` extension 5a for the user-facing path
 
 * **4a:** Same-length alternates, inventory present

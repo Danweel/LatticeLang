@@ -75,6 +75,10 @@ Paste-Check Discipline
 - JSON pastes/edits validated first (python -m json.tool — the JSON py_compile);
   no Unicode symbols through the clipboard (construct via chr()/escapes — combining
   marks and lookalikes corrupt through chat round-trips).
+- Sentinel patterns: prefer -F (fixed-string) unless regex is needed and explained; the sentinel
+  must be unique to the new edit — a token present in old content proves nothing; annotate expectations with the scope the command actually measures.
+- Sentinel phrases: prefer a single distinctive word over multi-word phrases — wrapped RST prose splits phrases across lines and a correct text greps empty.
+  When the phrase matters, join lines first: tr '\n' ' ' < file | grep -o 'phrase'.
 
 For example::
 
