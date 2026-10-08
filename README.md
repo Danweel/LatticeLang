@@ -139,7 +139,7 @@ Ultimately, I would love to create a full suite, something aimed at conglangers 
 
 #### Program stuff
 
-- **Libre & Open**: Built with Python and customtkinter (common GUI), licensed under GPL-3.0. Fork to mess with the implementation or theories. Contribute upstream?
+- **Libre & Open**: Built with Python and PySide6 (GUI, per the toolkit ADR), licensed under GPL-3.0. Fork to mess with the implementation or theories. Contribute upstream?
 - **Project-based workflow**: Saving and managing more than one conlang. Working on different parts or modules at different times. Changes doesn't mean you have to start over from the initial steps.
 - **Font options**: Comes packaged with v7 SIL fonts (Andika, Charis, Dolous, Gentium), Junicode 2, STIX 2, Liberation 2, Liguistics Pro (from the LinguaFranca>Heuristica>Utopia lineage), Open Sans (from the Noto>Droid Sans lineage), and GNU FreeFont to include a monospace character set, covering a wide variety of style options with near-total character coverage and encodings (Type 1, Open, TrueType, WOFF, etc.).
 

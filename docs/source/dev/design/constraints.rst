@@ -33,8 +33,29 @@ single syllable boundary.
    "max_coda_length","Structural","Within syllable","Upper bound on consonant count in coda"
    "position_restrictions","Positional","Within syllable","Forbidden phonemes per position (onset/coda/nucleus)"
    "ocp","Markedness","Within syllable","Obligatory Contour Principle: no adjacent segments sharing specified feature (place, voicing, etc.)"
-   "harmony","Harmonic","Within syllable (MVP only)","Features must agree across adjacent segments; cross-syllable deferred"
+   "harmony","Harmonic","Within syllable (MVP only)","Features must agree across adjacent segments; **cross-syllable deferred**"
    "prohibited_clusters","Concrete","Any (configurable)","Explicit list of banned consonant sequences"
+
+.. note::
+   **Harmony scoping (original supposition, clarified 2026-10-08).**
+   Harmony is canonically cross-syllable; the MVP row scopes it
+   within-syllable because adjacency machinery is built first —
+   cross-syllable agreement is the planned Phase Delta upgrade
+   (:ref:`phases`). Within-syllable vowel agreement alone is
+   near-vacuous; it is scaffolding, not the endpoint. Constraint
+   authoring is deliberately future-facing: the interface is
+   designed for features the core engine will fully exercise
+   only later.
+
+.. note::
+   **Sonority rank consumption (clarified 2026-10-08).** Null
+   ranks exist only in the reference layer (dc_ipa_reference),
+   where they signal an uncertain derivation; UC-01 treats null
+   as a pre-fill prompt, and every phoneme carries a concrete
+   rank (proposed, adjusted, or manually assigned for custom
+   symbols) before constraints exist (:ref:`uc01`). SSP
+   therefore consumes phoneme-level ranks that are always
+   present. See :ref:`dc_phoneme`'s field definition.
 
 Post-MVP Constraints
 --------------------

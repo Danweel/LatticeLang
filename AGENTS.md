@@ -9,12 +9,15 @@ docs/source/dev/governance/collaboration_protocol.rst — this file
 keeps summaries and pointers only.
 
 ## Cold-Start Kit (ASK for these at session start)
-1. This file
+1. This file (AGENTS.md)
 2. Status Overview table — top of docs/source/research/questions.rst
 3. ADR Index — top of docs/source/dev/governance/decisions.rst
+4. documentation_standards.rst
+5. collaboration_protocol.rst
+6. Session bootstrap: run the epoch check (see collaboration_protocol.rst) before any work
 
 Everything else is retrieved on demand. Past-session memory is never
-a source of current state; the repo is.
+a source of current state; the repo is. Warn if any of these files are missing.
 
 ## Retrieve on Demand (task triggers)
 - Documentation edit or pasteable block → docs/source/dev/governance/documentation_standards.rst
@@ -24,7 +27,7 @@ a source of current state; the repo is.
 - Claiming anything exists in the repo → grep first (Verification Discipline)
 - Adding or changing to existing Qs or ADRs → determine if cross referencing applies
 - Process/paste/verification rules in doubt → docs/source/dev/governance/collaboration_protocol.rst
-- Resuming a session → docs/operational/session_log.rst (newest entry first; operational, not published)
+- Resuming mid session → docs/operational/session_log.rst (newest entry first; operational, not published)
 
 ## Tech Stack
 - Python ≥3.11; Poetry (in-project venvs); pytest

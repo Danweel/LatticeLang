@@ -54,8 +54,6 @@ Serialization Example
 
 .. code-block:: json
 
-.. code-block:: json
-
    {
      "schema_version": "0.1.0",
      "symbol": "t̠ʃ",

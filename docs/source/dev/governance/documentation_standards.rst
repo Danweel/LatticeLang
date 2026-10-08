@@ -352,6 +352,12 @@ Do NOT create a Q entry for:
 - Glossary terms (use glossary.rst)
 - Minor clarifications that fit in a docstring or comment
 
+Contract-consumer sweep: when a data contract introduces an optional/null
+field, a nullable enum, or relaxes an invariant, grep the repo for the
+field name and confirm each consumer (contract, use case, design doc)
+either handles the new possibility or records an open question about it.
+Silent consumers are assumed total — that assumption is the drift.
+
 Sphinx Extensions in Use
 ------------------------
 
@@ -411,6 +417,14 @@ Full-build audits
    Build output lives in ``docs/_build/`` (Sphinx convention,
    gitignored). ``AGENTS.md`` is a tracked file — it is the
    session-start bootstrap index.
+
+**Design-doc amendments** preserve the original supposition.
+When implementation reality contradicts a design doc's claim,
+the claim is not rewritten — it's amended with a dated note
+stating what changed and why, with a warrant (ADR or Q-number).
+A silent rewrite is drift; an overturn without rationale is
+"whatever works." Living docs (like this one) accumulate history;
+they don't erase it.
 
 RST indentation in nested lists
 -------------------------------

@@ -249,6 +249,18 @@ Status Overview (changes)
      - ANSWERED (2026-10-06, :ref:`dc_ipa_reference` Implementation Bindings)
      - Resolved
      - :ref:`ADR-052`, :ref:`ADR-041`
+   * - Q47
+     - OCP Feature Neutrality
+     - OPEN
+     - Non-blocking?
+     - :ref:`uc03`
+
+Q47: OCP behavior when a participant lacks the designated feature
+==================================================================
+
+:Status: OPEN
+:Scope: [PHONO] — constraints (UC-03)
+
 
 Gap Analysis: MVP Impact
 ------------------------
@@ -2565,3 +2577,23 @@ locale; byte-ASCII filtering requires ``LC_ALL=C``.
 - [x] Sweep 2026-10-06: UC-012 extension 3a2 cites Q46;
   UC-01 6b1 and UC-009's ADR-041 citations are NFD-orthogonal
   and left unchanged.
+
+.. _Q47:
+.. _q47-ocp-feature-neutrality:
+
+Q47: OCP behavior when a participant lacks the designated feature
+==================================================================
+
+:Status: OPEN
+:Scope: [PHONO] — constraints (UC-03)
+
+**Question.** ``ocp`` triggers on a designated shared feature
+(e.g., ``place``, ``voice``). Custom phonemes carry user-supplied
+feature dictionaries, which may omit the designated feature.
+What happens when a participant lacks it — violation, pass, or
+neutral?
+
+**Context.** UC-03's harmony (Q42) already defines "absent
+categories are neutral" for the analogous case. Does OCP adopt
+the same neutrality rule, or does absence fail loudly? Decided
+before UC-03 implementation; blocked on nothing.

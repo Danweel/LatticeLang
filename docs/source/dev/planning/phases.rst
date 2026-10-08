@@ -231,11 +231,19 @@ linguistics suites:
    "Target audience","Casual conlangers","Serious conlangers","Professional linguists"
    "Learning curve","Low","Moderate","High"
    "Extensibility","Limited","High (plugins planned)","Very High"
-   "Cost","Free/Paid","Free (FOSS, MIT)","Free (installed)"
+   "Cost","Free/Paid","Free (GPL-3.0+)","Free (installed)"
    "Primary use case","Fun/Experiment","Naturalistic conlangs","Field documentation"
 
 Examples: Hobbyist tools include simple web-based phoneme generators.
 Professional suites include SIL FieldWorks and Praat.
+
+.. note::
+   **License correction (2026-10-08).** This table originally
+   read "Free (FOSS, MIT)" — a pre-ADR-001 relic. The project
+   license is GPL-3.0-or-later per the LICENSE file,
+   pyproject.toml, and :ref:`ADR-001` (which records the switch
+   from an early CC-BY-SA consideration). Caught during the
+   2026-10-08 doc-reality review.
 
 References
 ----------

@@ -49,8 +49,19 @@ Verification Discipline
 Paste-Check Discipline
 ----------------------
 
-- After pasting any code block, run `python -m py_compile <file>` before pytest — separates paste placement from logic in a second.
-- After pasting a code block on a file getting touched a lot, check for DUPLICATED definitions:
+- - Epoch check (session bootstrap): at session start, run
+  ``git log -1 --oneline && git status --short --branch &&
+  poetry run pytest -q | tail -1`` before any work. Expected:
+  HEAD matches origin/main (phantom-push detection), working
+  tree clean or dirt explained, suite passing. Unexplained dirt
+  is inspected (``git diff``) before proceeding — a modification
+  you can't attribute is a finding, not a chore. (Lineage:
+  2026-10-07, the day-after-push state where receipt and repo
+  had to be reconciled.)
+- After pasting any code block, run `python -m py_compile <file>`
+  before pytest — separates paste placement from logic in a second.
+- After pasting a code block on a file getting touched a lot,
+  check for DUPLICATED definitions:
   re-pasted blocks stack silently in Python — later defs win
   with no error, so py_compile cannot catch this class. Scan
   `grep -n '^def \|^class ' <file>` and eyeball for repeats
@@ -79,6 +90,12 @@ Paste-Check Discipline
   must be unique to the new edit — a token present in old content proves nothing; annotate expectations with the scope the command actually measures.
 - Sentinel phrases: prefer a single distinctive word over multi-word phrases — wrapped RST prose splits phrases across lines and a correct text greps empty.
   When the phrase matters, join lines first: tr '\n' ' ' < file | grep -o 'phrase'.
+- Session bootstrap (epoch check): At session start, run the
+  epoch check command triple to confirm repository state before
+  beginning work. Expected: HEAD matches origin/main, working
+  tree clean (or dirty files explained by known edits), test
+  suite passes. History: phantom-push detection 2026-10-07.
+
 
 For example::
 
