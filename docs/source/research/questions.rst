@@ -2639,3 +2639,51 @@ five bare letters are parked in the chart deferred map
 **Dependencies.** :ref:`Q46` (spelling variants), ADR-052
 (PHOIBLE-verbatim storage), derive-script rewrite task 2
 (decision needed before emission step).
+
+1. How many accompanied-cluster rows actually exist in the
+features data, and are they all clicks? Our probe covered
+click-containing rows (156 in the listing; the features side
+had 15/40/29/33/39 = 156 substrings). But the same structural
+question applies to other multi-part symbols — prenasalized
+stops like ᵐb, affricate-plus-modifier forms, geminate
+clusters. If the features table's multi-symbol rows are mostly
+clicks plus a handful of other families, an admission policy
+might be one rule with a small whitelist; if it's a sprawl,
+exclusion-with-overrides becomes more attractive.
+
+2. What do cluster features rows look like? Whether PHOIBLE
+assigns feature bundles to whole clusters (they do — each is
+a row with a full feature vector) matters for whether emitted
+cluster entries would even slot into our schema cleanly.
+Mostly a reading exercise against a few sample rows.
+
+3. What does the need actually look like from the user side?
+This is the use-case lens: does any UC describe a user
+importing an inventory containing kǀ? If the use cases
+(the spec) never demand clusters, the honest MVP answer
+may be "exclude, override path for the ambitious," and
+the decision becomes easy rather than researched. If some
+UC does assume them, the criterion question becomes real.
+
+**Research agenda (added 2026-10-11, ahead of the decision).**
+
+- Spec-first check: do any use cases assume cluster phonemes?
+  (grep use_cases/ for cluster/import examples; the MVP answer
+  is bounded by what the spec demands, not by what PHOIBLE
+  contains.) UC-01's custom path may already cover the ambition.
+- Census: how many multi-part symbols carry features rows in
+  the vendored data, grouped by family (clicks, prenasalized
+  stops, affricate-modifiers, geminates)? Determines whether
+  an admission policy is one rule plus a small whitelist, or
+  a sprawl better handled by exclusion-plus-overrides.
+- Shape check: read a few sample cluster rows (e.g. the k-
+  prefixed clicks) and confirm a full feature vector exists
+  per cluster row, so emitted entries would slot into the
+  existing schema without new field machinery.
+- Scope probe: the 156 click-containing listing rows are
+  known; the equivalents for other families are not.
+
+Decision target: before task 2's emission step. Not blocking
+the vowels batch or the completeness-floor test (phrase that
+test in terms of CHART CELLS, not emitted symbols, to stay
+decoupled from this question).

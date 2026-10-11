@@ -57,6 +57,9 @@ Verification Discipline
   unavoidable; if the human spots drift (self-corrections
   mid-message, placeholder brackets, repeated draft blocks),
   say so explicitly and reset to a fresh, focused request.
+- When a sentinel contradicts directly observed file content,
+  interrogate the sentinel (case, wrapping, flags) before
+  re-doing the edit.
 
 .. _paste-check-discipline:
 
