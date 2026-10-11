@@ -1,3 +1,35 @@
+2026-10-09 — non-pulmonic batch 2 (clicks) + Q48 opened
+------------------------------------------------------
+Landed: all five click letters (U+0298, U+01C0, U+01C1,
+U+01C2, U+01C3) parked in data/ipa_chart.json deferred map
+— probes 2026-10-08 found 0 bare rows in BOTH the listing
+and features tables; PHOIBLE attests clicks only as
+accompanied clusters (velar-closure prefixes + release
+modifiers). +1 test (test_clicks_all_deferred), suite 110.
+NEW: scripts/add_deferred.py — write-mode deferred adder
+(dry-run, double-run abort guard, ensure_ascii round-trip);
+chart file is never hand-edited for deferrals again. Side
+effect, accepted: whole-file escape normalization (raw
+glyphs → \u escapes throughout; parser-equivalent, verified
+all-ASCII receipt; wheel never ships this file). Q48 opened
+(cluster admission policy for accompanied symbols — blocks
+task-2 emission step). Docs c9385f2 landed earlier this
+session (constraints reality-check, Q47, license/toolkit
+corrections). AGENTS.md stale session-log pointer fixed
+(docs/_operational/). Method-notable: phantom save struck
+TWICE (script ran old draft from disk; corrected script ran
+new args against old code) — save/close-before-run now
+habit; REINJECT convention exercised first time (AGENTS.md
+re-pasted whole, found stale pointer). generate_deferred_
+entries.py deleted (subsumed by add_deferred.py).
+
+NEXT: vowels batch (vowel quadrilateral), completeness-floor
+test, then task 2 derive rewrite (Q48 decision needed at
+emission step). Deferred: F-4 ejectives, F-5 prep, F-6,
+audit annex, symbol-inventory doc (diff-reading aid;
+generate after this commit). Doc-contact rotation next up:
+theoretical_framework.
+
 2026-10-06 — non-pulmonic batch 1 (implosives) + Q46 ruling
 ------------------------------------------------------------
 Landed: four attested implosives (U+0253, U+0257, U+0284,
@@ -71,3 +103,4 @@ Deferred (small, standalone): setup_contrib.sh content review
 (likely stubs; undocumented); .gitignore template tidy
 (irrelevant framework blocks). Committed as two stories:
 program work (task 1) then repo housekeeping.
+

@@ -9,6 +9,17 @@ from the IPA chart (1999 Handbook; 2015 rendering). Curation is
 checked, not trusted: every symbol must exist as a features row
 in the vendored PHOIBLE data. A typo'd or hallucinated spelling
 fails here, by name, before it can pollute ipa_reference.json.
+
+Symbol-literal conventions: all IPA symbols in this file are
+written as \\u escapes with a codepoint comment — build from
+escapes, never paste glyphs through chat (see
+collaboration_protocol.rst). Every group test declares (1) the
+escaped group list, (2) a comment naming each symbol and
+codepoint, (3) the assertion against load_chart(). Deferred
+symbols get their own assertion line rather than disappearing
+from the list — absence is asserted explicitly (the clicks
+pattern: group list stays at emitted members, deferred
+membership is its own check).
 """
 from __future__ import annotations
 
@@ -138,3 +149,17 @@ def test_implosives_group_exact():
     chart = load_chart()
     assert chart["non_pulmonic_consonants"] == IMPLOSIVES
     assert "\u029B" in chart["deferred"]
+
+
+CLICKS = ["\u0298", "\u01C0", "\u01C1", "\u01C2", "\u01C3"]
+# ʘ U+0298, ǀ U+01C0, ǁ U+01C1, ǂ U+01C2, ǃ U+01C3
+
+def test_clicks_all_deferred():
+    """Non-pulmonic batch 2: all five click letters park in
+    deferred — PHOIBLE attests only accompanied clusters
+    (kǀ, ŋǀ, ...), never bare letters, in both the listing and
+    the features table (probe 2026-10-08)."""
+    chart = load_chart()
+    assert chart["non_pulmonic_consonants"] == ["\u0253", "\u0257", "\u0284", "\u0260"]
+    for sym in CLICKS:
+        assert sym in chart["deferred"]

@@ -23,9 +23,8 @@ Verification Discipline
 - PASTE FRESHNESS: uploaded pastes older than ~3 days are
   historical snapshots; repo state always defers to fresh
   grep output.
-- Audit build must match ALL docutils severities. The grep
-  pattern `warning|error` misses CRITICAL-severity messages;
-  use `warning|error|critical` (or `-w /tmp/...` for capture).
+- Audit build must match ALL docutils severities. Use
+  `warning|error|critical` (or `-w /tmp/...` for capture).
   Lineage: two pre-existing CRITICAL messages in questions.rst
   hid from every grep audit for one build cycle (2026-10-05).
 - Markdown headings in RST files pass silently as plain text.
@@ -42,22 +41,38 @@ Verification Discipline
 - terminal rendering of combining marks is not evidence —
   identical glyphs can differ in bytes; codepoint dumps
   (U+XXXX) adjudicate spelling questions.
-
+- Characterize the metric before comparing counts: a count is
+  only comparable to another count of the SAME thing. Raw-table
+  cardinality (``cut | sort -u | wc -l``), distinct-after-NFC
+  counts, and join-derived sums measure different populations
+  and disagree by small margins legitimately (2,162 raw vs
+  2,164 implied by 2,098+66, 2026-10-08). Before flagging an
+  arithmetic anomaly, name what each side counts; if the metrics
+  differ, the reconciliation is the finding, not a bug.
+- Assistant-state signals (context degradation): repetitive
+  batches degrade generation quality — successive near-identical
+  artifacts accumulate small errors (draft-thrash). Countermeasures:
+  batches of 3+ similar artifacts go through a generating script,
+  never hand-copied; one artifact per turn when repetition is
+  unavoidable; if the human spots drift (self-corrections
+  mid-message, placeholder brackets, repeated draft blocks),
+  say so explicitly and reset to a fresh, focused request.
 
 .. _paste-check-discipline:
 
 Paste-Check Discipline
 ----------------------
 
-- - Epoch check (session bootstrap): at session start, run
+- Epoch check (session bootstrap): at session start, run the
+  epoch check command triple before any work:
   ``git log -1 --oneline && git status --short --branch &&
-  poetry run pytest -q | tail -1`` before any work. Expected:
-  HEAD matches origin/main (phantom-push detection), working
-  tree clean or dirt explained, suite passing. Unexplained dirt
-  is inspected (``git diff``) before proceeding — a modification
-  you can't attribute is a finding, not a chore. (Lineage:
-  2026-10-07, the day-after-push state where receipt and repo
-  had to be reconciled.)
+  poetry run pytest -q | tail -1``. Expected: HEAD matches
+  origin/main (phantom-push detection), working tree clean
+  or dirt explained, suite passing. Unexplained dirt is
+  inspected (``git diff``) before proceeding — a modification
+  you can't attribute is a finding, not a chore.
+  (Lineage: 2026-10-07 phantom-push; 2026-10-08 repo-reality
+  review.)
 - After pasting any code block, run `python -m py_compile <file>`
   before pytest — separates paste placement from logic in a second.
 - After pasting a code block on a file getting touched a lot,
@@ -68,7 +83,7 @@ Paste-Check Discipline
   before running tests. (Lineage: derive_ipa_reference.py
   carried 3x-duplicated helper blocks through green tests.) The LLM should help remind the USER to check for this, since they are inexperienced.
 - generation scripts end with a completion print; a silent run means a truncated paste.
-- Never paste partial blocks with `...` placeholders: full body or nothing.
+- Never paste partial blocks with `...` placeholders: full body only.
 - Shell quoting: single-quote grep/sed patterns containing backticks.
 - Save before run: check the VSCodium tab-dot / Ctrl+S before any py_compile or pytest — py_compile reads from DISK, not editor memory, so an unsaved buffer passes in the editor while the stale file runs (assistant reminds; USER checks).
 - Paste complete command output, never a trimmed summary — truncated pytest output hides vacuous-pass and wrong-test failures.
@@ -83,19 +98,13 @@ Paste-Check Discipline
   1. Include a comment block showing the target column level for each code block type
   2. Mark the start/end of sections that should be at module level
   3. Use VSCodium's "Format Document" command after pasting, then inspect visually
-- JSON pastes/edits validated first (python -m json.tool — the JSON py_compile);
+- JSON pastes/edits validated first (`python -m json.tool` — the JSON py_compile);
   no Unicode symbols through the clipboard (construct via chr()/escapes — combining
   marks and lookalikes corrupt through chat round-trips).
 - Sentinel patterns: prefer -F (fixed-string) unless regex is needed and explained; the sentinel
-  must be unique to the new edit — a token present in old content proves nothing; annotate expectations with the scope the command actually measures.
+  must be **unique to the new edit** — a token present in old content proves nothing; annotate expectations with the scope the command actually measures.
 - Sentinel phrases: prefer a single distinctive word over multi-word phrases — wrapped RST prose splits phrases across lines and a correct text greps empty.
   When the phrase matters, join lines first: tr '\n' ' ' < file | grep -o 'phrase'.
-- Session bootstrap (epoch check): At session start, run the
-  epoch check command triple to confirm repository state before
-  beginning work. Expected: HEAD matches origin/main, working
-  tree clean (or dirty files explained by known edits), test
-  suite passes. History: phantom-push detection 2026-10-07.
-
 
 For example::
 

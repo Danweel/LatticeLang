@@ -358,6 +358,17 @@ field name and confirm each consumer (contract, use case, design doc)
 either handles the new possibility or records an open question about it.
 Silent consumers are assumed total — that assumption is the drift.
 
+IPA Symbol Generation Procedure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Never paste glyphs into JSON or test files. Generate entries
+via ``scripts/generate_deferred_entries.py`` from hex
+codepoints (e.g., ``python scripts/generate_deferred_entries.py
+298 1C0 1C1`` for ʘ ǀ ǁ). The script emits JSON-ready strings
+with ``\\u`` escapes and codepoint annotations; the test file
+mirrors the same escape discipline (commented codepoints next
+to each symbol list).
+
 Sphinx Extensions in Use
 ------------------------
 

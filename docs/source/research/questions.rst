@@ -254,6 +254,11 @@ Status Overview (changes)
      - OPEN
      - Non-blocking?
      - :ref:`uc03`
+   * - Q48
+     - Accompanied-cluster admission policy (clicks)
+     - OPEN (2026-10-09)
+     - Blocks task 2 emission step
+     - :ref:`Q46`, ADR-052
 
 Q47: OCP behavior when a participant lacks the designated feature
 ==================================================================
@@ -2597,3 +2602,40 @@ neutral?
 categories are neutral" for the analogous case. Does OCP adopt
 the same neutrality rule, or does absence fail loudly? Decided
 before UC-03 implementation; blocked on nothing.
+
+.. _Q48:
+.. _q48-cluster-admission-policy:
+
+Q48: Admission policy for accompanied-cluster symbols (clicks first)
+====================================================================
+
+:Status: OPEN
+:Scope: [PHONO] — ipa_reference derive pipeline (task 2)
+
+**Question.** PHOIBLE attests click phonemes only as accompanied
+clusters (velar-closure prefix + click letter + release
+modifiers: k-, g-, ng- prefixes with aspiration/ejective/
+frication/length markings — 156 listing rows across the five
+letters). Bare click letters exist only on the IPA chart:
+0 bare rows in both the listing and the features table (probes
+2026-10-08). The chart-membership filter governs single chart
+cells only, so accompanied clusters currently have no admission
+route into ipa_reference.json. What is the policy: emit
+attested clusters (by what criterion), route them through the
+overrides mechanism, or exclude them entirely pending
+post-MVP?
+
+**Context.** Clicks are inherently two-closure segments: the
+click letter spells the anterior closure's release; the velar
+or nasal companion spells the always-present posterior
+closure. Companions are principled, not decorative — the
+prefix inventory is small (roughly k/g/ng per click type) and
+articulatorily grounded. Users encountering clicks via UC-01
+need the whole cluster as a single phoneme; typing ASCII
+lookalikes (\|, !) resolves via the near-miss layer (Q46). The
+five bare letters are parked in the chart deferred map
+(reasons cite this question).
+
+**Dependencies.** :ref:`Q46` (spelling variants), ADR-052
+(PHOIBLE-verbatim storage), derive-script rewrite task 2
+(decision needed before emission step).

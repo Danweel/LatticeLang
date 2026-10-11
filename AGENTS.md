@@ -27,7 +27,7 @@ a source of current state; the repo is. Warn if any of these files are missing.
 - Claiming anything exists in the repo → grep first (Verification Discipline)
 - Adding or changing to existing Qs or ADRs → determine if cross referencing applies
 - Process/paste/verification rules in doubt → docs/source/dev/governance/collaboration_protocol.rst
-- Resuming mid session → docs/operational/session_log.rst (newest entry first; operational, not published)
+- Resuming mid session → docs/_operational/session_log.rst (newest entry first; operational, not published)
 
 ## Tech Stack
 - Python ≥3.11; Poetry (in-project venvs); pytest
