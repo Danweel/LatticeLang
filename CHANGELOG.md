@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add the four attested non-pulmonic implosives (U+0253, U+0257,
   U+0284, U+0260) to the chart pass-list, with an exact-group
   membership test.
+- Add user-facing methodology documentation: PHOIBLE use
+  methodology page (pipeline explanation), revised How
+  LatticeLang Works guide, and AI Collaboration Methodology
+  essay.
 
 ### Changed
 - Institute the `deferred` map in `data/ipa_chart.json` for

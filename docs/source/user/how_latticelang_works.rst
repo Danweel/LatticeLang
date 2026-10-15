@@ -1,7 +1,7 @@
 .. _how-latticelang-works:
 
-How LatticeLang Works: A Plain-English Guide
-============================================
+How LatticeLang Works:
+======================
 
 :date: 2026-10-01
 :type: Tutorial
@@ -11,7 +11,7 @@ This guide explains the internal workings of LatticeLang - the decisions
 made and linguistic theories used to make it work. Like all sciences,
 they're theories, and they don't all perfectly mesh, either. Similarly,
 a small program like this can't accurately depict all of linguistics either
-so outliers also had to be scoped out at some arbitary line as well.
+so outliers also had to be scoped out at some arbitrary line as well.
 
 At a High Level
 ---------------
@@ -24,15 +24,14 @@ consistent formats.
 
 That's pretty standard for phonology generators - there's a lot of
 them out there. Enough that it's a bit tough to write out a list of them,
-I usually just send people to Rosenfelder's, Gen.
-
-What I wanted specifically was a program with authors in mind, less-so
-conlangers with a hobby. Writers don't have time to make conlang a
+I usually just send people to Rosenfelder's "Gen". Zompist's Gen <https://www.zompist.com/gen.html>.
+What I wanted specifically was a program with fiction authors in mind, less-so
+conlangers with a hobby. Writers don't have time to make conlanging a
 full hobby. They might be interested in the things that a basic conlang
 might bring to their worlds, but struggle with the ins and outs that
 you get a sense of when you take it up as a full hobby. Writing is already
 the hobby for a lot of people. Also, it should be a touch more accessible
-for people curious also, than some of the Gens out there.
+for people curious about language than some of the Gens out there.
 
 The main thing I wanted it to do is be able to take a 'corpus', or already
 existing set of words (authors including myself often start making things
@@ -49,51 +48,61 @@ use-case, anyway.)
 Because a tiny corpus doesn't hold enough information to actually fully
 inform generation, some decisions need to be made and the program will
 hand-hold that to a certain degree. Ideally, you can change rules and
-see how that changes the output. This will help people choose the right
-rules for what they want, and hopefully learn something too. It should
-function alright as a toy for learning about lingustics basics
-as well, hopefully.
+see how that changes the output (we'll see if I can get that working).
+This will help people choose the right rules for what they want, and
+hopefully learn something too. It should function alright as a toy for
+learning about linguistics basics as well, hopefully.
 
-The Five-Step Pipeline
-----------------------
 
 Here's what happens internally, translated from technical terms:
 
-**1. Load PHOIBLE Data**
-PHOIBLE is a global database of 3,020 phonological inventories from
-real languages. LatticeLang starts with this data, not from scratch.
-This ensures the sounds suggested are plausible and can even tell you
-by how much. In this lang-gen you're constrained by what
-actually occurs in human languages. But if you were using IPA before,
-you already were anyway. This program puts a special emphasis on it though.
+**PHOIBLE curation**
+This is in the GitHub repo but not included for end users. PHOIBLE is
+a collection of data from real world languages that contains about
+about 3,000 inventories spanning roughly 2,200 languages that the authors of
+the database were able to collate. They already did the work of removing
+duplicates and normalizing the data itself. It's open-source, so I've
+been able to make use of their hard work for less-than-scientific purposes.
+I ran scripts that didn't take PHOIBLE for granted: it compares it to the
+IPA list. This way certain kinds of complex entries are set aside - an
+example is clicks. Clicks only ever appear with another sound - something
+not reflected in the IPA chart. You just have to know that. I can't assume
+users will be able to apply that if they don't know, not to mention that
+in PHOIBLE, the click glyphs themselves have 0 rows where they appear alone.
+These exceptions are placed aside and marked - they have to be handled
+in a different way than the rest. (See :ref:`phoible_use_methodology`)
+(PHOIBLE never lists the bare click letters at all — it documents clicks
+only in accompanied forms, and those rows are complete and usable. The
+problem is the mismatch between what the chart lists and what the
+database attests, not missing data.)
 
-**2. Derive Sonority Ranks**
-Every sound gets a "sonority rank" — a number indicating how sonorous
-(vowel-like) it is. Stops (p, t, k) score lowest; vowels score highest.
-This ranking determines which sounds can fill which slots in syllables.
-This was one of the initial rules I wanted to include - most generators
-really only focus on CVC, sometimes the overall likelyhood of a pattern
-appearing - but don't give any hints on what's already likely.
+**Data Stuff**
+LatticeLang starts with this data, not from scratch. This ensures the sounds
+suggested are plausible and can even tell you by how much compared to real
+languages. In this lang-gen you're somewhat more informed about what actually occurs in
+human languages. This program puts a special emphasis on it because that's
+usually what people are actually doing. It does allow for overrides, though.
 
-**3. Build IPA Reference Table**
+**The IPA Reference Table**
 The tool generates a master table, mapping every IPA symbol to its
 properties: features, rarity in world languages, Unicode codepoints,
 canonical forms, and aliases. This becomes the lookup table for all
 subsequent operations. This is what actually ships with the program,
-but it's specifically PHOIBLE-based, with the information codified
-in a way more useful to the program to read.
+with the information codified in a way more useful to the program to read.
 
-**4. Validate Against Rules**
-The user's inventory passes through six validation checks:
-- Unique symbols (no duplicates)
-- No forbidden vowel gaps (define what forbidden means at this juncture - forbidden by the user or the data?)
-- Required diphthong components present (define more clearly)
-- Feature vocabulary consistency (define)
-- Unicode codepoint correctness (which should already be part of the table?)
+**Derive Sonority Ranks**
+Every sound gets a "sonority rank" — a number indicating how sonorous
+(vowel-like) it is. Stops (p, t, k) score lowest; vowels score highest.
+This ranking determines which sounds tend to fill which slots in syllables.
+This was one of the initial rules I wanted to include - most generators
+really only focus on CVC, sometimes the overall likelyhood of a pattern
+appearing - but don't give any hints on what's already likely. I had
+to keep track of sonority myself, which was difficult.
 
-Failures abort the build — you can't create impossible phonologies.
+**Validate Against Rules**
+The user's inventory passes through six validation checks, detailed under Validation Gates below.
 
-**5. Instantiate Phonemes**
+**Instantiate Phonemes**
 Individual Phoneme objects are created, each carrying:
 - The IPA symbol itself
 - A feature set (consonantal+, syllabic-, etc.)
@@ -101,30 +110,32 @@ Individual Phoneme objects are created, each carrying:
 - Sonority rank
 - Generation frequency weight
 
-The user can also assign Orthography, or the spelling, to each phoneme.
+The user can also assign **Orthography**, or the spelling, to each phoneme.
 For now, this is somewhat simplistic, but I'd like to add rules to this as well,
 such as sound changes when next to other set phonemes, etc., which causes
-inconsistencies in spellings, potentially.
+inconsistencies in spellings, potentially, as in English.
 
 Why This Matters
 ----------------
 
 Most tools let users create anything, including linguistically
 impossible combinations or other 'interesting' edge cases. That's
-great for play and to experiment with lingustics. But for novelists
+great for play and to experiment with lingustics,, but for novelists
 too much adventure can be just difficult to read, or tempting to put
 on display when the words should really be serving the story - sometimes
-that's just flavor.
-LatticeLang prevents this *before* it happens,
-not after. You're nudged toward naturalistic patterns without being
+this work's just flavor.
+
+LatticeLang prevents this *before* it happens, not after. You're
+nudged toward naturalistic patterns without being
 explicitly forbidden. It'll still allow you to make whatever, but there's
 fundamentals that appear by default, especially when it's making
 assumptions about what you are feeding it.
 
 This is the "Naturalistic Defaults" principle (:ref:`ADR-035`).
-It's easier to remember what's forbidden than what's required — so
-the tool is lifting that weight for you. It might be #35, but this
-was a ground-level principle behind the tool and why I'm not just using
+It's easier to be flagged for what's unusual than remember what
+you don't know you have to put in there — so the tool is lifting
+that weight for you. It might be Ref 35, but this was a ground-level
+principle behind the tool and why I'm not just using
 an existing generator.
 
 The Phoneme Unit
@@ -158,19 +169,45 @@ means in plain English:
 Categories Are Derived, Not Assigned
 ------------------------------------
 
-In LatticeLang, you don't *assign* a phoneme to a category.
-The tool derives it from features using decision rules:
+In LatticeLang, you don't assign a phoneme to a category
+by hand. The tool derives the sound's recorded attributes using
+decision rules. Two features do most of the sorting:
 
-- **Consonant**: consonantal=+, syllabic=-
-- **Vowel**: syllabic=+
-- **Glide**: consonantal=+, syllabic=+
-- **Diphthong**: two-vowel combination
+- **Consonantal**: whether the sound obstructs the airflow
+  enough to pattern with consonants
+- **Syllabic**: whether it can serve as the heart of a
+  syllable (as the nucleus)
 
-If you mark something as consonantal but also syllabic, it
-automatically becomes a glide, not a contradiction.
+The rules:
 
-About Step 4 - Validation Gates
--------------------------------
+- **Consonant**: consonantal+, syllabic−
+- **Vowel**: consonantal−, syllabic+
+- **Glide** (j, w): consonantal−, syllabic− — essentially the
+  close vowels i and u in non-syllabic form; languages treat
+  them almost like consonants in where they're allowed to
+  appear
+- **Diphthong**: a two-vowel combination, stored as a single
+  phoneme with its components recorded
+
+Marking a sound as both consonantal and syllabic (like n̩,
+the "n" of "button") can also come up — it's a syllabic
+consonant. The tool will keep it in the consonant category
+but allows it to fill a syllable's nucleus.
+
+Meaning, these are derived automatically under normal circumstances
+based on naturalistic languages' usual patterns. However, this
+can be overridden in LatticeLang for a conlanger who knowingly wants
+an analysis that departs from the linguistic default.
+
+The user could invent a sound the PHOIBLE database doesn't know and
+supplies its features by hand, and the category derives from those
+hand-entered features (so even here, it's derived — just from user
+data rather than reference data), or such a user-defined entry
+could represent sounds that resist the clean partition that happens
+to be outside PHOIBLE's dataset.
+
+Validation Gates
+----------------
 
 When you build your inventory, six checks run:
 
@@ -179,8 +216,8 @@ No duplicate IPA characters allowed. The table can't have two ``p``
 entries — that would make lookups ambiguous.
 
 **INV-2: Syllable Template Compatibility**
-Your inventory must support at least one valid CV structure. Empty
-inventories or inventories with only tones fail here.
+Your inventory must support at least one valid CV structure (as defined
+by the user). Empty inventories or inventories with only tones fail here.
 
 **INV-3: Vowel Absence Warning**
 Languages almost always have at least one vowel. If yours has none,
@@ -198,7 +235,7 @@ You can't invent arbitrary feature names.
 
 **INV-6: Diphthong Structural Check**
 Diphthongs must contain exactly two vowel elements. Three-vowel
-clusters aren't supported at this phase, but its on the table.
+clusters aren't supported at this phase, but it's on the table.
 
 The Special Combinations Case
 -----------------------------
@@ -210,14 +247,13 @@ Some IPA symbols aren't single characters — they're combinations:
 - Syllabic diacritics (``l̩`` — syllabic consonant)
 
 These (from the PHOIBLE data) route to a separate ``special_combinations`` bucket in the
-output JSON. They're still considered valid 'phonemes', just handled differently
+output. They're still considered valid 'phonemes', just handled differently
 during segmentation. When we complicate things at a later stage, they'll have more uses.
 
 Frequency and Rarity Tiers
 --------------------------
 
-PHOIBLE provides raw inventory counts (e.g., ``p`` appears in 1,873 of
-the 2,155 inventories in PHOIBLE 2.0's gold-standard set). LatticeLang
+PHOIBLE provides raw inventory counts. LatticeLang
 converts this to a frequency weight (count divided by the total number
 of inventories, calculated at build time from the pinned data), then
 labels it with a rarity tier. The tiers are display labels for humans;
@@ -232,6 +268,11 @@ tiers never gate anything.
 - **Tier 6a**: Attested, but below 1% and not an isolate
 - **Tier 6b**: Isolate — attested in exactly one inventory of the sample
 
+They're not completely arbitrary - I chose break points by hand where there
+were slightly-larger-than-average gaps between deltas. Those happened
+to be fairly round numbers, but that's coincidence and sometimes just
+because the gap was so large I could choose a round number within it.
+
 A caveat on 6b: "isolate" means "appears in exactly one inventory of
 this 2,155-inventory sample," not "rare in a linguistic sense" —
 sampling gaps and source quirks can strand a sound in tier 6b that
@@ -239,7 +280,8 @@ isn't actually "unique" (though, it can still be assumed to be a **little**
 unusual). Sounds that aren't in the reference table at
 all aren't forbidden — they're custom symbols, usable freely for
 speculative conlangs. While the PHOIBLE data is impressive, it shouldn't
-be mistaken for "complete".
+be mistaken for "complete". Authors can add whatever they like and know
+how unusual it really is.
 
 What Happens Next?
 ------------------
@@ -261,7 +303,7 @@ Limitations (Current Phase)
 For transparency, here's what *doesn't* work yet (Post-MVP items):
 
 - Tone and stress marking (planned for Delta phase)
-- Harmonic processes (velar harmony, nasal harmony)
+- Cross-syllable harmony (backness/rounding, nasal harmony)
 - Morphology (prefixes, suffixes, roots)
 - Sound change simulation (historical phonology)
 - Export to writing systems beyond IPA
@@ -278,6 +320,7 @@ Further Reading
 - :ref:`dc_phoneme` — Technical phoneme contract (developers)
 - :ref:`dc_inventory` — Validation rules in detail
 - :ref:`how_the_program_processes_things` — (placeholder: expand with flow diagrams when available)
+- :ref:`phoible_use_methodology`
 - :ref:`glossary` — Technical terminology explained
 
 Feedback Welcome
