@@ -256,16 +256,9 @@ Status Overview (changes)
      - :ref:`uc03`
    * - Q48
      - Accompanied-cluster admission policy (clicks)
-     - OPEN (2026-10-09)
-     - Blocks task 2 emission step
-     - :ref:`Q46`, ADR-052
-
-Q47: OCP behavior when a participant lacks the designated feature
-==================================================================
-
-:Status: OPEN
-:Scope: [PHONO] — constraints (UC-03)
-
+     - ANSWERED (2026-10-11, :ref:`dc_ipa_reference` Implementation Bindings)
+     - Resolved (unblocks task 2 emission step)
+     - :ref:`Q46`, :ref:`ADR-052`
 
 Gap Analysis: MVP Impact
 ------------------------
@@ -2609,11 +2602,11 @@ before UC-03 implementation; blocked on nothing.
 Q48: Admission policy for accompanied-cluster symbols (clicks first)
 ====================================================================
 
-:Status: OPEN
+:Status: ANSWERED (2026-10-11, :ref:`dc_ipa_reference` Implementation Bindings)
 :Scope: [PHONO] — ipa_reference derive pipeline (task 2)
 
 **Question.** PHOIBLE attests click phonemes only as accompanied
-clusters (velar-closure prefix + click letter + release
+clusters (velar-closure prefix + click letter + releaseF
 modifiers: k-, g-, ng- prefixes with aspiration/ejective/
 frication/length markings — 156 listing rows across the five
 letters). Bare click letters exist only on the IPA chart:
@@ -2630,13 +2623,15 @@ click letter spells the anterior closure's release; the velar
 or nasal companion spells the always-present posterior
 closure. Companions are principled, not decorative — the
 prefix inventory is small (roughly k/g/ng per click type) and
-articulatorily grounded. Users encountering clicks via UC-01
+articulatorily grounded — though the census (see Evidence, below)
+later showed the real prefix families are broader and
+lopsided: velar and uvular companions across seven families,
+including layered glottalized formsasd. Users encountering clicks via UC-01
 need the whole cluster as a single phoneme; typing ASCII
 lookalikes (\|, !) resolves via the near-miss layer (Q46). The
-five bare letters are parked in the chart deferred map
-(reasons cite this question).
+five bare letters are parked in the chart deferred map.
 
-**Dependencies.** :ref:`Q46` (spelling variants), ADR-052
+**Dependencies.** :ref:`Q46` (spelling variants), :ref:`ADR-052`
 (PHOIBLE-verbatim storage), derive-script rewrite task 2
 (decision needed before emission step).
 
@@ -2687,3 +2682,55 @@ Decision target: before task 2's emission step. Not blocking
 the vowels batch or the completeness-floor test (phrase that
 test in terms of CHART CELLS, not emitted symbols, to stay
 decoupled from this question).
+
+**Answer.** Exclude from derive-pipeline emission, visibly.
+The pipeline emits chart cells only, as bound — accompanied
+clusters are off-chart rows that drop with categorical
+drop-log counting (a named category in the drop-log, never
+anonymous exclusion), so any future promotion is a policy
+change over known, inventoried rows. No admission rule for
+multi-part symbols ever enters the derive pipeline: user-facing
+availability of click clusters flows exclusively through the
+curated overrides channel, gated by a use-case amendment
+(the wake-up condition below). Combinatorial generation of
+accompaniment rosters is forbidden — curation, when it
+happens, copies attested PHOIBLE rows verbatim
+(:ref:`ADR-052`). Spec basis: no use case describes adding or
+importing an accompanied-cluster phoneme; UC-07's export note
+(rare PHOIBLE-derived segments including clicks) is
+anticipatory — it identifies the spec gap rather than
+demanding admission. The gap is repaired by amending the
+spec, never by smuggling emission. Binding location:
+:ref:`dc_ipa_reference` Implementation Bindings,
+"Accompanied-cluster admission".
+
+**Evidence.** [verified: output] Census (2026-10-11, features
+table): 156 distinct cluster symbols; prefix families
+{k: 50, ŋ: 40, ɡ: 41, q: 15, ɢ: 5, ɴ: 3, ʼ: 2}. The two
+ʼ-prefixed rows are glottalized nasal clicks (ʼŋǀ, ʼŋǃ;
+U+02BC + nasal + click letter). Shape check: every cluster
+row carries the full 38-column feature vector (specimens with
+codepoints: kǃ U+006B U+01C3; ɴɢǁqʰ U+0274 U+0262 U+01C1
+U+0071 U+02B0; qʘʰ U+0071 U+0298 U+02B0), so curated entries
+would need no new schema fields. Spec-first grep (2026-10-11):
+all cluster hits in use_cases/ are constraint-sense; click
+hits: 1 (UC-07 export note, anticipatory).
+
+**Action items.**
+
+- [x] Spec-first check: grep use_cases/ for cluster/click
+  assumptions (2026-10-11; all constraint-sense, UC-07
+  anticipatory only)
+- [x] Census, shape check, scope probe (2026-10-11; Evidence
+  above)
+- [ ] Phrase the task-4 completeness-floor test in CHART
+  CELLS, not emitted symbols, so it stays decoupled from this
+  ruling
+- [ ] Wake-up condition: draft the UC-01 extension (or
+  subfunction case) describing adding an accompanied-cluster
+  phoneme from the reference. The curated click-cluster batch
+  (156 attested rows, PHOIBLE-verbatim, copied never
+  combinatorially generated) becomes safe once that amendment
+  EXISTS and the derive-script rewrite (tasks 2–5) has LANDED.
+  Revisit alongside Q36 F-4 (ejective admission) with UC-012
+  input composition.

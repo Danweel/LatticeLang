@@ -318,6 +318,33 @@ segments; the chart is a published human artifact, so
 transcription is curation, not invention (zero-invented-values
 doctrine).
 
+Accompanied-cluster admission
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Q48 (resolved 2026-10-11): the pipeline emits chart cells only,
+as bound above. Accompanied-cluster symbols — PHOIBLE attests
+click phonemes only as accompaniment clusters (156 distinct
+features rows across seven families: velar k/ɡ/ŋ, uvular q/ɢ/ɴ,
+glottalized ʼŋ; probes 2026-10-11) — are off-chart rows: the
+chart carries only the five bare click letters and PHOIBLE
+attests bare letters in zero rows, so the click intersection
+is empty (the bare letters sit in the chart ``deferred``
+map). Accompanied clusters therefore DROP with categorical
+drop-log counting — a named category, never anonymous
+exclusion — so any future promotion is a policy change over
+known, inventoried rows. No admission rule for multi-part
+symbols ever enters the derive pipeline: user-facing
+availability flows exclusively through the curated overrides
+channel, gated by a use-case amendment (see Q48 action items).
+Curation, when it happens, copies attested PHOIBLE rows
+verbatim (:ref:`ADR-052`) — combinatorial generation of
+accompaniment rosters is forbidden under the zero-invented-
+values doctrine: the attested families are lopsided and include
+layered and quadrisegmental spellings (qʘʰ, ʼŋǀ, ɴɢǁqʰ) that
+no prefix × letter product predicts. Every cluster row carries
+the full 38-column feature vector (shape check 2026-10-11), so
+curated entries need no new schema fields.
+
 Classification derivation scope
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

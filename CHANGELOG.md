@@ -33,6 +33,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   spelling per glyph, ASCII variant rows drop via intersection
   with drop-log counting, typed-lookalike input tolerance
   delegated to the near-miss layer (ADR-041).
+- Record the accompanied-cluster admission ruling (Q48) in the
+  dc_ipa_reference Implementation Bindings: derive-pipeline emission
+  stays chart-cells-only; click accompaniment clusters (156 attested
+  PHOIBLE rows, seven families) are off-chart and drop with
+  categorical log counting. Future user-facing availability is a
+  curated batch gated by a use-case amendment — no admission rule
+  enters the pipeline.
 
 ### Dependencies
 - Vendor the pinned PHOIBLE 2.0 release into the repository

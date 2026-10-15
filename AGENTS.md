@@ -227,3 +227,6 @@ Deferred (recorded, not scheduled): KNOWN_FEATURE_KEYS comment
 cleanup (ledger (d)); reverse-IPA corpus philosophy note
 ("tens deep, art not science, suggestions with confidence"
 — becomes a constraint clause when the UC is specified).
+
+Click-cluster curation — gated by UC-01 cluster-extension amendment; see Q48.
+
