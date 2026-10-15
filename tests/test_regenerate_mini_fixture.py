@@ -28,9 +28,9 @@ from pathlib import Path
 import pytest
 
 from scripts.regenerate_mini_fixture import (
-    MINI_UNIVERSE_SIZE,
     EXPECTED_FEATURE_HEADER,
     EXPECTED_LISTING_HEADER,
+    MINI_UNIVERSE_SIZE,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -59,9 +59,9 @@ ROSTER = [
 
 VENDORED = FEATURES_SRC.is_file() and LISTING_SRC.is_file()
 requires_vendor = pytest.mark.skipif(
-    not VENDORED, reason= f"(vendor/ ships with the repo per the bundling "
-                          f"decision — see MANIFEST.in; custody record in "
-                          f"vendor/phoible-2.0/PROVENANCE.txt)")
+    not VENDORED, reason= "(vendor/ ships with the repo per the bundling "
+                          "decision — see MANIFEST.in; custody record in "
+                          "vendor/phoible-2.0/PROVENANCE.txt)")
 
 
 def read_tsv(path: Path) -> tuple[list[str], list[dict]]:

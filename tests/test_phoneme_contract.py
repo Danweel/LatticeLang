@@ -15,31 +15,34 @@ Sources of truth:
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import pytest
 
 from latticelang.core.phonology import (
-    Phoneme,
-    merge_phonemes,          # ADR-051 deterministic fallback
     CategoryDivergenceWarning,
+    Phoneme,
+    merge_phonemes,
 )
+
+# ADR-051 deterministic fallback
 
 FIXTURE = Path(__file__).parent / "fixtures" / "ipa_reference.example.json"
 
 # Real PHOIBLE 2.0 feature atoms (ADR-033; binary '+'/'-'/'0',
 # camelCase where PHOIBLE spells them). No ghost atoms: no
 # 'place', no 'manner', no 'voice', no 'height'.
-P = {  # 'p': known symbol, voiceless bilabial stop
+# 'p': known symbol, voiceless bilabial stop
+# place = labial via 'labial'+'-'/'round'
+# Open vowel uses real high/low binary pair instead of 'height'
+P = {
     "symbol": "p",
     "features": {"syllabic": "-", "consonantal": "+", "sonorant": "-",
-                 "continuant": "-", "labial": "+"},  # place = labial via 'labial'+'-'/'round'
+                 "continuant": "-", "labial": "+"},
 }
-# Open vowel uses real high/low binary pair instead of 'height'
+
 A = {"symbol": "a", "features": {"syllabic": "+", "consonantal": "-",
                                   "high": "-", "low": "+"}}
-
 
 # --- Construction (field list) -------------------------------------
 
@@ -67,8 +70,8 @@ def test_unknown_symbol_is_custom_with_no_prefill():
     assert q.custom is True
     assert q.features == {}
     assert q.sonority_rank is None
-    assert q.frequency == 1.0  # Q7 default for unattested
-
+    assert q.frequency == 1.0
+# Q7 default for unattested
 
 # --- Rank and frequency (validation rules) --------------------------
 
@@ -76,7 +79,8 @@ def test_rank_out_of_expected_range_warns():
     """UC-01 ext 4a: stop with rank 5 -> warning, stored anyway."""
     with pytest.warns(UserWarning, match="unusual"):
         p = Phoneme(symbol="p", features=P["features"], sonority_rank=5)
-    assert p.sonority_rank == 5  # warning is advisory; stored wins
+    assert p.sonority_rank == 5
+# warning is advisory; stored wins
 
 def test_frequency_must_be_positive():
     """Q7 item 3: zero/negative invalid; exclusion has another path."""
@@ -103,7 +107,8 @@ def test_divergent_stored_category_warns_and_retains():
     stored = Phoneme(symbol="p", features=P["features"], category="vowel")
     with pytest.warns(CategoryDivergenceWarning):
         loaded = Phoneme.from_json(stored.to_json())
-    assert loaded.category == "vowel"  # stored value retained
+    assert loaded.category == "vowel"
+# stored value retained
 
 
 # --- ADR-051 merge semantics (pure functions) ------------------------
@@ -137,7 +142,8 @@ def test_merge_metadata_new_only_fill():
     new = Phoneme(symbol="p", features={},
                   metadata={"y": 2})
     merged = merge_phonemes(old, new)
-    assert merged.metadata == {"x": 1}  # populated retains
+    assert merged.metadata == {"x": 1}
+# populated retains
 
 
 # --- Round-trip ------------------------------------------------------
@@ -146,4 +152,5 @@ def test_json_round_trip_preserves_fields():
     p = Phoneme(symbol="p", features=P["features"],
                 sonority_rank=0, frequency=1.93)
     restored = Phoneme.from_json(p.to_json())
-    assert restored == p  # needs __eq__ on Phoneme
+    assert restored == p
+# needs __eq__ on Phoneme

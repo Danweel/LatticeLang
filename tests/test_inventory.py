@@ -22,14 +22,11 @@ dc_inventory.rst):
   without templates the simplified zero-vowel warning fires
 """
 
-import pytest
 
 from latticelang.core.phonology import (
-    Phoneme,
     Inventory,
-    merge_phonemes,
+    Phoneme,
 )
-
 
 # --- Helpers ---------------------------------------------------------
 

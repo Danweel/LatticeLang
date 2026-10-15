@@ -108,6 +108,15 @@ Paste-Check Discipline
   must be **unique to the new edit** — a token present in old content proves nothing; annotate expectations with the scope the command actually measures.
 - Sentinel phrases: prefer a single distinctive word over multi-word phrases — wrapped RST prose splits phrases across lines and a correct text greps empty.
   When the phrase matters, join lines first: tr '\n' ' ' < file | grep -o 'phrase'.
+- Tool findings imply, they do not conclude. When a linter
+  flags dead code (unused variable/import), grep the whole
+  file before deleting: same-name locals in different functions
+  are different variables, and a tool's scope analysis must be
+  confirmed against the file before acting. Lineage:
+  2026-10-15 — ruff's F841 on audit_featureless.py:34 looked
+  obviously deletable; grep found the name in four other
+  lines (same name, other scopes — deletion was still safe,
+  but only the grep proved and expanded in what way, with clarity).
 
 For example::
 
@@ -158,3 +167,23 @@ human can verify each step without expert knowledge:
 Rationale: the USER won't necessarily verify by expertise; verification
 MUST be procedural. A fix that cannot state its expected
 outcome is not yet understood by either party well enough to apply.
+
+Multiple Similar Code Blocks
+----------------------------
+
+ONE master, never write multiple code blocks if they are likely
+to appear too similar. This can lead to thrash quickly. Instead:
+
+- The assistant drafts exactly one instance and delivers the
+  others as a written change list — which token changes, and
+  where. The User will then help implement the text as necessary.
+  Teaching opportunity - be clear about intention, differences and how to
+  insert the text correctly into the file.
+- As a data table driving a loop/parametrize.
+- Hand-copying a block to vary it is the thrash source:
+  each copy becomes an independent fact that drifts
+  from its siblings on the next edit (lineage: derive script
+  3x-duplicated helpers; audit_featureless twin report blocks).
+- Preference order: parametrize/table > single master
+  + change list > generation script (3+ artifacts) >
+  hand-copies (never).

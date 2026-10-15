@@ -7,14 +7,13 @@ the merge surface (ADR-051).
 from __future__ import annotations
 
 import json
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-import warnings
-
 
 from latticelang.core.feature_vocabulary import FEATURE_COLUMNS
-from latticelang.core.sonority import propose_sonority_rank, expected_rank_range
+from latticelang.core.sonority import expected_rank_range, propose_sonority_rank
 
 
 def derive_category(features: dict[str, str]) -> str | None:
@@ -122,6 +121,7 @@ class Phoneme:
                     f"{self.category!r} with these features. "
                     f"Expected range: {band[0]}-{band[1]}",
                     UserWarning,
+                    stacklevel=2,
                 )
 
         # Diphthong determination: components present (dc_phoneme
@@ -204,6 +204,7 @@ class Phoneme:
                 f"{phoneme.symbol!r} diverges from recomputation "
                 f"{recomputed!r}; stored value retained.",
                 CategoryDivergenceWarning,
+                stacklevel=2,
             )
         return phoneme
 

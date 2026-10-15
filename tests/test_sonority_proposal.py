@@ -28,8 +28,8 @@ import csv
 from pathlib import Path
 
 from latticelang.core.sonority import (
-    propose_sonority_rank,
     expected_rank_range,
+    propose_sonority_rank,
 )
 
 FIXTURE = (Path(__file__).parent / "fixtures"

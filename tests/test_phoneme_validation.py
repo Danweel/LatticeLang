@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from latticelang.core.phonology import Phoneme, CategoryDivergenceWarning
+from latticelang.core.phonology import Phoneme
 
 # --- Feature key validation (fail-loud rule) --------------------
 

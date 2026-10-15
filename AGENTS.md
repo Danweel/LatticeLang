@@ -9,6 +9,7 @@ docs/source/dev/governance/collaboration_protocol.rst — this file
 keeps summaries and pointers only.
 
 ## Cold-Start Kit (ASK for these at session start)
+
 1. This file (AGENTS.md)
 2. Status Overview table — top of docs/source/research/questions.rst
 3. ADR Index — top of docs/source/dev/governance/decisions.rst
@@ -20,28 +21,33 @@ Everything else is retrieved on demand. Past-session memory is never
 a source of current state; the repo is. Warn if any of these files are missing.
 
 ## Retrieve on Demand (task triggers)
+
 - Documentation edit or pasteable block → docs/source/dev/governance/documentation_standards.rst
-- Touching a data contract or its code → that docs/source/data_contracts/dc_*.rst
+- Touching a data contract or its code → that docs/source/data*contracts/dc*\*.rst
 - Implementing behavior → the governing use case file + its tests
 - Committing a user-visible change → CHANGELOG.md (per documentation_standards.rst § Changelog Standards)
 - Claiming anything exists in the repo → grep first (Verification Discipline)
 - Adding or changing to existing Qs or ADRs → determine if cross referencing applies
 - Process/paste/verification rules in doubt → docs/source/dev/governance/collaboration_protocol.rst
-- Resuming mid session → docs/_operational/session_log.rst (newest entry first; operational, not published)
+- Resuming mid session → docs/\_operational/session_log.rst (newest entry first; operational, not published)
 
 ## Tech Stack
+
 - Python ≥3.11; Poetry (in-project venvs); pytest
 - Sphinx + reST (furo, MyST, sphinxcontrib-bibtex, mermaid); Read-the-Docs hosting
 - VSCodium on GNU/Linux
 
 ## Commands (always preceded by cd to repo root)
+
 ```bash
 cd /home/danweel/Documents/VSCodiumFiles/LatticeLang/
 
 poetry run pytest                              # full suite
 poetry run sphinx-build -b html docs/source docs/_build/html   # docs
 ```
+
 ## Full audit build — incremental builds hide warnings:
+
 ```
 poetry run sphinx-build -E -b html docs/source docs/_build/html \
   2>&1 | grep -iE 'warning|error|critical' | head -40
@@ -65,12 +71,12 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 
 - Change alters user-visible behavior, output, or data → update CHANGELOG.md in the SAME commit, never retroactively (documentation_standards.rst § Changelog Standards).
 - Binding decision made → Status Overview + ADR Index updated in the same commit as the decision; update this file too (AGENTS.md) when a lesson belongs here.
-- Verify BEFORE committing, commit LAST: run the full sphinx audit build and pytest; only when both are clean does a commit happen.
+- Verify BEFORE committing, commit LAST: run the full sphinx audit build, pytest, and `poetry run ruff check .`; only when all three are clean does a commit happen. (Lineage: 2026-10-15 — CI's lint gate failed on 30 accumulated ruff errors never caught locally; the local ritual had no ruff step.)
 
 # Documentation Map
 
 - `docs/source/index.rst` — entry point
-- `docs/source/use_cases/` — Cockburn-style use cases; level subdirectories: user_goal_level/, subfunction_level/, summary_level/,   possible_future_cases/ (verified by ls, 2026-09-30)
+- `docs/source/use_cases/` — Cockburn-style use cases; level subdirectories: user_goal_level/, subfunction_level/, summary_level/, possible_future_cases/ (verified by ls, 2026-09-30)
 - `docs/source/data_contracts/` — JSON schema contracts: dc_phoneme, dc_syllable_template, dc_constraints, dc_inventory, dc_language_definition, dc_orthography_rules, dc_ipa_reference, dc_phoible_source
 - `docs/source/research/questions.rst` — questions registry, Status Overview at top; Q-numbers and ADR refs are the lingua franca
 - `docs/source/dev/governance/decisions.rst` — ADRs, append-only
@@ -83,7 +89,7 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 
 # Binding Conventions (summaries; canonical text in the docs named)
 
-- Use cases contain BEHAVIOR ONLY; fields and checks live in data contracts. Status fields on every use case (:Doc Status:, :Impl Status:, :Phase:). Long + short labels per use case (.. _uc02:, .. _UC-02_TITLE); references use :ref:`ADR-016`.
+- Use cases contain BEHAVIOR ONLY; fields and checks live in data contracts. Status fields on every use case (:Doc Status:, :Impl Status:, :Phase:). Long + short labels per use case (.. \_uc02:, .. \_UC-02_TITLE); references use :ref:`ADR-016`.
 - ADRs append-only; supersede, never edit published ones.
 - Questions: Status Overview row synced same-commit with any answer; :color: state success = ANSWERED, warning = OPEN.
 - Code: Google-style docstrings, type hints, functions <50 lines, zero-dependency core (stdlib JSON/csv), seeded PRNG.
@@ -95,9 +101,11 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 # Key Decisions (summaries; ADR Index is canonical and complete)
 
 Cross-cutting:
+
 - :ref:`ADR-035` — naturalistic defaults (the only SUITE-wide design principle)
 
 Load-bearing for the Phoneme/Q38 phase (derive script, reference table):
+
 - :ref:`ADR-033`: PHOIBLE 2.0 feature system pinned; controlled-vocab strings; Q38 hybrid pipeline — TSV is build-time input only
 - :ref:`ADR-036`: dedicated dc_inventory validation contract
 - :ref:`ADR-041`: near-miss symbol similarity (tie-bar forms excluded)
@@ -139,15 +147,21 @@ Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond withi
   RST targets get markdown-remnant sentinels (grep -c '^## '; fences via grep -F) — legal-parse garbage never warns;
   JSON edits validated (json.tool);
   no Unicode via clipboard (use chr()/escapes).
-- Fix Response Protocol: every fix = diagnosis with evidence, before/after with file path, verification command with expected output, what's next;
+- Fix Response Protocol: every fix = diagnosis with evidence,
+  before/after with file path, verification command with expected output, what's next;
   all diagnoses cite exact lines;
   all fixes include sentinels.
+  Tool findings imply, they do not conclude. Investigate unknowns of any kind.
+- warnings.warn in library code (src/) always sets
+  stacklevel=2 so the warning points at the caller's line;
+  scripts/**main** leave the default. (Why: default points
+  at the library's own interior — useless to the user.)
 
 # PHOIBLE Terminal Checks (paste-safe data access)
 
 Tabs mangle through clipboards — use awk field equality, never tab-anchored grep:
-    `awk -F'\t' -v s="p" '$8 == s' file.tsv`    # paste-safe
-    `grep -P "^p\t" file.tsv`                    # NOT paste-safe
+`awk -F'\t' -v s="p" '$8 == s' file.tsv` # paste-safe
+`grep -P "^p\t" file.tsv` # NOT paste-safe
 Verify column indices against `head -1` by hand before any cut/awk.
 Trumped-denominator recipe and counting verification: see
 dc_phoible_source.rst Implementation Bindings (the canonical home).
@@ -160,18 +174,19 @@ derived artifacts from first principles (the pinned PHOIBLE 2.0
 release), INCLUDING the vendored data — committed to the repo per
 the 2026-10-04 bundling decision. Distribution policy:
 
-- Repository/sdist (via ``MANIFEST.in`` graft): everything — vendor/
+- Repository/sdist (via `MANIFEST.in` graft): everything — vendor/
   data, tests, scripts, docs. Developers and CI can verify derived
   artifacts from source.
 - Wheel (end users): runtime library + pre-computed
-  ``ipa_reference.json`` only; vendor data excluded.
+  `ipa_reference.json` only; vendor data excluded.
 
 Boundaries:
-- ``vendor/phoible-2.0/`` — vendored raw data; IN the repo and sdist,
+
+- `vendor/phoible-2.0/` — vendored raw data; IN the repo and sdist,
   excluded from wheels; read only by derivation scripts
-- ``tests/`` and ``scripts/`` — development-only; excluded from wheels
-- ``src/latticelang/`` — the library package; distributed as-is
-- ``ipa_reference.json`` (committed, regenerated) — runtime data;
+- `tests/` and `scripts/` — development-only; excluded from wheels
+- `src/latticelang/` — the library package; distributed as-is
+- `ipa_reference.json` (committed, regenerated) — runtime data;
   included in distributions
 
 # Session Integrity (Re-Injection & Checkpoints)
@@ -205,6 +220,7 @@ derivation scope, overrides minimal scope, glossary.rst,
 stale field-check-6 note struck.
 
 Task order (each test-first, one-story commits):
+
 1. Author data/ipa_chart.json — curated chart transcription,
    provenance block, ~100 entries, PHOIBLE-verbatim spellings.
 2. Parsing layer — reuse read_tsv/require_header (shared or
@@ -229,4 +245,3 @@ cleanup (ledger (d)); reverse-IPA corpus philosophy note
 — becomes a constraint clause when the UC is specified).
 
 Click-cluster curation — gated by UC-01 cluster-extension amendment; see Q48.
-

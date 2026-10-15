@@ -39,7 +39,6 @@ import pytest
 from latticelang.core.phonology import derive_category
 from latticelang.core.sonority import propose_sonority_rank
 
-
 # --- Feature bundles used as test inputs ----------------------------
 # Values follow PHOIBLE 2.0 vocabulary (ADR-033): '+'/'-'/'0' strings,
 # camelCase where PHOIBLE spells them (delayedRelease, etc.).

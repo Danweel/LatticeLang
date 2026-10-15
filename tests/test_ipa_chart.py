@@ -4,11 +4,12 @@ Contract: dc_ipa_reference.rst Implementation Bindings,
 "Chart membership filter" — membership is INTERSECTION with the
 vendored PHOIBLE shared-symbol set, never heuristic approximation.
 
-The chart file (data/ipa_chart.json) is CURATED: hand-transcribed (though programmatically sourced from PHOIBLE to avoid copy-paste ASCII errors)
-from the IPA chart (1999 Handbook; 2015 rendering). Curation is
-checked, not trusted: every symbol must exist as a features row
-in the vendored PHOIBLE data. A typo'd or hallucinated spelling
-fails here, by name, before it can pollute ipa_reference.json.
+The chart file (data/ipa_chart.json) is CURATED: hand-transcribed
+(though programmatically sourced from PHOIBLE to avoid copy-paste
+ASCII errors) from the IPA chart (1999 Handbook; 2015 rendering).
+Curation is checked, not trusted: every symbol must exist as a
+features row in the vendored PHOIBLE data. A typo'd or hallucinated
+spelling fails here, by name, before it can pollute ipa_reference.json.
 
 Symbol-literal conventions: all IPA symbols in this file are
 written as \\u escapes with a codepoint comment — build from
@@ -37,7 +38,8 @@ VENDOR_FEATURES = (
 )
 
 # Groups mirror the chart's own sections. Fixed-cell symbols only:
-# affricates/ejectives are separate decisions (see the notes field in data/ipa_chart.json).
+# affricates/ejectives are separate decisions (see the notes field
+# in data/ipa_chart.json).
 EXPECTED_GROUPS = (
     "pulmonic_consonants",
     "affricates",

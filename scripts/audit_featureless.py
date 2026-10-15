@@ -31,7 +31,6 @@ def symbols(path: Path, col: int) -> Counter:
         return Counter(row[col] for row in reader)
 
 def classify(sym: str, features: set[str]) -> str:
-    cps = [ord(c) for c in sym]
     if sym == "N":
         return "legacy artifact (ASCII capital N — investigate provenance)"
     if BREATHY in sym:

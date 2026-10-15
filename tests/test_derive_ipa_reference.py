@@ -23,12 +23,12 @@ tests/fixtures/overrides_mini.json (curated overlay sample).
 from pathlib import Path
 
 from scripts.derive_ipa_reference import (
-    parse_phoible_tsv,
-    filter_to_ipa_chart,
     derive_rank_and_frequency,
-    merge_overrides,
-    run_field_checks,
+    filter_to_ipa_chart,
     generate_ipa_reference_json,
+    merge_overrides,
+    parse_phoible_tsv,
+    run_field_checks,
 )
 
 FIXTURE = Path(__file__).parent / "fixtures" / "phoible_mini.tsv"
