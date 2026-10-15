@@ -108,15 +108,6 @@ Paste-Check Discipline
   must be **unique to the new edit** — a token present in old content proves nothing; annotate expectations with the scope the command actually measures.
 - Sentinel phrases: prefer a single distinctive word over multi-word phrases — wrapped RST prose splits phrases across lines and a correct text greps empty.
   When the phrase matters, join lines first: tr '\n' ' ' < file | grep -o 'phrase'.
-- Tool findings imply, they do not conclude. When a linter
-  flags dead code (unused variable/import), grep the whole
-  file before deleting: same-name locals in different functions
-  are different variables, and a tool's scope analysis must be
-  confirmed against the file before acting. Lineage:
-  2026-10-15 — ruff's F841 on audit_featureless.py:34 looked
-  obviously deletable; grep found the name in four other
-  lines (same name, other scopes — deletion was still safe,
-  but only the grep proved and expanded in what way, with clarity).
 
 For example::
 
@@ -128,7 +119,6 @@ For example::
           # BODY LEVEL (column 8)
           pass
   # PASTE END
-
 
 - Save-and-sentinel after pasting: an edit in an unsaved editor
   buffer does not exist. After pasting, SAVE, then confirm the
@@ -144,6 +134,18 @@ For example::
   state in subsequent commands. Unsaved buffers persist
   through py_compile, pytest, and even full builds if
   the file isn't read fresh (editor caching).
+
+Tool findings imply, they do not conclude
+-----------------------------------------
+
+When a linter flags dead code (unused variable/import), grep the whole
+file before deleting: same-name locals in different functions
+are different variables, and a tool's scope analysis must be
+confirmed against the file before acting. Lineage:
+2026-10-15 — ruff's F841 on audit_featureless.py:34 looked
+obviously deletable; grep found the name in four other
+lines (same name, other scopes — deletion was still safe,
+but only the grep proved and expanded in what way, with clarity).
 
 .. _fix-response-protocol:
 
