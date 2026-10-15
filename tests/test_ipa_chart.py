@@ -37,7 +37,7 @@ VENDOR_FEATURES = (
 )
 
 # Groups mirror the chart's own sections. Fixed-cell symbols only:
-# affricates/ejectives are separate decisions (see chart file notes).
+# affricates/ejectives are separate decisions (see the notes field in data/ipa_chart.json).
 EXPECTED_GROUPS = (
     "pulmonic_consonants",
     "affricates",
@@ -150,6 +150,7 @@ def test_implosives_group_exact():
     assert chart["non_pulmonic_consonants"] == IMPLOSIVES
     assert "\u029B" in chart["deferred"]
 
+# --- Non-pulmonic batch 2: clicks --------------------------------
 
 CLICKS = ["\u0298", "\u01C0", "\u01C1", "\u01C2", "\u01C3"]
 # ʘ U+0298, ǀ U+01C0, ǁ U+01C1, ǂ U+01C2, ǃ U+01C3
@@ -163,3 +164,4 @@ def test_clicks_all_deferred():
     assert chart["non_pulmonic_consonants"] == ["\u0253", "\u0257", "\u0284", "\u0260"]
     for sym in CLICKS:
         assert sym in chart["deferred"]
+
