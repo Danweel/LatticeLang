@@ -76,6 +76,13 @@ Paste-Check Discipline
   you can't attribute is a finding, not a chore.
   (Lineage: 2026-10-07 phantom-push; 2026-10-08 repo-reality
   review.)
+- Branch/PR sweep (epoch addition): ``git branch -a`` plus
+  ``gh pr list`` (GitHub CLI) at session start — any branch
+  or PR that neither party can attribute is a finding, same
+  rule as unattributed working-tree dirt. Lineage:
+  2026-10-28 — an open PR from an unattributed 2026-09-22
+  machine-paced batch sat unnoticed for five weeks; epoch
+  check watched only main.
 - After pasting any code block, run `python -m py_compile <file>`
   before pytest — separates paste placement from logic in a second.
 - After pasting a code block on a file getting touched a lot,

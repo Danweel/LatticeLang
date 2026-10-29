@@ -15,7 +15,7 @@ keeps summaries and pointers only.
 3. ADR Index — top of docs/source/dev/governance/decisions.rst
 4. documentation_standards.rst
 5. collaboration_protocol.rst
-6. Session bootstrap: run the epoch check (see collaboration_protocol.rst) before any work
+6. Session bootstrap: run the epoch check (see collaboration_protocol.rst) before any work, including branch/PR sweep: `git branch -a` and `gh pr list`
 
 Everything else is retrieved on demand. Past-session memory is never
 a source of current state; the repo is. Warn if any of these files are missing.
