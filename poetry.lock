@@ -1806,4 +1806,4 @@ docs = ["furo", "linkify-it-py", "myst-parser", "sphinx", "sphinx-autobuild", "s
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "7f12a3dd8396f41b5b0fcb08e44d222c118b5fb9967503aca9fec1a697fb7287"
+content-hash = "810bad021e88c3eb4e3fcef235cba1c7e38c96b39005df1c337b286014f59736"
