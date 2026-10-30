@@ -70,7 +70,7 @@ Validation Rules
    * - Minimal feature sets
      - Note
      - Two phonemes' feature sets differ in exactly one feature
-   * - Missing diphthong component
+   * - Missing diphthong component (INV-6)
      - Warning
      - A diphthong's component symbol is not in the inventory
        (:ref:`dc_phoneme` validation rule, evaluated here per
@@ -117,6 +117,14 @@ exists only for the entry-mistake case and surfaces only when
 paired with symbol similarity (:ref:`ADR-041`), per :ref:`ADR-041`
 's rejection of feature-distance as a similarity trigger on
 its own. Never blocks, never warns on its own.
+
+Missing Diphthong Component (INV-6)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Warning when a diphthong's component symbol is not itself in
+the inventory — the components must exist as standalone
+phonemes. This is a :ref:`dc_phoneme` validation rule
+evaluated here per :ref:`ADR-036`; non-blocking.
 
 Load-Time Enforcement
 ---------------------

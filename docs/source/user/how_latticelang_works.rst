@@ -58,8 +58,9 @@ Here's what happens internally, translated from technical terms:
 
 **PHOIBLE curation**
 This is in the GitHub repo but not included for end users. PHOIBLE is
-a collection of data from real world languages that contains about
-about 3,000 inventories spanning roughly 2,200 languages that the authors of
+a collection of data from real world languages that contains 2,155 inventories
+spanning 2,104 language names (1,673 distinct ISO codes), as counted
+from the pinned PHOIBLE 2.0 release that the authors of
 the database were able to collate. They already did the work of removing
 duplicates and normalizing the data itself. It's open-source, so I've
 been able to make use of their hard work for less-than-scientific purposes.
@@ -211,31 +212,51 @@ Validation Gates
 
 When you build your inventory, six checks run:
 
-**INV-1: Unique Symbols**
-No duplicate IPA characters allowed. The table can't have two ``p``
-entries — that would make lookups ambiguous.
+**INV-1: Nucleus Capacity**
+(blocking error) At least one phoneme must be able to serve as
+a syllable nucleus — a vowel, a diphthong, or a syllabic
+consonant. Without one, no template can produce a word, so
+this is the only check that stops the build, with a hint to
+add a vowel or a syllabic consonant.
 
-**INV-2: Syllable Template Compatibility**
-Your inventory must support at least one valid CV structure (as defined
-by the user). Empty inventories or inventories with only tones fail here.
+**INV-2: Consonant Absence**
+(warning) An inventory with zero consonants is flagged. It is
+allowed — nothing blocks — but it is typologically rare
+enough to be worth naming.
 
-**INV-3: Vowel Absence Warning**
-Languages almost always have at least one vowel. If yours has none,
-you'll get a warning — but it won't block the build (some languages
-lack underlying vowels on certain analyses).
+**INV-3: Vowel Absence**
+(warning) Vowelless languages do exist (Nuxalk famously), so
+a missing vowel is not an error. The warning fires only when
+one of your templates requires a vowel in its nucleus slot —
+an inventory of syllabic-consonant nuclei with matching
+templates passes silently.
 
-**INV-4: Diphthong Component Presence**
-If you declare a diphthong, both component vowels must exist as
-standalone phonemes. ``ai`` can't be a diphthong if ``i`` doesn't
-exist in your inventory.
+**INV-4: Identical Feature Sets**
+(warning) Two phonemes with identical features but different
+symbols are either allophones recorded as separate phonemes
+or an entry mistake — the warning names the pair so you can
+decide which.
 
-**INV-5: Feature Vocabulary Consistency**
-All feature values must come from the controlled PHOIBLE vocabulary.
-You can't invent arbitrary feature names.
+**INV-5: Minimal Feature Sets**
+(note) Two phonemes differing in exactly one feature, like
+/t/ and /d/, are a normal minimal pair — unremarkable, and
+nothing fires on its own. This note only ever surfaces
+alongside symbol-similarity detection, which is not yet
+implemented.
 
-**INV-6: Diphthong Structural Check**
-Diphthongs must contain exactly two vowel elements. Three-vowel
-clusters aren't supported at this phase, but it's on the table.
+**INV-6: Diphthong Component Presence**
+(warning) A diphthong's component symbols must themselves be
+in the inventory: ``ai`` cannot be a diphthong if ``i`` is not
+a phoneme. Non-blocking, but the gap is named so it can be
+fixed.
+
+Duplicate symbols are deliberately not a check: adding a
+phoneme whose symbol already exists triggers a deterministic
+merge per the contract's merge rule rather than an error.
+Checks on the phonemes themselves — feature vocabulary
+conformance and diphthong structure — happen when each
+phoneme is built; see the technical specification
+(:ref:`dc_phoneme`).
 
 The Special Combinations Case
 -----------------------------
