@@ -13,6 +13,7 @@ LatticeLang contributors.
    planning/blueprint
    planning/suite_vision
    planning/phases
+   planning/derive_rewrite_plan
 
 .. toctree::
    :maxdepth: 2
@@ -20,6 +21,7 @@ LatticeLang contributors.
 
    design/architecture
    design/theoretical_framework
+   design/design_principles
    design/constraints
 
 .. toctree::

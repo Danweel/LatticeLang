@@ -66,6 +66,8 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 - `git status` / `git log --stat` whenever unsure; terminal pager exits with "q".
 - Assistant always gives full git commands with explanations.
 - Epoch line: at cold-start (after the kit), run `git log -1 --oneline && poetry run pytest -q | tail -1` — ground-truth commit + test count, catching drift in the cold-start documents themselves.
+- When a session adopts or rejects a new tool/service, update the AGENTS.md tooling
+  inventory in the same session.
 
 # At Commit Time
 
@@ -210,38 +212,105 @@ Boundaries:
 
 # Provenance Warning
 
-Files dated before ~August 2026 may originate from an abandoned automated-AI build attempt (OMP - removed) that populated files without enough spec grounding. Known specimens: enum-based Phoneme scaffold (replaced), PhonemeInventory naming, data/ipa_reference_table.json and data/dipthong_reference.json (deleted), test_sonarity.py (deleted), empty sonority.py/inventory.py husks. Code contradicting contracts with no ADR behind it → suspect this origin if very old; verify against the docs before treating it as intentional. Delete or replace when encountered.
+Files dated before ~October 2026 might originate from the
+removed automated-AI build attempt (OMP) or later unreviewed
+LLM batches (e.g. the 2026-09-22 contract stack in PR #1,
+closed unmerged 2026-10-28; the "Docs roundup" commit 32449c6
+landed on main the same night). Known specimens: enum-based
+Phoneme scaffold (replaced), PhonemeInventory naming,
+data/ipa_reference_table.json and data/dipthong_reference.json
+(deleted), test_sonarity.py (deleted), empty sonority.py /
+inventory.py husks. Code contradicting contracts with no ADR
+behind it → suspect this origin if old; verify against the
+docs before treating it as intentional. Delete or replace
+when encountered. Attributed, reviewed-session commits from
+2026-10 onward are the reliability boundary.
 
-## Phase: derive-script rewrite (Q38) — planned 2026-10-04
+Clock time is weak attribution in both directions: a solo dev
+may work late (2026-10-01 04:45 is not itself proof of machine
+work), and rebase-organized commits naturally share identical
+timestamps. The reliable signal is corroboration — session
+records, protocol checks, and follow-on work depending on the
+content. Treat content as unverified when it lacks
+corroboration, never merely because of its clock time.
 
-Foundation (done): chart-membership binding (curated
-data/ipa_chart.json, intersection semantics), classification
-derivation scope, overrides minimal scope, glossary.rst,
-stale field-check-6 note struck.
+## Tooling Inventory
 
-Task order (each test-first, one-story commits):
+What LatticeLang uses, and what it deliberately doesn't. Two
+purposes: (1) so a newcomer doesn't "fix" a deliberate choice,
+(2) so service banners can be triaged without re-investigation.
+Update in the same session a tool is adopted or rejected (see
+collaboration_protocol.rst, service-banner rule).
 
-1. Author data/ipa_chart.json — curated chart transcription,
-   provenance block, ~100 entries, PHOIBLE-verbatim spellings.
-2. Parsing layer — reuse read_tsv/require_header (shared or
-   imported from regenerate_mini_fixture.py; do not fork the
-   validators). Full-scale two-source join, pair-dedup,
-   drop-log for: featureless-attested, off-chart (counts
-   computed, never asserted; documented 2,077/83/85 are dated
-   comments, not assertions).
-3. Category + classification derivation — toneme routing
-   (tone '+' branch), consonant/vowel sort, classification
-   vocabulary per the Classification derivation scope binding.
-   Null, never nearest-fit.
-4. Overrides merge + Field Checks — curated-wins merge, then
-   the nine Field Checks as acceptance tests (grow
-   tests/test_ipa_reference.py into its contracted role).
-5. Emission — data/ipa_reference.json, load-time sanity
-   check, RTD green.
+### In use
 
-Deferred (recorded, not scheduled): KNOWN_FEATURE_KEYS comment
-cleanup (ledger (d)); reverse-IPA corpus philosophy note
-("tens deep, art not science, suggestions with confidence"
-— becomes a constraint clause when the UC is specified).
+- **Runtime & packaging**: Python ≥3.11 (CI matrix 3.11 + 3.12);
+  Poetry with PEP 621 metadata and the poetry-core build backend,
+  in-project venvs; `src/` layout; console entry point
+  `latticelang = latticelang.cli:main`; license GPL-3.0-or-later.
+- **Testing**: pytest 8 (`-v --tb=short`); pytest-cov is available
+  but no coverage threshold is enforced.
+- **Lint**: ruff (rules E, W, F, I, B; line-length 88; target
+  py311; one per-file ignore for `docs/source/conf.py` E501).
+  Part of the pre-commit ritual since 2026-10-15.
+- **Docs**: Sphinx 8 + MyST 5, furo theme; extensions: autodoc,
+  napoleon, viewcode, intersphinx, todo, mermaid (11.13.0),
+  notfound, copybutton, design, togglebutton, bibtex
+  (`research/refs.bib`). Built with `make docs SPHINXOPTS=-W` —
+  warnings are errors in CI.
+- **Hosting**: Read the Docs is the CANONICAL public
+  documentation. GitHub Pages is an incidental secondary build
+  with fewer features — redundancy, not parity.
+- **CI/CD**: GitHub Actions — `ci.yml` (matrix test + lint + docs,
+  artifact upload) and `deploy-pages.yml`. First-party actions plus
+  `snok/install-poetry`. Runs on GitHub's runners; nothing local.
+- **Dependency upkeep**: Dependabot for the `github-actions`
+  ecosystem, weekly (adopted 2026-10-28).
+- **Version control**: git, trunk-based on `main` only; SSH auth;
+  `gh` CLI with a keyring-stored token.
+- **Editor**: VSCodium; `settings.json` is the editor-config
+  source of truth.
+- **Data**: vendored PHOIBLE 2.0, pinned and checksummed.
 
-Click-cluster curation — gated by UC-01 cluster-extension amendment; see Q48.
+### Deliberately not in use
+
+- **Editor AI / GitHub Copilot**: AI collaboration is external and
+  chat-based, with a verification-heavy protocol (see
+  collaboration_protocol.rst). A design choice — please don't
+  "fix" it.
+- **GitHub Apps / marketplace integrations**: no third-party
+  services in CI, review, or deployment.
+- **GitHub Issues / Projects**: `research/questions.rst` plus the
+  ADR registry are the issue system.
+- **Long-lived branches**: no `develop`, no feature branches; PRs
+  are exceptions, not workflow.
+- **Issue/PR templates, CODEOWNERS, release automation, tags**:
+  scale-dependent; revisit if outside contributors arrive.
+- **`.editorconfig`**: VSCodium `settings.json` instead.
+- **Dependabot for Python packages**: dependency review is manual
+  via Poetry. Revisit anytime; the actions ecosystem is the
+  automated exception.
+
+### Project shape
+
+Solo, hobby-scale, trunk-based development. Radically different
+approaches are welcome as forks rather than in-tree changes.
+
+### Banners seen and resolved
+
+Kept so the same notice is never investigated twice.
+
+- `ghs_` token format change (2026-05-15 changelog): GitHub Apps
+  only; we consume `GITHUB_TOKEN` via first-party actions — no
+  action.
+- Node 20 deprecation: resolved 2026-10-28 by the actions major
+  bump.
+- `ubuntu-latest` → Ubuntu 26 (2026-10-19): migration occurred;
+  first green run post-migration confirmed.
+
+## Current Work
+
+Derive-script rewrite (Q38) in progress. Task order and progress marks live in the repo:
+docs/source/dev/planning/derive_rewrite_plan.rst. Deferred items and
+wake-up conditions live there and in the question registry (questions.rst),
+not here.

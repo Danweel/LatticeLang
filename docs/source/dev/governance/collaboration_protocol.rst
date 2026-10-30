@@ -17,12 +17,28 @@ Verification Discipline
 - Never assert what a one-line command can check. Propose the
   grep, USER runs it and pastes output; output beats both
   parties' memory.
-- `grep -r recursive`, `-n` line numbers, quote search terms,
-  `-i` for case-insensitive; explain regex when first used.
+- `grep -r recursive`, `-n` line numbers, `-i` for
+  case-insensitive; quote search terms — single-quote any
+  pattern containing backticks, since unquoted backticks are
+  shell command substitution; explain regex when first used.
 - If a grep contradicts the assistant's claim, the grep wins — say so.
 - PASTE FRESHNESS: uploaded pastes older than ~3 days are
   historical snapshots; repo state always defers to fresh
   grep output.
+
+.. _terminal-and-byte-evidence:
+
+Terminal and Byte Evidence
+--------------------------
+- terminal rendering of combining marks is not evidence —
+  identical glyphs can differ in bytes; codepoint dumps
+  (U+XXXX) adjudicate spelling questions.
+
+.. _build-and-output-reading:
+
+Build and Output Reading
+------------------------
+
 - Audit build must match ALL docutils severities. Use
   `warning|error|critical` (or `-w /tmp/...` for capture).
   Lineage: two pre-existing CRITICAL messages in questions.rst
@@ -38,9 +54,30 @@ Verification Discipline
   grep. Use `-F` (fixed-string) for fence checks. Lineage:
   my own grep pattern matched the start-of-buffer anchor on
   every line, giving a false-positive dump (2026-10-05).
-- terminal rendering of combining marks is not evidence —
-  identical glyphs can differ in bytes; codepoint dumps
-  (U+XXXX) adjudicate spelling questions.
+- CI-dependency drift: green is not necessarily current. Actions majors
+  move fast and old versions run on with mere warnings; the
+  fix is Dependabot for ``github-actions`` (weekly) from
+  project inception, so bumps arrive as verified PRs.
+  Lineage: 2026-10-28 — workflows sat 3 majors behind on
+  Node 24 deprecation with no signal beyond annotations.
+- Service banners (console, CI annotations, GitHub pages):
+  when session output includes a service-deprecation or
+  behavior-change banner, the assistant resolves it against the
+  AGENTS.md tooling inventory BEFORE commenting: if the project
+  uses the affected tool, it becomes a work item; if not, a
+  one-line "not affected, and why" entry is added to the
+  inventory (or confirmed present) so it is never
+  re-investigated. The user is not expected to remember this
+  rule — banners get pasted, the protocol does the rest.
+  Lineage: 2026-10-28 — the ``ghs_`` token-format banner and Node 20
+  deprecation were investigated twice before anyone thought to
+  record the disposition.
+
+.. _counting-discipline:
+
+Counting Discipline
+-------------------
+
 - Characterize the metric before comparing counts: a count is
   only comparable to another count of the SAME thing. Raw-table
   cardinality (``cut | sort -u | wc -l``), distinct-after-NFC
@@ -49,6 +86,19 @@ Verification Discipline
   2,164 implied by 2,098+66, 2026-10-08). Before flagging an
   arithmetic anomaly, name what each side counts; if the metrics
   differ, the reconciliation is the finding, not a bug.
+- **No remembered numbers.** Exact figures (counts, totals, thresholds)
+  are counted from the pinned data at the moment of use — never recalled
+  from memory, from code comments, or from earlier conversation summaries.
+  Lineage that motivated this: an invented "4,000" mini-world total that
+  sat in a code comment beside a half-remembered "3,020" release number,
+  when the real, correct denominator (trumped inventories, 2,155) had to
+  be counted from the data anyway.
+
+.. _assistant-state-signals:
+
+Assistant-State Signal
+----------------------
+
 - Assistant-state signals (context degradation): repetitive
   batches degrade generation quality — successive near-identical
   artifacts accumulate small errors (draft-thrash). Countermeasures:
@@ -57,64 +107,50 @@ Verification Discipline
   unavoidable; if the human spots drift (self-corrections
   mid-message, placeholder brackets, repeated draft blocks),
   say so explicitly and reset to a fresh, focused request.
-- When a sentinel contradicts directly observed file content,
-  interrogate the sentinel (case, wrapping, flags) before
-  re-doing the edit.
+
 
 .. _paste-check-discipline:
 
 Paste-Check Discipline
 ----------------------
 
-- Epoch check (session bootstrap): at session start, run the
-  epoch check command triple before any work:
-  ``git log -1 --oneline && git status --short --branch &&
-  poetry run pytest -q | tail -1``. Expected: HEAD matches
-  origin/main (phantom-push detection), working tree clean
-  or dirt explained, suite passing. Unexplained dirt is
-  inspected (``git diff``) before proceeding — a modification
-  you can't attribute is a finding, not a chore.
-  (Lineage: 2026-10-07 phantom-push; 2026-10-08 repo-reality
-  review.)
-- Branch/PR sweep (epoch addition): ``git branch -a`` plus
-  ``gh pr list`` (GitHub CLI) at session start — any branch
-  or PR that neither party can attribute is a finding, same
-  rule as unattributed working-tree dirt. Lineage:
-  2026-10-28 — an open PR from an unattributed 2026-09-22
-  machine-paced batch sat unnoticed for five weeks; epoch
-  check watched only main.
-- After pasting any code block, run `python -m py_compile <file>`
-  before pytest — separates paste placement from logic in a second.
-- After pasting a code block on a file getting touched a lot,
-  check for DUPLICATED definitions:
-  re-pasted blocks stack silently in Python — later defs win
+- Never provide pastes in partial blocks with `...` placeholders: full body only.
+- After pasting, VERIFY the paste reached disk by running a grep for a distinctive
+  token BEFORE trusting the file state in subsequent commands. Unsaved buffers persist
+  through py_compile, pytest, and even full builds if the file isn't read fresh
+  (editor caching).
+- After pasting a code block on a file getting touched a lot, check for
+  DUPLICATED definitions: re-pasted blocks stack silently in Python — later defs win
   with no error, so py_compile cannot catch this class. Scan
-  `grep -n '^def \|^class ' <file>` and eyeball for repeats
-  before running tests. (Lineage: derive_ipa_reference.py
-  carried 3x-duplicated helper blocks through green tests.) The LLM should help remind the USER to check for this, since they are inexperienced.
-- generation scripts end with a completion print; a silent run means a truncated paste.
-- Never paste partial blocks with `...` placeholders: full body only.
-- Shell quoting: single-quote grep/sed patterns containing backticks.
-- Save before run: check the VSCodium tab-dot / Ctrl+S before any py_compile or pytest — py_compile reads from DISK, not editor memory, so an unsaved buffer passes in the editor while the stale file runs (assistant reminds; USER checks).
-- Paste complete command output, never a trimmed summary — truncated pytest output hides vacuous-pass and wrong-test failures.
-- **No remembered numbers.** Exact figures (counts, totals, thresholds)
-  are counted from the pinned data at the moment of use — never recalled
-  from memory, from code comments, or from earlier conversation summaries.
-  Lineage that motivated this: an invented "4,000" mini-world total that
-  sat in a code comment beside a half-remembered "3,020" release number,
-  when the real, correct denominator (trumped inventories, 2,155) had to
-  be counted from the data anyway.
-- When pasting code that depends on indentation (decorators, class bodies, nested functions):
-  1. Include a comment block showing the target column level for each code block type
-  2. Mark the start/end of sections that should be at module level
-  3. Use VSCodium's "Format Document" command after pasting, then inspect visually
+  `grep -n '^def \|^class ' <file>` and eyeball for repeats before running tests.
+  (Lineage: derive_ipa_reference.py carried 3x-duplicated helper blocks through
+  green tests.) The LLM should help remind the USER to check for this, since they
+  are inexperienced.
+- Generation scripts end with a completion print; a silent run means a truncated paste.
+- After pasting any code block, run `python -m py_compile <file>` before pytest —
+  separates paste placement from logic in a second.
+- Save before run: check the VSCodium tab-dot / Ctrl+S before any py_compile or
+  pytest — py_compile reads from DISK, not editor memory, so an unsaved buffer
+  passes in the editor while the stale file runs (assistant reminds; USER checks).
+- Save-and-sentinel after pasting: an edit in an unsaved editor buffer does not exist.
+  After pasting, SAVE, then confirm the disk has a distinctive token from the paste
+  (grep -n for a constant or function name). Terminal line numbers that refuse to
+  change between runs mean the disk file never changed — buffer/disk divergence,
+  not a code bug. (Lineage: the phantom EXPECTED_LISTING_HEADER NameError, diagnosed
+  by identical traceback line numbers across differing pastes.) Remind the user if you
+  aren't in touch with the code directly.
+- Insist on complete command output, never a trimmed summary — truncated pytest output
+  hides vacuous-pass and wrong-test failures.
 - JSON pastes/edits validated first (`python -m json.tool` — the JSON py_compile);
   no Unicode symbols through the clipboard (construct via chr()/escapes — combining
   marks and lookalikes corrupt through chat round-trips).
-- Sentinel patterns: prefer -F (fixed-string) unless regex is needed and explained; the sentinel
-  must be **unique to the new edit** — a token present in old content proves nothing; annotate expectations with the scope the command actually measures.
-- Sentinel phrases: prefer a single distinctive word over multi-word phrases — wrapped RST prose splits phrases across lines and a correct text greps empty.
-  When the phrase matters, join lines first: tr '\n' ' ' < file | grep -o 'phrase'.
+  must be **unique to the new edit** — a token present in old content proves nothing;
+  annotate expectations with the scope the command actually measures.
+- When providing code that depends on indentation (decorators, class bodies,
+  nested functions):
+  1. Include a comment block showing the target column level for each code block type
+  2. Mark the start/end of sections that should be at module level
+  3. Use VSCodium's "Format Document" command after pasting, then inspect visually
 
 For example::
 
@@ -127,20 +163,51 @@ For example::
           pass
   # PASTE END
 
-- Save-and-sentinel after pasting: an edit in an unsaved editor
-  buffer does not exist. After pasting, SAVE, then confirm the
-  disk has a distinctive token from the paste (grep -n for a
-  constant or function name). Terminal line numbers that refuse
-  to change between runs mean the disk file never changed —
-  buffer/disk divergence, not a code bug. (Lineage: the
-  phantom EXPECTED_LISTING_HEADER NameError, diagnosed by
-  identical traceback line numbers across differing pastes.)
-  Remind the user if you aren't in touch with the code directly.
-- After pasting, VERIFY the paste reached disk by running
-  a grep for a distinctive token BEFORE trusting the file
-  state in subsequent commands. Unsaved buffers persist
-  through py_compile, pytest, and even full builds if
-  the file isn't read fresh (editor caching).
+.. _sentinel-design:
+
+Sentinel Design
+---------------
+
+- When a sentinel contradicts directly observed file content,
+  interrogate the sentinel (case, wrapping, flags) before
+  re-doing the edit.
+- Sentinel patterns: prefer -F (fixed-string) unless regex is
+  needed and explained; the sentinel must be **unique to the
+  new edit** — a token present in old content proves nothing;
+  annotate expectations with the scope the command actually
+  measures.
+- Sentinel phrases: prefer a single distinctive word over
+  multi-word phrases — wrapped RST prose splits phrases across
+  lines and a correct text greps empty. When the phrase
+  matters, join lines first:
+  tr '\n' ' ' < file | grep -o 'phrase'.
+- Prose sentinels use `grep -i`. A phrase beginning a heading,
+  sentence, or table cell is capitalized there, so an exact-case
+  grep returns empty on correct text. Reserve exact case for
+  code identifiers. RST labels are hyphenated where headings use
+  spaces (`_principle-invocation` vs "Principle invocation").
+
+.. _session-bootstrap:
+
+Session Bootstrap
+-----------------
+
+- Epoch check (session bootstrap): at session start, run the
+  epoch check command triple before any work:
+  `git log -1 --oneline && git status --short --branch && poetry run pytest -q | tail -1`.
+  Expected: HEAD matches origin/main (phantom-push detection), working tree clean
+  or dirt explained, suite passing. Unexplained dirt is inspected (`git diff`)
+  before proceeding — a modification you can't attribute is a finding, not a chore.
+  (Lineage: 2026-10-07 phantom-push; 2026-10-08 repo-reality review.)
+- Branch/PR sweep: `git branch -a` plus
+  `gh pr list` (GitHub CLI) at session start — any branch
+  or PR that neither party can attribute is a finding, same
+  rule as unattributed working-tree dirt. Lineage:
+  2026-10-28 — an open PR from an unattributed 2026-09-22
+  machine-paced batch sat unnoticed for five weeks; epoch
+  check watched only main.
+
+.. _tool-findings-imply:
 
 Tool findings imply, they do not conclude
 -----------------------------------------
@@ -177,6 +244,8 @@ Rationale: the USER won't necessarily verify by expertise; verification
 MUST be procedural. A fix that cannot state its expected
 outcome is not yet understood by either party well enough to apply.
 
+.. _multiple-similar-code-blocks:
+
 Multiple Similar Code Blocks
 ----------------------------
 
@@ -196,3 +265,17 @@ to appear too similar. This can lead to thrash quickly. Instead:
 - Preference order: parametrize/table > single master
   + change list > generation script (3+ artifacts) >
   hand-copies (never).
+
+.. _principle-invocation:
+
+Principle invocation
+--------------------
+
+- ADR rationales and contract decisions
+  cite the governing principle by name from the design
+  principles file when one applies. A decision that can name
+  its principle is deliberate; one that can't may be drift.
+
+
+
+
