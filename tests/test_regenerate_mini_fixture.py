@@ -1,3 +1,12 @@
+# NOTE (2026-10-30): this is a DUPLICATE of
+# scripts/regenerate_mini_fixture.py:read_tsv, already drifted —
+# the script's copy raises a curated FileNotFoundError for
+# missing vendored data; this one doesn't (fixtures are
+# committed, so a plain open() error was tolerable here).
+# One-master consolidation is scheduled with the derive-script
+# parsing layer (dev/planning/derive_rewrite_plan.rst, task 2).
+# Do not copy further; do not "fix" one copy without the other.
+
 """Tests for the mini-fixture regeneration script (test-first).
 
 Regeneration contract (dc_ipa_reference.rst, Implementation
