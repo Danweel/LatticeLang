@@ -22,9 +22,13 @@ requires-python = ">=3.11"
 # RTD uses:    pip install .[docs]
 # Local dev:   poetry install --extras dev
 #
-# 'dev' includes everything in 'docs' via the self-reference
-# "latticelang[docs]", so --extras dev gives you docs + linting +
-# testing in one command.
+# 'dev' mirrors 'docs' plus linting/testing. Duplicated by
+# necessity, not oversight: `poetry lock` rejects the
+# self-reference form ("Package 'latticelang[docs]' is listed
+# as a dependency of itself", 2026-10-30) despite the PEP 621
+# spec allowing it. WHEN YOU EDIT ONE LIST, EDIT THE OTHER —
+# drift is silent (found: sphinx-design pin present in docs,
+# missing in dev).
 
 [project.optional-dependencies]
 docs = [
@@ -47,7 +51,7 @@ dev = [
     "sphinx-notfound-page>=1.0.0",
     "sphinx-copybutton>=0.5.2",
     "myst-parser>=5.0.0,<6.0.0",
-    "sphinx-design>=0.6.0",
+    "sphinx-design>=0.6.0,<1.0",
     "linkify-it-py>=2.0.0",
     "sphinx-autobuild>=2024.10.0",
     "sphinxcontrib-bibtex>=2.5,<3.0",
