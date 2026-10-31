@@ -11,20 +11,87 @@ notes preserved verbatim — they are the reason each rule exists.
 
 .. _verification-discipline:
 
-Verification Discipline
------------------------
+Verification Discipline (reviewed 2026-10-31)
+---------------------------------------------
 
 - Never assert what a one-line command can check. Propose the
   grep, USER runs it and pastes output; output beats both
   parties' memory.
-- `grep -r recursive`, `-n` line numbers, `-i` for
+- `grep -r` for recursive, `-n` for line numbers, `-i` for
   case-insensitive; quote search terms — single-quote any
-  pattern containing backticks, since unquoted backticks are
-  shell command substitution; explain regex when first used.
-- If a grep contradicts the assistant's claim, the grep wins — say so.
+  pattern containing backticks (unquoted backticks trigger
+  shell command substitution); explain regex definitions when used.
+- If a grep contradicts the assistant's claim, the grep wins.
+  When sources conflict (file A says X, file B says Y), state
+  the conflict explicitly before drawing conclusions. Never
+  resolve from memory, always discuss with user.
 - PASTE FRESHNESS: uploaded pastes older than ~3 days are
   historical snapshots; repo state always defers to fresh
   grep output.
+- Run verification commands with explicit location and
+  interpreter (``cd <repo> && poetry run …``).
+- Full audit build — incremental builds hide warnings:
+  ``poetry run sphinx-build -E -b html docs/source docs/_build/html 2>&1 | grep -iE 'warning|error|critical' | head -40``
+- Model and mode batching: route execution to
+  cheap/fast (Lite + Fast), adjudication to capable/slow
+  (Max + Thinking). Switch at the decide/execute boundary;
+  assume the serving model may differ across turns, so keep
+  each turn self-contained and state expected outputs before
+  commands.
+- Verification-before-assertion: before stating any specific
+  claim (dates, counts, numbers, filenames), cite the exact
+  source read (command output, file line, tool result). If
+  unverifiable from current context, state "I haven't verified
+  that" rather than hedging with probabilistic language —
+  uncertainty masks can hide confident errors.
+
+.. _model-tiering-and-task-batching:
+
+Model Tiering and Task Batching (2026-10-31)
+--------------------------------------------
+
+Models are tiered by role, not brand: an EXECUTE tier
+(fast, cheap — Lumo Lite + Fast; locally, an 8B-class
+model) and a DECIDE tier (capable, slow — Lumo Max +
+Thinking; locally, the largest model available). The
+rule set transfers unchanged between hosted and local.
+
+When to use which — the trigger is the decide/execute
+boundary:
+
+DECIDE tier (flag a switch UP when a task involves):
+
+- Adjudication between documents, ADRs, or questions
+  (whose claim wins, and on what evidence)
+- Designing new rules, ADRs, or protocol amendments
+- Refactors and any code change where a confidently
+  wrong answer is expensive (check() extraction class)
+- Debugging beyond one obvious cause
+- Anything irreversible or public-facing (release prep,
+  contract finalizations)
+
+EXECUTE tier (default; switch DOWN when a task is only):
+
+- Running sentinels and interpreting plain results
+- Applying decisions already made (paste-ready text,
+  commits, formatting)
+- Drafting commit messages, summaries, list upkeep
+- Single-document lookups and simple questions
+
+Switch signaling: the assistant flags the tier on
+request ("Max recommended" / "Lite sufficient") when a
+task crosses the boundary; the user toggles. When in
+doubt, DECIDE — a capable model doing execution wastes
+budget, but a weak model doing adjudication produces
+confident errors that sentinels catch late.
+
+Batching: schedule related EXECUTE tasks together
+(sentinel rounds, list upkeep, formatting sweeps) and
+reserve dedicated DECIDE sessions for adjudication and
+design. The verification discipline is model-agnostic
+and is what makes EXECUTE-tier work safe: sentinels
+catch weak-model errors regardless of what produced
+them.
 
 .. _terminal-and-byte-evidence:
 
@@ -72,6 +139,16 @@ Build and Output Reading
   Lineage: 2026-10-28 — the ``ghs_`` token-format banner and Node 20
   deprecation were investigated twice before anyone thought to
   record the disposition.
+
+.. _communication-standards:
+
+Communication Standards (added 2026-10-31)
+------------------------------------------
+
+- Run doc-build and test commands with an explicit location and
+  interpreter (``cd <repo> && poetry run …``), so the right venv
+  is used regardless of where the shell starts.
+
 
 .. _counting-discipline:
 
@@ -144,8 +221,6 @@ Paste-Check Discipline
 - JSON pastes/edits validated first (`python -m json.tool` — the JSON py_compile);
   no Unicode symbols through the clipboard (construct via chr()/escapes — combining
   marks and lookalikes corrupt through chat round-trips).
-  must be **unique to the new edit** — a token present in old content proves nothing;
-  annotate expectations with the scope the command actually measures.
 - When providing code that depends on indentation (decorators, class bodies,
   nested functions):
   1. Include a comment block showing the target column level for each code block type
