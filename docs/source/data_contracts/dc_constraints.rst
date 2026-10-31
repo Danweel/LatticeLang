@@ -18,6 +18,14 @@ Constraint Data Contract
    :ref:`adr-049` (coordinate-addressed random streams),
    :ref:`adr-050` (qualitative ambiguity tiers).
 
+   Correction 2026-10-31: that review also introduced defects,
+   since found in systemized review rotation and corrected in
+   place — the MVP catalog had been silently swapped (restored
+   to :ref:`ADR-037`'s frozen nine below) and a ``params``
+   field-name stray (normalized to ``parameters``). The original
+   note above is kept unchanged for the record; see the realignment
+   note in Constraint Types (MVP Catalog) for the full account.
+
 Overview
 --------
 
@@ -39,27 +47,42 @@ Constraint Types (MVP Catalog)
 The nine frozen MVP types (:ref:`ADR-037`):
 
 #. ``sonority_sequencing`` — Enforces the Sonority Sequencing
-   Principle (:ref:`adr-038`); default on, visible.
-#. ``prohibited_clusters`` — Forbidden consonant sequences in
-   margins (default syllable domain).
+   Principle within onset and coda (:ref:`adr-038`); default on,
+   visible.
+#. ``allow_s_appendix`` — Permits /s/+C onset clusters that
+   violate SSP (e.g., /sp/, /st/).
 #. ``no_geminate_obstruents`` — Adjacent identical obstruents
-   forbidden (hard-wired to ``word`` domain).
-#. ``position_restrictions`` — Phoneme forbidden at specific
-   positions (onset/coda, word-initial/final).
-#. ``harmony`` — Feature agreement across vowels/consonants
-   (within-syllable MVP; cross-syllable post-MVP, Q42).
-#. ``ocp`` — Obligatory Contour Principle: identical adjacent
-   feature values forbidden.
-#. ``nucleus_requirements`` — Mandatory nucleus content.
-#. ``margin_requirements`` — Mandatory margin content.
-#. ``tone_assignment`` — Reserved for future tone behavior
-   configuration; currently enforced by ``tone_assignment``
-   constraint, configured by a separate tone stage
-   (:ref:`ADR-048`).
+   forbidden (domain fixed to ``word``: geminates arise across
+   the coda-onset junction, Q35).
+#. ``max_onset_length`` — Upper bound on consonant count in
+   onset (structural cap).
+#. ``max_coda_length`` — Upper bound on consonant count in
+   coda (structural cap).
+#. ``position_restrictions`` — Forbidden phonemes per position
+   (onset/coda/nucleus, plus ``word_initial``/``word_final``
+   edge keys, Q37).
+#. ``ocp`` — Obligatory Contour Principle: no adjacent
+   segments sharing a designated feature.
+#. ``harmony`` — Feature agreement within the syllable (MVP
+   scope, Q34; parameterized per Q42).
+#. ``prohibited_clusters`` — Explicit banned sequences (domain
+   defaults to ``syllable``, configurable per Q35).
+
+Realigned to :ref:`ADR-037` 2026-10-31. The 2026-09-16
+audit-era draft had silently replaced ``allow_s_appendix``,
+``max_onset_length``, and ``max_coda_length`` with
+``nucleus_requirements``, ``margin_requirements``, and
+``tone_assignment`` — without the superseding ADR that
+ADR-037 requires for any catalog change, and with
+``tone_assignment`` already among its ten reserved post-MVP
+types. The variant names appeared nowhere else in the docs
+(sweep, 2026-10-31). Nucleus/margin requirements remain
+available through ADR-037's supersession protocol if they
+earn a place.
 
 New constraint types are added by defining a new ``type``
 identifier and implementing a validator handler (extensibility
-protocol per :ref:`adr-037`).
+protocol per :ref:`ADR-037`).
 
 Field List
 ----------
@@ -76,7 +99,7 @@ Field List
      - string
      - Yes
      - Constraint type identifier (catalog strings above).
-   * - ``params``
+   * - ``parameters``
      - object
      - Yes
      - Type-specific parameters (per ``parameters`` schema below).
@@ -112,10 +135,18 @@ Parameters Schema (Type-Specific)
    keyed by ``onset``, ``coda``, ``word_initial``,
    ``word_final`` (edge keys per Q37).
 
-``parameters.max_count``
-   ``position_restrictions`` only: integer override for
-   max-onset/coda (exceeding defaults triggers
-   :ref:`adr-035` warning).
+``parameters.max_onset_length`` / ``parameters.max_coda_length``
+   Integer upper bound on cluster size (e.g., 3). Conflicting
+   pairs (e.g., ``max_onset_length=2`` vs. ``allow_s_appendix``
+   implying /spl/) trigger the UC-03 step-4 conflict check.
+
+``parameters.allow_s_appendix``
+   List of phonemes permitted to follow /s/ (e.g.,
+   ``["p", "t", "k", "m", "n", "l", "ɹ", "w", "j"]``, UC-03).
+
+``parameters.clusters``
+   ``prohibited_clusters`` only: list of forbidden sequences
+   (e.g., ``[["s", "t"], ["l", "n"]]``, UC-03).
 
 Validation Result Schema
 ------------------------
@@ -184,16 +215,18 @@ remains documented.
 Relation to Tone
 ----------------
 
-The ``tone_assignment`` constraint type is reserved for
-future tone behavior. Tone is configured in a future tone
-stage (:ref:`adr-048`) and enforced by this constraint —
-the division of labor is architectural, not temporal.
+The ``tone_assignment`` constraint type is among the ten
+post-MVP types RESERVED by :ref:`ADR-037` (names must not be
+displaced). Tone is configured in a future tone stage
+(:ref:`ADR-048`) and enforced by this constraint — the division
+of labor is architectural, not temporal.
 
 Implementation Bindings
 -----------------------
 
-Current homes (subject to change without contract amendment;
-semantic rules are stable):
+Planned homes (none implemented as of 2026-10-31; verified —
+module absent, no references, no preset file. Semantic rules
+above are stable and unaffected):
 
 - ``latticelang.core.constraints`` — ``Constraint`` class,
   per-type handlers, ``TemplateValidator``

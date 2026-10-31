@@ -1648,7 +1648,7 @@ Q34: [PHONO] Harmony Constraint — MVP Scope Confirmation
 
    **Action items:**
 
-   - [ ] Document scope explicitly in constraint data contract
+   - [x] Document scope explicitly in constraint data contract
    - [ ] Add test case: within-syllable harmony passes
    - [ ] Add test case: cross-syllable harmony not evaluated (not an error, just ignored)
 
