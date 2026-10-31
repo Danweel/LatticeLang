@@ -950,7 +950,7 @@ Fixtures are EXPORTS of real data, never invented worlds:
   carry a provenance comment and a "data changed" failure
   message — a tripped pin means re-run the PROVENANCE checks,
   never edit the number.
-- Fresh-clone principle: `git clone && poetry install --extras
-  dev && poetry run pytest` must be green on any machine; vendor-
-  gated tests skip VISIBLY (named reasons), never fail silently,
-  never vanish.
+- Fresh-clone principle:
+  `git clone && poetry install --extras docs --with dev && poetry run pytest`
+  must be green on any machine; vendor- gated tests skip VISIBLY
+  (named reasons), never fail silently, never vanish.

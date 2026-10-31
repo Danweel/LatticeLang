@@ -357,6 +357,12 @@ ADR Index
      - Accepted
      - 2026-09-30
      - Danweel
+   * - :ref:`ADR-053`
+     - [DOCS]
+     - Poetry Dependency Groups
+     - Accepted
+     - 2026-10-30
+     - Danweel, Lumo
 
 ---
 
@@ -3216,3 +3222,57 @@ while linguists familiar with the IPA tie bar lose nothing.
 Normalizing input spellings inward to canonical form remains a
 future normalization concern (see the ADR-028 note; the 83 unlisted
 composition project is unaffected).
+
+.. _ADR-053:
+
+ADR-053: [GOV] Dev Tooling to a Poetry Dependency Group
+-------------------------------------------------------
+
+:Date: 2026-10-31
+:Status: Accepted
+:Scope: Packaging, CI, development workflow
+:Deciders: Danweel
+
+Context
+~~~~~~~
+
+The ``dev`` extra (``[project.optional-dependencies]``)
+duplicated the ``docs`` extra's eleven pins plus ruff/pytest/
+pytest-cov, maintained by hand. The duplication already
+drifted once — the ``sphinx-design`` upper bound (``<1.0``)
+was present in ``docs``, missing in ``dev`` — silently
+diverging the RTD and local environments (commit 8d9e4f5
+repaired and documented it, 2026-10-30). The obvious fix, a
+self-referential extra (``latticelang[docs]``), is rejected
+by Poetry: "Package 'latticelang[docs]' is listed as a
+dependency of itself" (exit 1, 2026-10-30), despite the
+PEP 621 specification permitting the form.
+
+Decision
+~~~~~~~~
+
+Move dev tooling to an optional Poetry dependency group
+(``[tool.poetry.group.dev.dependencies]``: ruff, pytest,
+pytest-cov). The ``docs`` extra remains for Read the Docs'
+``pip install .[docs]``. Local and CI dev installs become
+``poetry install --extras docs --with dev``. This matches
+Poetry's documented semantic split: groups carry
+development-process dependencies; extras carry optional
+runtime functionality (the Sphinx stack is consumed at
+docs-build time by an external installer, which is the
+extras use case). Poetry 2.0 supports ``[project]`` and
+``[tool.poetry.group]`` coexisting (Poetry 2.0.0 release
+announcement; managing-dependencies docs); verified locally
+— ``poetry lock`` resolves clean (exit 0, 2026-10-31).
+
+Consequences
+~~~~~~~~~~~~
+
+One master per concern: the docs extra owns the Sphinx
+stack, the dev group owns tooling, no duplicated pins to
+drift. CI's install step and the documentation_standards
+fresh-clone principle update in the same commit. Earlier
+ADR text referencing ``--extras dev`` stands untouched
+(append-only); this ADR supersedes in effect. The
+question-registry sync was checked — no open question
+covers dependency organization.

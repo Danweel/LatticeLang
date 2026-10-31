@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: |
           if [ ! -d ".venv" ]; then
-            poetry install --extras dev
+            poetry install --extras docs --with dev
           fi
 
       - name: Run linter

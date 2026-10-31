@@ -179,14 +179,21 @@ Sentinel Design
 - Sentinel phrases: prefer a single distinctive word over
   multi-word phrases — wrapped RST prose splits phrases across
   lines and a correct text greps empty. When the phrase
-  matters, join lines first:
-  tr '\n' ' ' < file | grep -o 'phrase'.
+  matters, join lines AND squeeze spaces before matching:
+  ``tr '\n' ' ' < file | tr -s ' ' | grep -c 'phrase'`` — a
+  wrapped continuation line carries its own indentation, so
+  naive joining inserts multiple spaces where the source had
+  newline-plus-indent, and the exact phrase still misses.
+  When in doubt, drop back to a single unwrappable token.
+  Lineage: 2026-10-31 — the sentinel-design rule itself sat
+  on disk at lines 190-191 while three phrase greps missed
+  it; ``grep -n 'inflect'`` found it instantly.
 - Prose sentinels use `grep -i`. A phrase beginning a heading,
   sentence, or table cell is capitalized there, so an exact-case
   grep returns empty on correct text. Reserve exact case for
   code identifiers. RST labels are hyphenated where headings use
   spaces (`_principle-invocation` vs "Principle invocation").
-  - Copy the sentinel from the exact text pasted, not from the
+- Copy the sentinel from the exact text pasted, not from the
   concept behind it — and prefer a token that cannot wrap or
   inflect. Wrapped RST prose splits an expected phrase across
   lines mid-token (a link at a line start defeats a
