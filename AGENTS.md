@@ -74,6 +74,10 @@ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
 - Change alters user-visible behavior, output, or data → update CHANGELOG.md in the SAME commit, never retroactively (documentation_standards.rst § Changelog Standards).
 - Binding decision made → Status Overview + ADR Index updated in the same commit as the decision; update this file too (AGENTS.md) when a lesson belongs here.
 - Verify BEFORE committing, commit LAST: run the full sphinx audit build, pytest, and `poetry run ruff check .`; only when all three are clean does a commit happen. (Lineage: 2026-10-15 — CI's lint gate failed on 30 accumulated ruff errors never caught locally; the local ritual had no ruff step.)
+- pyproject.toml edits regenerate poetry.lock in the SAME commit
+  (poetry lock, then verify pytest) — a lock/pyproject mismatch is a
+  half-applied dependency change and fails fresh installs (lineage:
+  2026-10-30 CI red on the dev-extras commit until the lock caught up).
 
 # Documentation Map
 

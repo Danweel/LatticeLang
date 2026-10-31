@@ -186,6 +186,21 @@ Sentinel Design
   grep returns empty on correct text. Reserve exact case for
   code identifiers. RST labels are hyphenated where headings use
   spaces (`_principle-invocation` vs "Principle invocation").
+  - Copy the sentinel from the exact text pasted, not from the
+  concept behind it — and prefer a token that cannot wrap or
+  inflect. Wrapped RST prose splits an expected phrase across
+  lines mid-token (a link at a line start defeats a
+  trailing-context pattern); sentence-start words are
+  capitalized; adjectives get hyphenated. Choose the shortest
+  distinctive fragment that must appear regardless of
+  wrapping (e.g. grep for 'gen.html', not the sentence around
+  it), and grep -i for prose. Lineage: five instances in
+  three sessions — "tool findings" vs "Tool findings" (cap ×2),
+  "principle invocation" (cap), "2,155 inventories" vs
+  "2,155-inventory" (hyphen), "not missing data" vs "isn't
+  missing data" (drafter's synonym — the sentinel author's
+  own rewording), and zompist.com/gen.html`_ (line-wrap:
+  correct text at a wrapped line start grepped empty).
 
 .. _session-bootstrap:
 
