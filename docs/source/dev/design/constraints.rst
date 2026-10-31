@@ -3,7 +3,7 @@
 Constraint Types Overview
 =========================
 
-:date: 2026-08-24
+:date: 2026-10-31
 :type: Living (Incremental)
 :audience: Developers and contributors
 :purpose: What specific constraint types exist?
@@ -18,8 +18,10 @@ by implementation phase and theoretical classification.
 MVP Constraints
 ---------------
 
-Nine constraint types are planned for the MVP. All operate within a
-single syllable boundary.
+Nine constraint types are planned for the MVP (:ref:`ADR-037`).
+Domains vary by type (Q35): most default to the syllable;
+``no_geminate_obstruents`` is fixed to ``word``; ``prohibited_clusters``
+is configurable per instance.
 
 .. csv-table::
    :header-rows: 1
@@ -28,13 +30,21 @@ single syllable boundary.
    "Constraint","Category","Domain","Description"
    "sonority_sequencing","Markedness","Within syllable","Enforces Sonority Sequencing Principle: sonority rises in onset, falls in coda"
    "allow_s_appendix","Exception","Within syllable","Permits /s/+C clusters that violate SSP (e.g., /sp/, /st/)"
-   "no_geminate_obstruents","Markedness","Within syllable","Prohibits identical adjacent obstruents"
+   "no_geminate_obstruents","Markedness","Word (fixed, Q35)","Prohibits identical adjacent obstruents across the coda-onset junction"
    "max_onset_length","Structural","Within syllable","Upper bound on consonant count in onset"
    "max_coda_length","Structural","Within syllable","Upper bound on consonant count in coda"
    "position_restrictions","Positional","Within syllable","Forbidden phonemes per position (onset/coda/nucleus)"
    "ocp","Markedness","Within syllable","Obligatory Contour Principle: no adjacent segments sharing specified feature (place, voicing, etc.)"
    "harmony","Harmonic","Within syllable (MVP only)","Features must agree across adjacent segments; **cross-syllable deferred**"
    "prohibited_clusters","Concrete","Any (configurable)","Explicit list of banned consonant sequences"
+
+.. important::
+   **MVP is a skeleton, not a finished product.**
+   ``harmony`` is within-syllable only in MVP;
+   cross-syllable harmony and ``tone_assignment`` are
+   RESERVED post-MVP types (:ref:`ADR-037`). The
+   program opens and works minimally at MVP — most
+   phonotactic expressiveness arrives in Phase Delta.
 
 .. note::
    **Harmony scoping (original supposition, clarified 2026-10-08).**
