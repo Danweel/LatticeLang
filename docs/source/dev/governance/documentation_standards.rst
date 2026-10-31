@@ -12,6 +12,9 @@ This file serves as a reference for consistent formatting and structure
 across LatticeLang documentation. It is intentionally compact for easy
 reference during development sessions.
 
+Project pacing and tone conventions live in AGENTS.md
+("Project cadence and tone"); that file is the single master.
+
 File Organization
 -----------------
 
@@ -593,6 +596,11 @@ Preconditions, Inputs (subfunctions only), Main Success Scenario,
 Postconditions, Extensions, Frequency, Related (Calls /
 Called by / Consumes / Data contracts), Variations, Notes,
 Open Questions, Flow Diagram (Goal and Subfunction levels only).
+
+Use-case ID number width encodes Cockburn level: three-digit
+numbers are subfunctions, two-digit are summary/User Goal
+level. Numbers do not overlap between the ranges; mixed-width
+IDs in one document are correct, not inconsistent.
 
 Rules
 -----
