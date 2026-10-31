@@ -3,7 +3,7 @@
 How LatticeLang Works:
 ======================
 
-:date: 2026-10-01
+:date: 2026-10-30
 :type: Tutorial
 :audience: Linguists, conlangers (minimal programming jargon)
 
@@ -24,7 +24,8 @@ consistent formats.
 
 That's pretty standard for phonology generators - there's a lot of
 them out there. Enough that it's a bit tough to write out a list of them,
-I usually just send people to Rosenfelder's "Gen". Zompist's Gen <https://www.zompist.com/gen.html>.
+I usually just send people to Mark Rosenfelder's
+`Gen <https://www.zompist.com/gen.html>`_ (hosted on his Zompist site).
 What I wanted specifically was a program with fiction authors in mind, less-so
 conlangers with a hobby. Writers don't have time to make conlanging a
 full hobby. They might be interested in the things that a basic conlang
@@ -58,24 +59,22 @@ Here's what happens internally, translated from technical terms:
 
 **PHOIBLE curation**
 This is in the GitHub repo but not included for end users. PHOIBLE is
-a collection of data from real world languages that contains 2,155 inventories
+a collection of data from real-world languages — 2,155 inventories
 spanning 2,104 language names (1,673 distinct ISO codes), as counted
-from the pinned PHOIBLE 2.0 release that the authors of
-the database were able to collate. They already did the work of removing
-duplicates and normalizing the data itself. It's open-source, so I've
-been able to make use of their hard work for less-than-scientific purposes.
-I ran scripts that didn't take PHOIBLE for granted: it compares it to the
-IPA list. This way certain kinds of complex entries are set aside - an
-example is clicks. Clicks only ever appear with another sound - something
-not reflected in the IPA chart. You just have to know that. I can't assume
-users will be able to apply that if they don't know, not to mention that
-in PHOIBLE, the click glyphs themselves have 0 rows where they appear alone.
-These exceptions are placed aside and marked - they have to be handled
-in a different way than the rest. (See :ref:`phoible_use_methodology`)
-(PHOIBLE never lists the bare click letters at all — it documents clicks
-only in accompanied forms, and those rows are complete and usable. The
-problem is the mismatch between what the chart lists and what the
-database attests, not missing data.)
+from the pinned PHOIBLE 2.0 release. The database's authors did the
+hard work of collating, de-duplicating, and normalizing; it's
+open-source, so I've been able to build on it for
+less-than-scientific purposes. The scripts written for LL don't take PHOIBLE for
+granted as-is, though: they compare it against the curated IPA chart.
+That comparison sets aside certain complex entries — clicks are
+the example. On the IPA chart, clicks appear as bare letters; in
+PHOIBLE, they're only ever attested in accompanied forms (like
+``kǃ``), and those rows are complete and usable. So the problem
+isn't missing data — it's a mismatch between what the chart lists
+and what the database attests. Since I can't assume users know
+that offhand, these exceptions are set aside and marked, to be
+handled differently than the rest. (See
+:ref:`phoible_use_methodology`.)
 
 **Data Stuff**
 LatticeLang starts with this data, not from scratch. This ensures the sounds
@@ -121,7 +120,7 @@ Why This Matters
 
 Most tools let users create anything, including linguistically
 impossible combinations or other 'interesting' edge cases. That's
-great for play and to experiment with lingustics,, but for novelists
+great for play and to experiment with linguistics, but for novelists
 too much adventure can be just difficult to read, or tempting to put
 on display when the words should really be serving the story - sometimes
 this work's just flavor.
@@ -135,8 +134,8 @@ assumptions about what you are feeding it.
 This is the "Naturalistic Defaults" principle (:ref:`ADR-035`).
 It's easier to be flagged for what's unusual than remember what
 you don't know you have to put in there — so the tool is lifting
-that weight for you. It might be Ref 35, but this was a ground-level
-principle behind the tool and why I'm not just using
+that weight for you. This was a ground-level
+idea behind the tool and why I'm not just using
 an existing generator.
 
 The Phoneme Unit
@@ -324,7 +323,7 @@ Limitations (Current Phase)
 For transparency, here's what *doesn't* work yet (Post-MVP items):
 
 - Tone and stress marking (planned for Delta phase)
-- Cross-syllable harmony (backness/rounding, nasal harmony)
+- Harmony beyond within-syllable scope (cross-syllable backness/rounding or nasal harmony)
 - Morphology (prefixes, suffixes, roots)
 - Sound change simulation (historical phonology)
 - Export to writing systems beyond IPA
@@ -349,10 +348,9 @@ Feedback Welcome
 
 This guide is intentionally jargon-light. If you're a linguist
 reading this and thinking "wait, that's not how sonority works,"
-please open an issue on GitHub. Your expertise helps keep the
-tool accurate.
+please reach out through the repository — your expertise helps
+keep the tool accurate.
 
 Conversely, if you're a programmer thinking "that's hand-wavy,"
-please check :ref:`dc_phoneme` for the technical specifications.
-This page is the friendly front door; the docs behind it hold
-the rigorous details.
+please check :ref:`dc_phoneme` for the technical specifications,
+if they can be improved, that's ideal.
