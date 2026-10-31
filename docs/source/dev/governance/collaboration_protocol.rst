@@ -242,7 +242,20 @@ Fix Response Protocol
 ---------------------
 
 Every fix proposal follows the same four-part shape, so the
-human can verify each step without expert knowledge:
+human can verify each step without expert knowledge.
+Step ordering: when instructions contain a sequence, every
+step appears in the numbered order of execution, and the
+sequence is COMPLETE at first presentation — nothing needed
+for the task arrives after the sequence ends. Preconditions,
+sentinel checks, and file edits precede the commands that
+depend on them; follow-ups or next tasks belong in a separate
+later section, clearly outside the numbered steps. The USER
+reads the whole message before starting step 1 — mid-sequence
+surprises are how steps execute in the wrong order.
+Lineage: 2026-10-31 — a corrections-round commit sequence was
+presented complete, then a CHANGELOG line arrived as an
+afterthought below it; the push had already happened before
+the addendum was read.
 
 1. Diagnosis with evidence — name the exact cause and point at
    the lines/output that prove it (never "something is wrong

@@ -150,13 +150,18 @@ Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond withi
   save-and-sentinel (unsaved buffer edits do not exist;
   grep the disk for a paste token);
   no remembered numbers;
-  RST targets get markdown-remnant sentinels (grep -c '^## '; fences via grep -F) — legal-parse garbage never warns;
+  RST targets get markdown-remnant sentinels
+  (grep -c '^## '; fences via grep -F) — legal-parse garbage never warns;
   JSON edits validated (json.tool);
-  no Unicode via clipboard (use chr()/escapes).
+  no Unicode via clipboard (use chr()/escapes);Sentinels are
+  copied from the exact pasted text and prefer
+  wrap-proof single tokens (grep -i for prose) — wrapping,
+  capitalization, and hyphenation defeat phrase sentinels.
 - Fix Response Protocol: every fix = diagnosis with evidence,
   before/after with file path, verification command with expected output, what's next;
-  all diagnoses cite exact lines;
-  all fixes include sentinels.
+  all diagnoses cite exact lines; all fixes include sentinels;
+  Step sequences are numbered, complete at first presentation
+  (no afterthought steps), and read whole before step 1 begins.
   Tool findings imply, they do not conclude. Investigate unknowns of any kind.
 - warnings.warn in library code (src/) always sets
   stacklevel=2 so the warning points at the caller's line;
