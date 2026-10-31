@@ -5,8 +5,10 @@ in this repository. Written assistants-first, humans-second: short
 lines, grep-able headings, explicit paths. Normative content lives in
 `docs/source/`; this file points to it and adds session mechanics.
 Collaboration process detail lives in
-docs/source/dev/governance/collaboration_protocol.rst — this file
+`docs/source/dev/governance/collaboration_protocol.rst` — AGENTS.md file
 keeps summaries and pointers only.
+Working rules live in `docs/source/dev/governance/collaboration_protocol.rst`;
+see Model and mode batching there for tiering guidance.
 
 ## Cold-Start Kit (ASK for these at session start)
 
@@ -20,7 +22,44 @@ keeps summaries and pointers only.
 Everything else is retrieved on demand. Past-session memory is never
 a source of current state; the repo is. Warn if any of these files are missing.
 
+## Project cadence and tone
+
+This is a hobby project with no business-related deadlines. Normal 'work' rules don't
+apply - this means an emphasis on ideal development conditions and best practices is
+in the forefront. The user can start and stop work at any time, and is unhurried in
+pacing. The goal is good code and habits rather than closing commits; always take your
+time and favor completeness over arbitrary 'finishing'. (Added due to reasoning blocks
+referencing worrying about pacing. Always choose best-practice, even if it adds to
+chores and verifications, or makes the response 'long', if complete) Leave as few
+threads and chores open as possible before moving onto more substantial "deliverables",
+don't let small jobs accumulate too long, even if this slows 'progress'. Treat all work
+as progress towards a working program and celebrate it as such.
+
+When not working locally, e.g. with Lumo, Assume the assistant
+may be served by different underlying models across turns. Keep
+each turn self-contained (paste the material being discussed),
+avoid mixing unrelated task types in one request, and state
+expected outputs before commands. Offer analysis on which mode(s)
+may be appropriate to select for the next turn to save tokens;
+e.g., Thinking mode for complex multi-document analysis.
+
+When switching tools/models, re-read AGENTS.md to
+recover working rules. The verification discipline
+(paste back results, state expected outputs before
+commands, verify before asserting) is what makes weak
+models safe to use.
+
 ## Retrieve on Demand (task triggers)
+
+Selective retrieval: when a task touches one protocol topic,
+extract just that section instead of pasting the whole file —
+`grep -n '_section-label:' <file>` finds the label, `sed -n
+'X,Yp' <file>` prints the range; paste the span. Whole-file
+pastes are fine while files stay small; extract when a session
+is long or a weak/local model is serving. (Also the cold-start
+kit's default: AGENTS.md always; protocol sections on demand.)
+
+Triggers: (1) a task that names a specific protocol topic (paste-check, sentinel design, fix-response), (2) a long session where the context budget matters, (3) the local-model drill, where extraction is mandatory because AGENTS.md-only is the test condition. Non-trigger: cross-cutting work that touches multiple rules at once — whole-file context wins there.
 
 - Documentation edit or pasteable block → docs/source/dev/governance/documentation_standards.rst
 - Touching a data contract or its code → that docs/source/data*contracts/dc*\*.rst
@@ -53,31 +92,53 @@ poetry run sphinx-build -E -b html docs/source docs/_build/html \
   2>&1 | grep -iE 'warning|error|critical' | head -40
 ```
 
-## Broken-role sweep
+## Skill Transfer Mode
 
-A :ref: missing its backticks renders as plain text with NO warning (silent dead reference). Runs with the pre-commit verification:
+Skill-transfer mode: when the user signals readiness for
+routine tasks (sentinel runs, list audits), the assistant
+gives the full command **with inline annotations** explaining
+each flag's purpose. This teaches grep/bash syntax while
+avoiding token waste on repetitive explanations. Always alert
+and verify with the user when doing this.
 
-```
-grep -rnE ':ref:[A-Za-z]' docs/source/
-grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/
-```
-
-- RTD auto-builds on push. No build on readthedocs.org → check GitHub webhook deliveries + RTD integrations before anything else.
-- `git status` / `git log --stat` whenever unsure; terminal pager exits with "q".
-- Assistant always gives full git commands with explanations.
-- Epoch line: at cold-start (after the kit), run `git log -1 --oneline && poetry run pytest -q | tail -1` — ground-truth commit + test count, catching drift in the cold-start documents themselves.
-- When a session adopts or rejects a new tool/service, update the AGENTS.md tooling
-  inventory in the same session.
+`grep -rn 'geminate' docs/source/  # -r recursive, -n line numbers`
 
 # At Commit Time
 
-- Change alters user-visible behavior, output, or data → update CHANGELOG.md in the SAME commit, never retroactively (documentation_standards.rst § Changelog Standards).
-- Binding decision made → Status Overview + ADR Index updated in the same commit as the decision; update this file too (AGENTS.md) when a lesson belongs here.
-- Verify BEFORE committing, commit LAST: run the full sphinx audit build, pytest, and `poetry run ruff check .`; only when all three are clean does a commit happen. (Lineage: 2026-10-15 — CI's lint gate failed on 30 accumulated ruff errors never caught locally; the local ritual had no ruff step.)
-- pyproject.toml edits regenerate poetry.lock in the SAME commit
-  (poetry lock, then verify pytest) — a lock/pyproject mismatch is a
-  half-applied dependency change and fails fresh installs (lineage:
-  2026-10-30 CI red on the dev-extras commit until the lock caught up).
+Before committing:
+
+1. **Verify first, commit last.** Run:
+
+   ```bash
+   cd ~/Documents/VSCodiumFiles/LatticeLang && \
+   poetry run sphinx-build -E -b html docs/source docs/_build/html \
+     2>&1 | grep -iE 'warning|error|critical' | head -40
+   poetry run pytest -q
+   poetry run ruff check .
+   Only when all three pass does a commit happen. (Lineage: 2026-10-15 CI
+   failed on 30 accumulated ruff errors.)
+
+   ```
+
+2. **User-facing changes get CHANGELOG lines staged
+   in the SAME commit** (docs/source/user/, packaging,
+   behavior changes; never retroactive; see
+   documentation_standards.rst § Changelog Standards).
+
+3. **pyproject.toml edits regenerate poetry.lock
+   in the SAME commit** (poetry lock → verify pytest;
+   lineage: 2026-10-30 CI red until lock caught up).
+
+4. **Binding decisions update Status Overview + ADR
+   Index in the SAME commit**; update this file when
+   a lesson belongs here.
+
+5. **Broken-role sweep** (runs with the pre-commit verification):
+   `grep -rnE ':ref:[A-Za-z]' docs/source/ grep -rnE ':cite:[a-z]?:[A-Za-z]' docs/source/`
+   A re: missing backticks renders as plain text (silent dead reference).
+
+6. **RTD webhook check** — No build on readthedocs.org? Check GitHub
+   webhook deliveries + RTD integrations before anything else.
 
 # Documentation Map
 
@@ -137,6 +198,8 @@ Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond withi
 - Treat tool results as the only evidence for time-sensitive or verifiable claims. A verified wrong answer beats a plausible guess; when a count or fact matters, search before asserting.
 - Record decisions in files at the moment they're made — working memory does not survive compaction; documents do.
 - Re-inject when hazy: invoke "RE-INJECT" to force the cold-start kit.
+- `git status` / `git log --stat` whenever unsure; terminal pager exits with "q".
+- Assistant always gives full git commands with explanations.
 
 # Process Rules (summaries; full text: collaboration_protocol.rst)
 
