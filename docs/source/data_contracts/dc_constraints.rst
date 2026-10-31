@@ -68,6 +68,14 @@ The nine frozen MVP types (:ref:`ADR-037`):
 #. ``prohibited_clusters`` — Explicit banned sequences (domain
    defaults to ``syllable``, configurable per Q35).
 
+.. important::
+   **MVP is a skeleton, not a finished product.**
+   ``harmony`` is within-syllable only in MVP;
+   cross-syllable harmony and ``tone_assignment`` are
+   RESERVED post-MVP types (:ref:`ADR-037`). The
+   program opens and works minimally at MVP — most
+   phonotactic expressiveness arrives in Phase Delta.
+
 Realigned to :ref:`ADR-037` 2026-10-31. The 2026-09-16
 audit-era draft had silently replaced ``allow_s_appendix``,
 ``max_onset_length``, and ``max_coda_length`` with
