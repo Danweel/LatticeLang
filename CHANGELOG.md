@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Add the curated IPA chart pass-list (`data/ipa_chart.json`):
   pulmonic consonants and affricates in vendored PHOIBLE-verbatim
   spellings (ADR-052), with a provenance block and vendor-gated
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   essay.
 
 ### Changed
+
 - Institute the `deferred` map in `data/ipa_chart.json` for
   chart-canonical symbols lacking a PHOIBLE features row; park
   the voiced uvular implosive (U+029B) — only the voiceless
@@ -46,23 +48,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   enters the pipeline.
 
 ### Dependencies
+
 - Vendor the pinned PHOIBLE 2.0 release into the repository
   (dev-862bec9, hash pinned in PROVENANCE.txt; bundling
   decision 2026-10-04): repository and sdist carry all data,
   tests, scripts, and docs; the wheel distributes the runtime
   library plus the precomputed ipa_reference.json only.
 
+### Fixed
+
+- **User docs**: `how_latticelang_works` — click attestation
+  consolidated (chart/database mismatch, not missing data);
+  working Rosenfelder Gen link; harmony limitation wording
+  aligned to within-syllable scope; broken-issue invitation
+  replaced (Issues deliberately not in use); typos. (Follow-up entry:
+  the originating commit 1b6aa83..HEAD landed without its
+  CHANGELOG line.) The wheel no longer ships a broken 'latticelang' command.
+
 ### Tests
+
 - 109 passing
 
 ### Removed
+
 - Remove the empty placeholder `data/ipa_reference.json`: it is
   the derive script's OUTPUT, emitted fresh; the curated chart
   file is the INPUT.
+- Remove the broken `latticelang` console command — the wheel
+  declared `latticelang.cli:main` but no such module existed,
+  so the shipped script crashed on launch. No use case
+  specifies a CLI; the entry point returns when one does. It
+  was old automated work still hanging around.
 
 ## [0.3.0] — 2026-09-30
 
 ### Added
+
 - Add Q38 IPA Reference derive pipeline (`scripts/derive_ipa_reference.py`)
   - Build in five steps: parse → filter → derive → merge → validate → emit
   - Share sonority rank derivation with runtime prefill (one derivation, two consumers)
@@ -74,27 +95,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implement Field Check 4 (alias/symbol collision detection)
 
 ### Changed
+
 - Harden `tests/test_derive_ipa_reference.py`: replace vacuous alias test with
   real assertion; pin pipeline boundaries with negative assertions (step-1 shape
   ≠ step-3 shape)
 
 ### Fixed
+
 - Fix column alignment in PHOIBLE-style TSV (inventory_count / features / vowel
   columns previously slid by one slot)
 - Fix placeholder ellipsis in `derive_category` (previously returned `None` for
   all categories)
 
 ### Removed
+
 - Remove legacy AI debris: `PhonemeCategory(Enum)`, `PhonemeInventory` naming,
   orphaned test files
 - Remove stale comments referencing "script doesn't exist yet"
 - Remove unused `tempfile` import
 
 ### Dependencies
+
 - Pin PHOIBLE 2.0 via Zenodo DOI (`10.5281/zenodo.2626687`, 2019)
 - Adopt annual-review upgrade cadence (January each year, per DC-PHOIBLE-01)
 
 ### Tests
+
 - Grow suite to 71 passing:
   - `test_derive_ipa_reference`: 14
   - `test_ipa_reference`: 10
@@ -109,6 +135,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] — September 2026
 
 ### Added
+
 - UC-01 data layer (Phoneme, Inventory, Merge per ADR-014, ADR-033, ADR-051)
 - `core/phonology.py`: Phoneme dataclass, Inventory validation view
 - `core/sonority.py`: `propose_sonority_rank`, band-floor ranks
@@ -116,6 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 57 tests passing (prior to IPA reference work)
 
 ### Documentation
+
 - `docs/source/data_contracts/dc_phoneme.rst`
 - `docs/source/data_contracts/dc_inventory.rst`
 - Implementation Bindings recorded for module homes and merge semantics
@@ -125,6 +153,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] — April-August 2026
 
 ### Initial Release
+
 - Project scaffolding
 - Poetry configuration
 - Sphinx/RTD setup

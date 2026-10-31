@@ -255,8 +255,7 @@ collaboration_protocol.rst, service-banner rule).
 
 - **Runtime & packaging**: Python ≥3.11 (CI matrix 3.11 + 3.12);
   Poetry with PEP 621 metadata and the poetry-core build backend,
-  in-project venvs; `src/` layout; console entry point
-  `latticelang = latticelang.cli:main`; license GPL-3.0-or-later.
+  in-project venvs; `src/` layout; license GPL-3.0-or-later.
 - **Testing**: pytest 8 (`-v --tb=short`); pytest-cov is available
   but no coverage threshold is enforced.
 - **Lint**: ruff (rules E, W, F, I, B; line-length 88; target
