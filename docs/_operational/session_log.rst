@@ -1,3 +1,31 @@
+2026-11-06 — ADR-054 batch lands; PR sweep closed
+---------------------------------------------------
+Landed: the staged 2026-10-31 governance batch finally committed —
+ADR-054 (testing taxonomy, authority hierarchy, authorship order)
+accepted in decisions.rst; testing_standards.rst added (new file,
+213 lines, toctree via dev/index.rst); documentation_standards.rst
+extended (+197 lines: fixture doctrine and doc-format additions);
+AGENTS.md gained testing pointers; test_ipa_chart.py +15 lines
+(pending diff review — believed the PENDING_GROUPS empty-group
+guard). Gates: pytest 111 passed, ruff clean, audit build clean
+EXCEPT one benign grep match — MyST's full-build config banner
+contains "suppress_warnings", tripping 'warning|error|critical'.
+Candidate process note: banner filter or grep refinement for the
+audit command; not decided this session. Suite count in
+CHANGELOG.md refreshed 109 -> 111 (same commit). PR sweep (first
+since Dependabot adoption 2026-10-28): #2 and #3 (actions majors,
+upload-pages-artifact 3->5, deploy-pages 4->5) checked and merged
+squash, branches deleted — closes the Node-20-deprecation thread
+from the 2026-10-28 lineage.
+
+NEXT: vowels batch (vowel quadrilateral), per 2026-10-09 plan —
+roster verification against vendored PHOIBLE first, then RED
+exact-group test, then population; PENDING_GROUPS shrinks.
+Wrinkle to settle at roster stage: vowel rows with length/nasal
+diacritics under ADR-052 verbatim storage (clicks deferral may
+be the precedent). Then task 2 derive rewrite (Q48 ruling in
+hand at emission step).
+
 2026-10-09 — non-pulmonic batch 2 (clicks) + Q48 opened
 ------------------------------------------------------
 Landed: all five click letters (U+0298, U+01C0, U+01C1,

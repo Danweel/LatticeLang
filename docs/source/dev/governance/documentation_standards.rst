@@ -30,6 +30,7 @@ docs/source/
 │   └── possible_future_cases/     # Parked ideas
 ├── data_contracts/               # Data structure specifications
 │   ├── index.rst
+│   ├── dc_constraints.rst
 │   ├── dc_phoneme.rst
 │   ├── dc_syllable_template.rst
 │   ├── dc_language_definition.rst
@@ -47,18 +48,21 @@ docs/source/
 │   ├── index.rst                 # Dev section index
 │   ├── planning/                 # Milestones and vision
 │   │   ├── blueprint.rst
+│   │   ├── derive_rewrite_plan.rst
 │   │   ├── suite_vision.rst
 │   │   └── phases.rst
 │   ├── design/                   # Architecture and theory
 │   │   ├── architecture.rst
 │   │   ├── theoretical_framework.rst
-│   │   ├── constraints.rst
-│   │   └── testing.rst           # blank, planned
+│   │   └── constraints.rst
 │   └── governance/               # Process and decisions
+│       ├── collaboration_protocol.rst
 │       ├── decisions.rst
-│       └── documentation_standards.rst
+│       ├── documentation_standards.rst
+│       └── testing_standards.rst
 ├── research/                     # Research tracking
 │   ├── index.rst
+│   ├── q36_featureless_audit.rst
 │   ├── questions.rst
 │   ├── refs.bib
 │   └── bibliography.rst
@@ -75,10 +79,14 @@ docs/source/
 │   │   ├── index.rst
 │   │   └── ...
 │   ├── about.rst
+│   ├── ai_collaboration_methodology.rst
 │   ├── contributing.rst
+│   ├── how_latticelang_works.rst
+│   ├── how_the_program_processes_things.rst
 │   ├── installation.rst
+│   ├── phoible_use_methodology.rst
 │   ├── quickstart.rst
-│   └── reference.rst             # Specifically aimed at users
+│   └── reference_material.rst             # Specifically aimed at users
 └── glossary.rst
 
 Table Formatting Rules
@@ -440,6 +448,19 @@ A silent rewrite is drift; an overturn without rationale is
 "whatever works." Living docs (like this one) accumulate history;
 they don't erase it.
 
+**Exact command for commit-time verification:**
+
+.. code-block:: bash
+
+   cd /home/danweel/Documents/VSCodiumFiles/LatticeLang/ && \
+   poetry run sphinx-build -E -b html docs/source docs/_build/html \
+     2>&1 | grep -iE 'warning|error|critical' | head -40
+
+Note: Do NOT use placeholders (``...`` or ``[args]``) in commands.
+Copy the full line as written; ``...`` is a shell glob, not a
+placeholder. Sphinx will error if it receives literal ``...``
+as an argument (you will see "arguments required" messages).
+
 RST indentation in nested lists
 -------------------------------
 
@@ -653,6 +674,174 @@ When receiving an edit without a location anchor, ask:
 
 When making an edit yourself, note in the commit/changelog which
 sections changed.
+
+Architectural Decision Records (ADR) Format
+-------------------------------------------
+
+:Applies to: ``docs/source/dev/governance/decisions.rst``
+
+Every binding decision in the project is recorded as an ADR
+following the format below. ADRs are append-only; when a
+decision changes, a new ADR supersedes the old one rather
+than editing it.
+
+Index Table Entry
+~~~~~~~~~~~~~~~~~
+
+Each ADR has a corresponding row in the ADR Index table at
+the top of ``decisions.rst``. Both change in the same commit:
+
+.. csv-table::
+   :header-rows: 1
+   :widths: 20 15 45 10 15 25
+
+   "Label","Scope Tag","Title","Status","Date","Deciders"
+   ":ref:`ADR-053`","[DOCS]","Poetry Dependency Groups","Accepted","2026-10-30","Danweel, Lumo"
+
+Rules:
+
+- Scope tag is a four-letter category in brackets: ``[GOV]``,
+  ``[PHONO]``, ``[ORTHO]``, ``[DOCS]``, ``[SUITE]``, etc.
+- Title is sentence case, 3–8 words.
+- Deciders are comma-separated names; Danweel is always listed
+  for binding decisions.
+- Status is one of: Draft, Accepted, Superseded, Deprecated.
+
+Entry Structure
+~~~~~~~~~~~~~~~
+
+Each ADR follows this exact structure, in order:
+
+.. csv-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   "Element","Content"
+   "Label and heading","``.. _ADR-NNN:`` above ``ADR-NNN: [TAG] Title``"
+   "Field list",":Date:, :Status:, :Scope:, :Deciders:"
+   "Context","Problem being solved, evidence gathered, failed alternatives"
+   "Decision","What was chosen, why, and any constraints"
+   "Consequences","Impact on workflow, code, docs, future decisions"
+   "Relations","Links to Q-numbers, related ADRs, data contracts"
+
+Example
+~~~~~~~
+
+.. code-block:: rst
+
+   .. _ADR-054:
+
+   ADR-054: [GOV] Testing Taxonomy and Authority Hierarchy
+   -------------------------------------------------------
+
+   :Date: 2026-10-31
+   :Status: Accepted
+   :Scope: Testing methodology, commit workflow, data integrity
+   :Deciders: Danweel
+
+   Context
+   ~~~~~~~
+
+   The suite uses several distinct test patterns—interface-first
+   RED tests, data-batch exact-match tests, audit tests,
+   vendor-gated tests—but no document states when each applies,
+   or what makes an assertion authoritative. The gap surfaced
+   during the vowels-batch planning: an exact-match test cannot
+   honestly be written before the roster is verified.
+
+   Decision
+   ~~~~~~~~
+
+   Four test types, each with a defined trigger and authorship
+   order. Test-first required when interface is specified; for
+   data batches, test written after roster verification but
+   before population. The exception is legal only when
+   declared in the commit message with source citation.
+
+   Consequences
+   ~~~~~~~~~~~~
+
+   The vowels batch proceeds as: verify parenthesized-cell
+   policy, transcribe roster with escapes, write test, populate
+   until green, commit together with declared exception cited.
+   Derive-plan task 2 reconciles fixture worlds in one commit.
+
+   Relates to :ref:`Q38`, :ref:`ADR-052`, :ref:`ADR-036`.
+   Supersedes: none.
+
+Writing Guidelines
+~~~~~~~~~~~~~~~~~~
+
+**Context**
+
+State the problem with evidence. Mention failed alternatives
+if they inform the decision. Cite probe output or grep results
+with provenance tags (e.g., "probe 2026-10-06", "[verified: output]").
+
+**Decision**
+
+Write the ruling in active voice. If an exception exists (test-
+first not applicable), name it and cite the source.
+
+**Consequences**
+
+Detail the impact on:
+
+- Workflow (how commits, tests, or CI change)
+- Code (what refactors or new files are needed)
+- Docs (what must update in the same commit)
+- Future decisions (what this enables or constrains)
+
+Include question-registry sync status: "Checked — no open
+question covers this topic, so no question-side sync required."
+
+**Relations**
+
+Always name:
+
+- Any Q-number the ADR resolves
+- Any data contracts or use cases affected
+- Any ADRs this supersedes or depends on
+
+Status Management
+~~~~~~~~~~~~~~~~~
+
+- **Draft** — Under review, not binding yet
+- **Accepted** — Approved, binding from this date forward
+- **Superseded** — Replaced by a newer ADR; add a "Superseded
+  by" line naming the superseding ADR to the Consequences
+  section
+- **Deprecated** — No longer applicable but retained for history
+
+Append-Only Rule
+~~~~~~~~~~~~~~~~
+
+Published ADRs are never edited. Corrections or updates are
+made by:
+
+1. Creating a new ADR that supersedes the old one, or
+2. Adding a dated amendment note to the Consequences section
+   (if minor, and with a warrant citing an ADR or Q-number)
+
+Silent rewrites are drift. An overturn without rationale is
+"whatever works." Living records accumulate history; they don't
+erase it.
+
+Question-Sync Requirement
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before writing an ADR:
+
+1. Search ``research/questions.rst`` for existing coverage
+   (``grep -n '^[A-Z].*[Tt]opic-word'`` or Ctrl-F by keyword).
+2. If a question covers the topic, update its Status to
+   ``ANSWERED (date, :ref:`ADR-XXX`)`` and update the Status
+   Overview table row.
+3. If no question exists, proceed — note in Consequences that
+   the registry was checked.
+
+Same-commit sync applies: changing a question's Status requires
+updating both the body and the Status Overview table.
 
 Glossary Formatting
 -------------------

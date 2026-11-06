@@ -358,11 +358,17 @@ ADR Index
      - 2026-09-30
      - Danweel
    * - :ref:`ADR-053`
-     - [DOCS]
+     - [GOV]
      - Poetry Dependency Groups
      - Accepted
      - 2026-10-30
      - Danweel, Lumo
+   * - :ref:`ADR-054`
+     - [GOV]
+     - Testing Taxonomy and Authority Hierarchy
+     - Accepted
+     - 2026-10-31
+     - Danweel, Lumo drafted
 
 ---
 
@@ -3226,7 +3232,7 @@ composition project is unaffected).
 .. _ADR-053:
 
 ADR-053: [GOV] Dev Tooling to a Poetry Dependency Group
--------------------------------------------------------
+--------------------------------------------------------
 
 :Date: 2026-10-31
 :Status: Accepted
@@ -3276,3 +3282,107 @@ ADR text referencing ``--extras dev`` stands untouched
 (append-only); this ADR supersedes in effect. The
 question-registry sync was checked — no open question
 covers dependency organization.
+
+.. _ADR-054:
+
+ADR-054: [GOV] Testing Taxonomy and Authority Hierarchy
+-------------------------------------------------------
+
+:Date: 2026-10-31
+:Status: Accepted
+:Scope: Testing methodology, commit workflow, data integrity
+:Deciders: Danweel
+
+Context
+~~~~~~~
+
+The suite uses several distinct test patterns — interface-first
+RED tests, data-batch exact-match tests, post-implementation
+audit tests, vendor-gated tests — but no document states when
+each applies, or what makes an assertion authoritative. The
+gap surfaced concretely during the vowels-batch planning: an
+exact-match test cannot honestly be written before the roster
+is verified, because the roster's open question (parenthesized
+cells) is the thing under investigation. Without a written
+rule, that sequencing decision gets re-litigated every session.
+
+The cost of not having the rule is on record. A handover
+answer produced for this session, generated without the
+governing file in context, contained five fabricated API
+details (a nonexistent import path, a nonexistent accessor, an
+undefined constant, an invented roster, and a reference to a
+test function that does not exist) plus one convention
+violation (glyphs instead of escapes). The fabrications were
+plausible, which is what made them dangerous. Authority needs
+to be written down where a weak model can read it.
+
+Separately, the fixture layer has fractured. The derive-script
+suite reads ``tests/fixtures/phoible_mini.tsv`` (hand-authored,
+six rows, ghost schema), while
+``scripts/regenerate_mini_fixture.py`` writes
+``phoible_mini_features.tsv`` and
+``phoible_mini_attestation.tsv`` (real rows, true 38-column
+header). Both files exist; neither visibly supersedes the
+other. Commit-time verification therefore has no stated
+authority chain.
+
+Decision
+~~~~~~~~
+
+**1. Four test types, each with a defined trigger and
+authorship order.**
+
+.. csv-table::
+   :header-rows: 1
+   :widths: 18 57 25
+
+   "Type","Trigger","Authorship order"
+   "interface-first","Contract or interface documented before implementation exists","BEFORE code (write RED)"
+   "data-batch","Curated artifact whose roster is verified from a spec","AFTER roster verified, BEFORE data populated"
+   "audit","Post-implementation bug hunt against real data","AFTER code exists; expectations cite the ruling, not the behavior"
+   "vendor-gated","Authority check against pinned source data","Anytime; skips visibly when source is absent"
+
+**2. The exception rule.** Test-first is required when the
+interface is specified. For a data batch whose expected roster
+is itself under verification, the test is written after roster
+verification but before population. Such an exception is legal
+only when **declared**: the commit message names it and the
+test cites its source. Undeclared exceptions are the failure
+mode; declared exceptions are not.
+
+**3. Fixture authority chain,** highest to lowest:
+vendor-gated tests against pinned real data → committed
+fixtures (portable exports, truth delegated to the
+regeneration script) → in-memory mocks (isolation only, no
+correctness authority). A count appearing in a fixture was
+computed from real rows or it does not exist.
+
+**4. Symbol-escape discipline.** IPA symbols in JSON and test
+files are written as ``\uXXXX`` escapes with codepoint
+comments. Glyphs are never pasted through chat (clipboard
+mangling, homoglyph risk; :ref:`Q46`, :ref:`ADR-052`).
+
+**5. Absence must be declared.** A chart group may be empty
+only if named in a pending-groups constant; a deferred symbol
+is asserted explicitly rather than dropped from the list. An
+undeclared empty group fails the suite. This is the
+anti-vacuous-pass rule.
+
+Consequences
+~~~~~~~~~~~~
+
+The vowels batch proceeds as: verify the parenthesized-cell
+policy from the contract, transcribe the roster with escapes,
+write the exact-match test, populate until green, commit
+together with the declared exception cited. Derive-plan task 2
+reconciles the two fixture worlds in one commit, retiring
+``tests/fixtures/phoible_mini.tsv``. Methodology detail lives
+in :ref:`testing_standards`; this ADR records the rulings.
+
+The question registry was checked: no open question covers
+testing methodology, so no question-side sync is required.
+
+Relates to :ref:`Q38` (derive pipeline), :ref:`Q46` (spelling
+variants), :ref:`ADR-052` (segment spelling), :ref:`ADR-036`
+(inventory contract). Supersedes: none.
+contract).

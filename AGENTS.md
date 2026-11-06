@@ -69,6 +69,7 @@ Triggers: (1) a task that names a specific protocol topic (paste-check, sentinel
 - Adding or changing to existing Qs or ADRs → determine if cross referencing applies
 - Process/paste/verification rules in doubt → docs/source/dev/governance/collaboration_protocol.rst
 - Resuming mid session → docs/\_operational/session_log.rst (newest entry first; operational, not published)
+- Writing or reviewing a test → docs/source/dev/governance/testing_standards.rst
 
 ## Tech Stack
 
@@ -149,6 +150,7 @@ Before committing:
 - `docs/source/dev/governance/decisions.rst` — ADRs, append-only
 - `docs/source/dev/governance/documentation_standards.rst` — format rules for all docs (tables, labels, bib hygiene, edit-location anchors, changelog, data-contract section order, fixture doctrine)
 - `docs/source/dev/governance/collaboration_protocol.rst` — verification, paste-check, and fix-response process rules (moved here 2026-10-05)
+- `docs/source/dev/governance/testing_standards.rst` — test taxonomy, fixture authority chain, authorship order (ADR-054)
 - `docs/source/dev/planning/` — blueprint, phases, suite vision
 - `docs/source/dev/design/` — architecture, theoretical framework, constraints (verified 2026-09-30)
 - `docs/source/user/` — user-facing docs and troubleshooting
@@ -164,6 +166,11 @@ Before committing:
 - Technical suggestions state floor, connections, consequences, failure modes (documentation_standards.rst § Architecture Explanation); mermaid for diagrams, floor color conventions there.
 - In questions.rst and decisions.rst, always update the index at the top as well as the entry.
 - Fail loud, never plausible-silent: functions validate inputs and raise on mismatch; a plausible-but-wrong return is a defect even when tests pass around it.
+- Tests: four types (interface-first, data-batch, audit,
+  vendor-gated); authorship order and the declared-exception
+  rule in testing_standards.rst (ADR-054). Absence must be
+  declared — an empty chart group is named in PENDING_GROUPS
+  or the suite fails.
 
 # Key Decisions (summaries; ADR Index is canonical and complete)
 
@@ -190,7 +197,9 @@ Tone/stress-prosody, corpus inference beyond profile layer, harmony beyond withi
 
 - Explain WHY before HOW; beginner language; define linguistic terms (glossary.rst is the accumulator: new terms become :term: entries).
 - Heavy inline comments; small steps.
-- Test-first: propose a test before proposing code.
+- Test-first: propose a test before proposing code. Sequencing
+  varies by test type — see testing_standards.rst (taxonomy,
+  declared-exception rule; ADR-054).
 - No large refactors without approval — show before/after diffs.
 - Ask before acting when unsure; never guess (drift is expensive — project state lives in docs for this reason).
 - Cross-reference sources; cite only what was actually retrieved this session.
@@ -385,3 +394,11 @@ Derive-script rewrite (Q38) in progress. Task order and progress marks live in t
 docs/source/dev/planning/derive_rewrite_plan.rst. Deferred items and
 wake-up conditions live there and in the question registry (questions.rst),
 not here.
+
+**Context needed:**
+
+1. [Task name] — what are we implementing?
+2. [Contract doc] — which spec governs this?
+3. [Existing tests] — what pattern should I follow?
+4. [Expected data] — is there a known target (list, count, shape)?
+   Context questions must be answered from pasted output, never from recall. If the answering model hasn't seen the file, the answer is a hypothesis, not context.

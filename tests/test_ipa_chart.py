@@ -48,6 +48,11 @@ EXPECTED_GROUPS = (
     "other_symbols",
 )
 
+# Groups legitimately empty while their batch is pending. Shrink
+# as batches land; an empty group NOT named here fails the test
+# below (absence must be declared).
+PENDING_GROUPS = {"vowels", "other_symbols"}
+
 VENDORED = VENDOR_FEATURES.is_file()
 
 requires_vendor = pytest.mark.skipif(
@@ -167,3 +172,13 @@ def test_clicks_all_deferred():
     for sym in CLICKS:
         assert sym in chart["deferred"]
 
+# --- Completeness floor -------------------------------------------
+
+def test_no_group_silently_empty():
+    """A group in EXPECTED_GROUPS may be empty only if declared
+    pending. Guards the vacuous pass: an unfilled section must be
+    named, not merely absent (ADR-054)."""
+    chart = load_chart()
+    empty = {g for g in EXPECTED_GROUPS if not chart.get(g)}
+    assert empty <= PENDING_GROUPS, (
+        f"undeclared empty groups: {sorted(empty - PENDING_GROUPS)}")

@@ -30,4 +30,5 @@ LatticeLang contributors.
 
    governance/decisions
    governance/documentation_standards
+   governance/testing_standards
    governance/collaboration_protocol
